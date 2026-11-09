@@ -1431,6 +1431,70 @@
             opacity: 0.35;
         }
 
+        /* =====================================================
+           DESKTOP: TRAININGSNAMEN BEARBEITEN
+        ===================================================== */
+
+        .desktop-title-actions {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .desktop-rename-button {
+            padding: 10px 18px;
+            border: 1px solid #ff9e76;
+            border-radius: 10px;
+            background: rgba(255, 128, 89, 0.12);
+            color: #ffaf91;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .desktop-rename-button:hover {
+            background: rgba(255, 128, 89, 0.22);
+        }
+
+        .desktop-rename-form {
+            display: none;
+            margin: 0 0 22px;
+            padding: 16px;
+            border: 1px solid #47505a;
+            border-radius: 12px;
+            background: #171f29;
+        }
+
+        .desktop-rename-form.active {
+            display: block;
+        }
+
+        .desktop-rename-field {
+            display: block;
+            width: 100%;
+            min-width: 0;
+            border: 1px solid #617084;
+            border-radius: 8px;
+            background: #111923;
+            color: white;
+            font: inherit;
+            padding: 12px;
+            margin: 8px 0 12px;
+        }
+
+        .desktop-rename-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .desktop-rename-error {
+            color: #ff9e9e;
+            font-size: 12px;
+            min-height: 16px;
+            margin-bottom: 8px;
+        }
+
         .sport-assignment {
             display: flex;
 
@@ -5143,16 +5207,44 @@ header {
             </div>
 
 
-            <button
-                class="compare-button"
-                id="compareButton">
+            <div class="desktop-title-actions">
 
-                Vergleichen
+                <button
+                    type="button"
+                    class="desktop-rename-button"
+                    id="desktopRenameButton">
+                    ✎ Umbenennen
+                </button>
 
-            </button>
+                <button
+                    class="compare-button"
+                    id="compareButton">
+                    Vergleichen
+                </button>
+
+            </div>
 
         </div>
 
+        <div class="desktop-rename-form" id="desktopRenameForm">
+            <label for="desktopRenameInput">Neuer Name der Trainingseinheit</label>
+            <input
+                type="text"
+                id="desktopRenameInput"
+                class="desktop-rename-field"
+                maxlength="90"
+                autocomplete="off"
+                placeholder="z. B. Fußball am Abend">
+            <div class="desktop-rename-error" id="desktopRenameError"></div>
+            <div class="desktop-rename-actions">
+                <button type="button" class="primary-button" id="desktopRenameSave">
+                    Namen speichern
+                </button>
+                <button type="button" class="secondary-button" id="desktopRenameCancel">
+                    Abbrechen
+                </button>
+            </div>
+        </div>
 
         <div class="sport-assignment">
 
@@ -8995,6 +9087,8 @@ header {
         currentActivity =
             activity;
 
+        document.getElementById("desktopRenameForm").classList.remove("active");
+        document.getElementById("desktopRenameError").textContent = "";
 
         const sport =
             getSport(
@@ -9228,6 +9322,87 @@ header {
     }
 
 
+
+    /* =====================================================
+       DESKTOP: TRAINING UMBENENNEN
+       Gleicher Speicher wie in der Handy-Version (ft_m_titles).
+    ===================================================== */
+
+    const desktopRenameForm = document.getElementById("desktopRenameForm");
+    const desktopRenameInput = document.getElementById("desktopRenameInput");
+    const desktopRenameError = document.getElementById("desktopRenameError");
+
+    document.getElementById("desktopRenameButton").onclick = function () {
+        if (!currentActivity) {
+            return;
+        }
+
+        desktopRenameInput.value = currentActivity.title;
+        desktopRenameError.textContent = "";
+        desktopRenameForm.classList.add("active");
+        desktopRenameInput.focus();
+        desktopRenameInput.select();
+    };
+
+    document.getElementById("desktopRenameCancel").onclick = function () {
+        desktopRenameForm.classList.remove("active");
+        desktopRenameError.textContent = "";
+    };
+
+    window.addEventListener("tracker:training-renamed", function (event) {
+        if (currentActivity && event.detail && event.detail.id === currentActivity.id) {
+            document.getElementById("activityTitle").textContent = event.detail.title;
+        }
+        renderRecords();
+    });
+
+    function saveDesktopTrainingName() {
+        if (!currentActivity) {
+            return;
+        }
+
+        const newName = desktopRenameInput.value.trim();
+
+        if (!newName) {
+            desktopRenameError.textContent = "Bitte einen Namen eingeben.";
+            return;
+        }
+
+        currentActivity.title = newName;
+
+        // Derselbe lokale Datenspeicher wie beim Umbenennen am Handy.
+        const existingNames = loadJSON("ft_m_titles", {});
+        existingNames[currentActivity.id] = newName;
+        saveJSON("ft_m_titles", existingNames);
+
+        document.getElementById("activityTitle").textContent = newName;
+        desktopRenameForm.classList.remove("active");
+        desktopRenameError.textContent = "";
+
+        renderRecords();
+        renderSports();
+
+        // Hält den mobilen Zwischenspeicher bei Änderungen in derselben Seite aktuell.
+        window.dispatchEvent(new CustomEvent("tracker:training-renamed", {
+            detail: {
+                id: currentActivity.id,
+                title: newName
+            }
+        }));
+    }
+
+    document.getElementById("desktopRenameSave").onclick = saveDesktopTrainingName;
+
+    desktopRenameInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            saveDesktopTrainingName();
+        }
+        if (event.key === "Escape") {
+            event.stopPropagation();
+            desktopRenameForm.classList.remove("active");
+        }
+    });
 
     /* =====================================================
        SPORTART EINER EINHEIT ÄNDERN
@@ -10759,6 +10934,18 @@ header {
         $('mTrashView').classList.add('active');
 
     };
+    // Desktop und Handy verwenden dieselben gespeicherten Trainingsnamen.
+    window.addEventListener('tracker:training-renamed', event =>
+    {
+        const { id, title } = event.detail || {};
+
+        if (id && typeof title === 'string')
+        {
+            titles[id] = title;
+            renderRecords();
+        }
+    });
+
     function saveTitles()
     {
         put('titles', titles);
@@ -10849,6 +11036,10 @@ header {
             saveTitles();
             openDetail(a.id);
             renderRecords();
+            // Auch Desktop-Aufzeichnungen sofort aktualisieren.
+            window.dispatchEvent(new CustomEvent('tracker:training-renamed', {
+                detail: { id: a.id, title: value }
+            }));
             toast('Name gespeichert');
 
         });
