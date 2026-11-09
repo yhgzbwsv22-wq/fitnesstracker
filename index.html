@@ -1780,7 +1780,127 @@
 
         }
 
-    </style>
+    
+/* =====================================================
+   MOBILE FITNESSTRACKER — Zusatzdesign
+   Desktop-CSS und Desktop-Oberfläche bleiben bestehen.
+===================================================== */
+#mobileApp{display:none}
+.mobile-only-switch{display:none}
+#mViewToggle{position:fixed;right:16px;bottom:16px;z-index:980;background:#263b59;color:#e8f1ff;border:1px solid #5c91d2;border-radius:100px;padding:10px 14px;box-shadow:0 8px 25px #0006;cursor:pointer;font:600 12px Arial,sans-serif}
+body.force-mobile .container{display:none!important}
+body.force-mobile #mobileApp{display:block!important}
+body.force-mobile::before{display:none}
+@media(max-width:800px){body:not(.force-desktop) .container{display:none}body:not(.force-desktop) #mobileApp{display:block}body:not(.force-desktop)::before{display:none}body.force-desktop{min-width:1000px}body.force-desktop .container{min-width:1000px}body.force-desktop .mobile-only-switch{display:none}}
+@media(min-width:801px){body.force-mobile #mobileApp{display:block}body.force-mobile .container{display:none}}
+#mobileApp{--mc:#12161d;--ms:#1b222d;--ms2:#232d3a;--ml:#3b82f6;--mt:#f3f7fe;--mm:#9aaac0;position:relative;z-index:2;color:var(--mt);background:var(--mc);min-height:100dvh;font-family:Arial,sans-serif;padding-bottom:calc(86px + env(safe-area-inset-bottom));overflow-x:hidden}
+#mobileApp *{box-sizing:border-box}
+#mobileApp button,#mobileApp input,#mobileApp select{font:inherit}
+#mobileApp button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+#mobileApp .m-header{padding:calc(16px + env(safe-area-inset-top)) 16px 12px;background:#171d26;border-bottom:1px solid #293441;position:sticky;top:0;z-index:65}
+#mobileApp .m-topline,#mobileApp .m-flex{display:flex;align-items:center;justify-content:space-between;gap:12px}
+#mobileApp .m-brand{display:flex;align-items:center;gap:10px;min-width:0}
+#mobileApp .m-logo{width:37px;height:37px;flex-shrink:0;border-radius:11px;background:#1c3557;color:#7fb4ff;display:grid;place-items:center;font-size:22px;font-weight:800}
+#mobileApp .m-heading{font-size:16px;font-weight:800;line-height:1.3}
+#mobileApp .m-small{font-size:11px;color:var(--mm);line-height:1.5}
+#mobileApp .m-muted{color:var(--mm)}
+#mobileApp .m-iconbtn{border:1px solid #3c4c60;background:#202b39;color:#e6efff;min-height:37px;min-width:37px;border-radius:10px;padding:8px}
+#mobileApp .m-chip{display:inline-flex;gap:6px;align-items:center;border-radius:30px;padding:5px 9px;background:#3b2a1b;color:#fbbf74;font-size:11px;font-weight:700}
+#mobileApp .m-chip.blue{background:#203958;color:#92bdff}
+#mobileApp .m-chip.gray{background:#303b4c;color:#ccd6e5}
+#mobileApp .m-chip.green{background:#193b2c;color:#86efac}
+#mobileApp .m-chip.red{background:#48252b;color:#fca5a5}
+#mobileApp .m-headerline{display:flex;align-items:center;gap:8px;justify-content:space-between;margin-top:12px}
+#mobileApp .m-headerline .m-small{flex:1}
+#mobileApp .m-screen{display:none;padding:19px 15px 30px;max-width:800px;margin:auto}
+#mobileApp .m-screen.active{display:block}
+#mobileApp .m-pagehead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px}
+#mobileApp h2{font-size:23px;line-height:1.2;margin:0;font-weight:800}
+#mobileApp h3{font-size:15px;font-weight:800;margin:0 0 12px}
+#mobileApp .m-section-label{color:#c5d4e9;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;margin:22px 0 12px}
+#mobileApp .m-panel{background:var(--ms);border:1px solid #344254;border-radius:17px;padding:16px;margin-bottom:13px;box-shadow:0 2px 10px #0001}
+#mobileApp .m-hero{background:linear-gradient(140deg,#203756,#162434 78%);border-color:#345c8f;padding:19px}
+#mobileApp .m-round{height:98px;width:98px;border-radius:100%;border:9px solid #39495d;display:grid;place-items:center;margin:5px auto 15px;box-shadow:inset 0 0 0 2px #26374a;text-align:center}
+#mobileApp .m-round span{display:block;font-size:24px;margin-bottom:4px}
+#mobileApp .m-round small{display:block;font-size:10px;color:#b6c4d5}
+#mobileApp .m-hero-center{text-align:center}
+#mobileApp .m-hero-center strong{font-size:17px}
+#mobileApp .m-hero-center p{font-size:12px;color:#b5c6db;margin:8px 0 17px;line-height:1.5}
+#mobileApp .m-primary,#mobileApp .m-secondary,#mobileApp .m-danger{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:11px;padding:12px 14px;min-height:43px;font-weight:750;font-size:13px;border:1px solid #5c97ed;background:#2666cf;color:white}
+#mobileApp .m-primary:disabled{opacity:.5;cursor:not-allowed}
+#mobileApp .m-secondary{background:#26354a;border-color:#475d79;color:#d9e9fd}
+#mobileApp .m-danger{background:#5b2931;border-color:#b45462;color:#ffe2e4}
+#mobileApp .m-full{width:100%}
+#mobileApp .m-grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#mobileApp .m-grid2>.m-panel{margin-bottom:0;padding:13px}
+#mobileApp .m-val{font-size:25px;font-weight:800;letter-spacing:-.6px;margin:9px 0 5px}
+#mobileApp .m-cardname{color:#aebed2;font-size:12px}
+#mobileApp .m-unit{color:#90a4bd;font-size:11px;font-weight:400}
+#mobileApp .m-bottom{position:fixed;bottom:0;left:0;right:0;z-index:75;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));background:#1a222d;border-top:1px solid #354456;padding:7px 5px calc(7px + env(safe-area-inset-bottom));box-shadow:0 -4px 25px #0005}
+#mobileApp .m-navbtn{display:flex;flex-direction:column;align-items:center;gap:5px;padding:7px 2px;border:0;background:none;color:#95a8be;font-size:10px;min-width:0}
+#mobileApp .m-navbtn b{font-size:21px;line-height:1}
+#mobileApp .m-navbtn.active{color:#73aeff}
+#mobileApp .m-field{width:100%;background:#111923;color:#edf3fc;border:1px solid #41536a;border-radius:10px;padding:12px 11px;outline:none;min-height:44px}
+#mobileApp .m-field:focus{border-color:#64a0fa}
+#mobileApp .m-toolbar{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+#mobileApp .m-toolbar .m-field{min-width:0;flex:1}
+#mobileApp .m-sportlist{display:none;background:#1d2734;border:1px solid #44536a;border-radius:12px;margin-bottom:14px;overflow:hidden}
+#mobileApp .m-sportlist.open{display:block}
+#mobileApp .m-sportrow{display:flex;align-items:stretch;border-bottom:1px solid #344153}
+#mobileApp .m-sportrow button{border:0;background:transparent;color:#d7e5f6;padding:13px;text-align:left}
+#mobileApp .m-sportrow button:first-child{flex:1}
+#mobileApp .m-sportrow.selected{background:#233d5d}
+#mobileApp .m-sportrow .m-sportdelete{color:#ff9a9a;border-left:1px solid #364658;font-size:14px}
+#mobileApp .m-sportrow:last-child{border:0}
+#mobileApp .m-record{display:block;width:100%;text-align:left;color:#eff5fe;background:#1c2530;border:1px solid #36475b;border-radius:15px;padding:15px;margin:0 0 10px}
+#mobileApp .m-record:active{border-color:#6da9ff}
+#mobileApp .m-record-title{font-size:15px;font-weight:800;margin:9px 0 5px;overflow-wrap:anywhere}
+#mobileApp .m-recordgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;border-top:1px solid #334053;margin-top:12px;padding-top:13px}
+#mobileApp .m-recordgrid strong{font-size:13px;white-space:nowrap}
+#mobileApp .m-recordgrid small{display:block;color:#9fafc2;margin-bottom:6px;font-size:10px}
+#mobileApp .m-empty{padding:26px 18px;text-align:center;color:#a4b6ce;border:1px dashed #415169;border-radius:13px;line-height:1.6}
+#mobileApp .m-detail{display:none;position:fixed;inset:0;background:#121922;z-index:100;overflow-y:auto;padding:calc(16px + env(safe-area-inset-top)) 15px calc(26px + env(safe-area-inset-bottom))}
+#mobileApp .m-detail.active{display:block}
+#mobileApp .m-detail>.m-inner{max-width:800px;margin:auto}
+#mobileApp .m-subtabs{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:#1c2837;border-radius:12px;padding:4px;margin:15px 0}
+#mobileApp .m-subtabs button{background:transparent;border:0;color:#aabbd0;padding:11px 3px;border-radius:10px;font-size:12px}
+#mobileApp .m-subtabs button.active{background:#2c5c9c;color:white;font-weight:700}
+#mobileApp .m-subpanel{display:none}
+#mobileApp .m-subpanel.active{display:block}
+#mobileApp .m-detailgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#mobileApp .m-stat{background:#202a37;border:1px solid #384a5e;padding:13px;border-radius:12px}
+#mobileApp .m-stat small{display:block;color:#acbed3;font-size:11px;margin-bottom:8px}
+#mobileApp .m-stat strong{font-size:17px}
+#mobileApp .m-chart{width:100%;height:215px;display:block;touch-action:pan-y}
+#mobileApp .m-legend{display:flex;flex-wrap:wrap;gap:10px;color:#aebed4;font-size:11px;margin:10px 0}
+#mobileApp .m-swatch{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px}
+#mobileApp .m-info{background:#1b2d40;border:1px solid #34577b;padding:13px;border-radius:12px;color:#b8d5fa;font-size:12px;line-height:1.6}
+#mobileApp .m-error-circle{display:grid;place-items:center;margin:12px auto;height:135px;width:135px;border:9px solid #637186;border-radius:100%;color:#c9d6e7;text-align:center;font-size:14px;font-weight:750}
+#mobileApp .m-popover{display:none;position:absolute;right:0;top:calc(100% + 6px);min-width:180px;background:#263345;border:1px solid #485b74;border-radius:11px;box-shadow:0 10px 30px #0007;overflow:hidden;z-index:80}
+#mobileApp .m-popover.open{display:block}
+#mobileApp .m-popover button{display:block;padding:13px 16px;border:0;background:transparent;color:#e7f1ff;width:100%;text-align:left;font-size:13px}
+#mobileApp .m-popover button+button{border-top:1px solid #3b4d60}
+#mobileApp .m-toast{position:fixed;z-index:120;left:16px;right:16px;bottom:calc(85px + env(safe-area-inset-bottom));background:#184d34;color:#ddffed;padding:13px 16px;border:1px solid #3fad73;border-radius:12px;font-size:13px;font-weight:700;display:none;text-align:center}
+#mobileApp .m-toast.visible{display:block}
+#mobileApp .m-dialog{display:none;position:fixed;inset:0;z-index:125;background:#000b;align-items:center;justify-content:center;padding:15px}
+#mobileApp .m-dialog.open{display:flex}
+#mobileApp .m-dialogbox{width:min(100%,440px);max-height:85dvh;overflow-y:auto;background:#1d2633;border:1px solid #4d6480;border-radius:18px;padding:20px}
+#mobileApp .m-dialogbox p{color:#b2c4da;line-height:1.6;font-size:13px;margin:10px 0 17px}
+#mobileApp .m-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+#mobileApp .m-actions>*{flex:1}
+#mobileApp .m-check{display:flex;align-items:center;gap:9px;margin:12px 0;color:#cbd8ea;font-size:12px}
+#mobileApp .m-check input{accent-color:#3b82f6;width:18px;height:18px}
+#mobileApp .m-previewmap{width:100%;aspect-ratio:1.7;border:1px solid #3c5268;background:#192331;border-radius:12px}
+#mobileApp .m-progress{height:5px;border-radius:10px;background:#324053;overflow:hidden;margin:10px 0}
+#mobileApp .m-progress>span{height:100%;background:#60a5fa;display:block;width:0%}
+#mobileApp .m-caps{font-size:10px;letter-spacing:.6px;color:#97abc4;text-transform:uppercase}
+#mobileApp .m-underline{border-bottom:1px solid #344557;padding-bottom:12px;margin-bottom:12px}
+#mobileApp .m-inline-link{background:transparent;color:#90bdff;border:none;padding:3px;text-decoration:underline}
+#mobileApp .m-canvasnote{color:#a3b6cc;font-size:11px;line-height:1.6;margin-top:9px}
+@media(min-width:801px){body.force-mobile #mobileApp .m-bottom{left:50%;transform:translateX(-50%);max-width:800px}body.force-mobile #mobileApp .m-header{max-width:800px;margin:auto}body.force-mobile #mobileApp{max-width:800px;margin:auto;box-shadow:0 0 60px #0006}}
+@media(max-width:360px){#mobileApp .m-recordgrid{gap:5px}#mobileApp .m-recordgrid strong{font-size:12px}#mobileApp .m-header{padding-left:11px;padding-right:11px}}
+
+</style>
 
 </head>
 
@@ -3862,6 +3982,52 @@
 </div>
 
 
+
+
+<!-- Mobile-App: eigenständige responsive Oberfläche mit Zugriff auf denselben Demo-Datenbestand -->
+<div id="mobileApp">
+  <div class="m-header">
+    <div class="m-topline">
+      <div class="m-brand"><div class="m-logo">⌁</div><div><div class="m-heading">Fitnesstracker</div><div class="m-small">von Julian und Lukas</div></div></div>
+      <div style="display:flex;gap:7px;align-items:center"><span class="m-chip gray" id="mBattery">🔋 --</span><button class="m-iconbtn" id="mSettings" aria-label="Einstellungen">⚙</button></div>
+    </div>
+    <div class="m-headerline"><span class="m-chip" id="mConnectionChip">● ESP32 getrennt</span><span class="m-small">Messwerte nur bei Verbindung</span><button class="m-iconbtn" id="mTeam" aria-label="Über uns">ⓘ</button></div>
+  </div>
+  <main>
+    <section id="mOverview" class="m-screen active">
+      <div class="m-pagehead"><div><h2>Übersicht</h2><div class="m-small">Dein Training auf einen Blick</div></div><span class="m-chip blue">Demo-Aufzeichnungen</span></div>
+      <div class="m-panel m-hero"><div class="m-round"><div><span>⌁</span><small>OFFLINE</small></div></div><div class="m-hero-center"><strong>ESP32 nicht verbunden</strong><p>Verbinde deinen Fitnesstracker, um die aktuellen Messwerte und den Trainingsstatus zu sehen.</p><button class="m-primary m-full" id="mConnect">⌁ Mit ESP32 verbinden</button></div></div>
+      <div id="mResume" style="display:none" class="m-panel"><h3>▶ Training läuft</h3><div id="mResumeText" class="m-small"></div><button class="m-primary m-full" data-mscreen="live">Training fortsetzen</button></div>
+      <div class="m-section-label">Aktuelle Messwerte</div>
+      <div class="m-grid2"><div class="m-panel"><div class="m-cardname">♡ Puls</div><div class="m-val" data-metric="pulse">--</div><div class="m-unit">bpm</div></div><div class="m-panel"><div class="m-cardname">↗ Geschwindigkeit</div><div class="m-val" data-metric="speed">--</div><div class="m-unit">km/h</div></div><div class="m-panel"><div class="m-cardname">◉ Belastung</div><div class="m-val" data-metric="load">--</div><div class="m-unit">%</div></div><div class="m-panel"><div class="m-cardname">↥ Sprünge</div><div class="m-val" data-metric="jumps">--</div><div class="m-unit">Anzahl</div></div></div>
+      <div class="m-section-label">Deine Trainingsstatistik</div><div class="m-grid2" id="mHomeStats"></div><div class="m-canvasnote">Die gespeicherten Einheiten sind Beispieldaten und mit „Demo“ gekennzeichnet.</div>
+    </section>
+    <section id="mLive" class="m-screen"><div class="m-pagehead"><div><h2>Live Daten</h2><div class="m-small" id="mLiveFreshness">Keine aktuellen Messdaten</div></div><span class="m-chip gray">Live</span></div>
+      <div class="m-panel"><div class="m-flex"><h3>Trainingssteuerung</h3><span class="m-chip gray" id="mTrainingStatus">Nicht verbunden</span></div><p class="m-small" style="margin:8px 0 13px">Start, Pause und Ende werden später direkt mit dem ESP32 synchronisiert.</p><div class="m-actions"><button class="m-primary" id="mStart">▶ Start</button><button class="m-secondary" id="mPause">Ⅱ Pause</button><button class="m-danger" id="mStop">■ Beenden</button></div></div>
+      <div class="m-grid2" id="mLiveGrid"></div><div class="m-section-label">Verlauf</div><div class="m-panel"><h3>♡ Puls</h3><canvas class="m-chart" id="mLivePulse"></canvas><div class="m-canvasnote">Echte Messwerte erscheinen nach Einrichtung des BLE-Datenprotokolls.</div></div><div class="m-panel"><h3>↗ Geschwindigkeit</h3><canvas class="m-chart" id="mLiveSpeed"></canvas></div>
+    </section>
+    <section id="mErrors" class="m-screen"><div class="m-pagehead"><div><h2>Fehler & Diagnose</h2><div class="m-small">Status der Systemkomponenten</div></div></div><div class="m-panel"><div class="m-error-circle">? <br>Unbekannt</div><p class="m-small" style="text-align:center">Ohne ESP32-Verbindung lässt sich der tatsächliche Zustand der Sensoren nicht überprüfen.</p></div><div class="m-grid2"><div class="m-panel"><div class="m-cardname">Aktive Fehler</div><div class="m-val">--</div></div><div class="m-panel"><div class="m-cardname">Warnungen</div><div class="m-val">--</div></div></div><div class="m-section-label">Komponenten</div><div id="mComponentList"></div><div class="m-section-label">Fehlerverlauf</div><div class="m-empty" id="mErrorHistory">Noch keine echten Fehlerprotokolle vorhanden.</div></section>
+    <section id="mRecords" class="m-screen"><div class="m-pagehead"><div><h2>Aufzeichnungen</h2><div class="m-small">Alle Trainingseinheiten</div></div><div style="position:relative"><button class="m-iconbtn" id="mRecordsMore" aria-label="Weitere Optionen">⋮</button><div class="m-popover" id="mRecordsMenu"><button id="mShowTrash">🗑 Papierkorb</button><button id="mToggleAll">Alle Sportarten</button></div></div></div>
+      <div class="m-toolbar"><input class="m-field" type="search" id="mSearch" placeholder="Training suchen …" aria-label="Training suchen"><select class="m-field" id="mSort" style="max-width:138px" aria-label="Sortieren"><option value="new">Neueste</option><option value="distance">Distanz</option><option value="duration">Dauer</option><option value="speed">Tempo</option></select></div>
+      <button class="m-secondary m-full" id="mSportsToggle" style="justify-content:space-between;margin-bottom:11px">Sportarten <span>▾</span></button><div class="m-sportlist" id="mSportsList"></div>
+      <div class="m-flex m-underline"><div><strong id="mSportTitle">Alle Sportarten</strong><div class="m-small" id="mRecordCount"></div></div><span class="m-chip blue" id="mRecordBadge">Demo</span></div><div id="mRecordList"></div>
+    </section>
+  </main>
+  <nav class="m-bottom" aria-label="Hauptnavigation"><button class="m-navbtn active" data-mscreen="overview"><b>⌂</b><span>Übersicht</span></button><button class="m-navbtn" data-mscreen="live"><b>⌁</b><span>Live Daten</span></button><button class="m-navbtn" data-mscreen="errors"><b>⚠</b><span>Fehler</span></button><button class="m-navbtn" data-mscreen="records"><b>▤</b><span>Aufzeichnungen</span></button></nav>
+  <div class="m-detail" id="mDetail"><div class="m-inner"><div class="m-flex" style="margin-bottom:18px"><button class="m-secondary" id="mDetailBack">← Zurück</button><span class="m-chip blue" id="mDetailDemo">Demo</span><button class="m-iconbtn" id="mDetailMenuButton" aria-label="Weitere Aktionen">⋮</button></div><h2 id="mDetailTitle"></h2><div class="m-small" id="mDetailDate" style="margin:8px 0 12px"></div>
+    <div class="m-actions" style="margin-bottom:13px"><button class="m-secondary" id="mRename">✎ Umbenennen</button><button class="m-secondary" id="mAddCompare">＋ Vergleichen</button><button class="m-danger" id="mTrash">🗑</button></div>
+    <div class="m-panel"><div class="m-cardname" style="margin-bottom:9px">Zugewiesene Sportart</div><div class="m-toolbar" style="margin:0"><select class="m-field" id="mDetailSport"></select><button class="m-primary" id="mSaveSport">Speichern</button></div></div>
+    <div class="m-subtabs"><button class="active" data-mtab="metrics">Messwerte</button><button data-mtab="charts">Diagramme</button><button data-mtab="gps">GPS-Route</button></div>
+    <div class="m-subpanel active" id="mMetrics"><div class="m-detailgrid" id="mDetailStats"></div></div>
+    <div class="m-subpanel" id="mCharts"><div class="m-panel"><h3>Pulsverlauf</h3><canvas class="m-chart" id="mDetailPulse"></canvas><div class="m-canvasnote">Diagramm berühren, um Messpunkte abzulesen.</div><button class="m-secondary m-full" data-expand="pulse" style="margin-top:10px">Vergrößern ⤢</button></div><div class="m-panel"><h3>Geschwindigkeitsverlauf</h3><canvas class="m-chart" id="mDetailSpeed"></canvas><button class="m-secondary m-full" data-expand="speed" style="margin-top:10px">Vergrößern ⤢</button></div></div>
+    <div class="m-subpanel" id="mGps"><div class="m-panel"><h3>GPS-Route</h3><div id="mGpsContent"></div></div></div>
+  </div></div>
+  <div class="m-detail" id="mCompare"><div class="m-inner"><div class="m-flex" style="margin-bottom:15px"><button class="m-secondary" id="mCompareBack">← Zurück</button><span class="m-chip blue">Vergleich</span></div><h2>Trainingsvergleich</h2><div class="m-small" id="mCompareCaption" style="margin:8px 0 12px"></div><label class="m-check"><input type="checkbox" id="mCrossSport">Sportartenübergreifend vergleichen</label><div id="mCompareSelected"></div><div class="m-panel"><h3>Einheit hinzufügen (max. 3)</h3><select class="m-field" id="mComparePick"></select><button class="m-secondary m-full" id="mCompareAdd" style="margin-top:9px">+ Hinzufügen</button></div><div id="mCompareNumbers"></div><div class="m-panel"><h3>Pulsverlauf im Vergleich</h3><canvas class="m-chart" id="mComparePulse"></canvas></div><div class="m-panel"><h3>Geschwindigkeitsverlauf im Vergleich</h3><canvas class="m-chart" id="mCompareSpeed"></canvas></div><div class="m-panel"><h3>GPS-Routen</h3><select id="mMapMode" class="m-field"><option value="together">Alle Routen zusammen</option><option value="single">Routen einzeln</option></select><div id="mCompareMaps" style="margin-top:12px"></div></div></div></div>
+  <div class="m-detail" id="mTrashView"><div class="m-inner"><div class="m-flex" style="margin-bottom:15px"><button class="m-secondary" id="mTrashBack">← Zurück</button><span class="m-chip gray">30 Tage</span></div><h2>Papierkorb</h2><p class="m-small" style="margin:9px 0 18px">Gelöschte Trainings kannst du innerhalb von 30 Tagen wiederherstellen.</p><div id="mTrashList"></div></div></div>
+  <div class="m-toast" id="mToast" role="status"></div>
+  <div class="m-dialog" id="mDialog"><div class="m-dialogbox"><h3 id="mDialogTitle"></h3><p id="mDialogText"></p><div id="mDialogExtra"></div><div class="m-actions"><button class="m-secondary" id="mDialogCancel">Abbrechen</button><button class="m-primary" id="mDialogOK">Bestätigen</button></div></div></div>
+</div>
+<button id="mViewToggle" type="button" title="Ansicht wechseln">📱 Handy-Ansicht</button>
 
 <script>
 
@@ -7710,6 +7876,70 @@
 
 </script>
 
+
+
+<script>
+/* Mobile-Zusatzlogik; Desktop-Code bleibt unverändert. */
+(()=>{'use strict';
+const $=id=>document.getElementById(id);
+const get=(key,def)=>{try{const v=localStorage.getItem('ft_m_'+key);return v===null?def:JSON.parse(v)}catch{return def}};
+const put=(key,value)=>{try{localStorage.setItem('ft_m_'+key,JSON.stringify(value))}catch(e){console.warn('Lokales Speichern nicht möglich',e)}};
+const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=n=>Number(n||0).toLocaleString('de-AT',{maximumFractionDigits:1});
+const visibleActs=()=>Object.values(activities).filter(a=>!trash[a.id]&&!permanent.includes(a.id));
+const sportName=s=>getSport(s)?.label||'Nicht zugewiesen';
+const viewToggle=$('mViewToggle');
+let viewPref=get('view','auto');
+function mobileMode(){return viewPref==='mobile'||(viewPref==='auto'&&window.innerWidth<=800)}
+function applyMode(){document.body.classList.toggle('force-mobile',viewPref==='mobile');document.body.classList.toggle('force-desktop',viewPref==='desktop');const mobile=mobileMode();viewToggle.textContent=mobile?'▣ Desktop-Ansicht':'📱 Handy-Ansicht';viewToggle.setAttribute('aria-label',mobile?'Desktop-Ansicht einschalten':'Handy-Ansicht einschalten');}
+viewToggle.onclick=()=>{viewPref=mobileMode()?'desktop':'mobile';put('view',viewPref);applyMode();};
+window.addEventListener('resize',applyMode);
+let trash=get('trash',{}),permanent=get('permanent',[]),titles=get('titles',{}),selectedSport='all',selectedRecord=null,compareIds=[],currentScreen='overview',toastTimer=null,dialogAction=null,selectedTab='metrics';
+Object.keys(trash).forEach(id=>{if(Date.now()-trash[id]>=30*86400000){if(!permanent.includes(id))permanent.push(id);delete trash[id]}});put('trash',trash);put('permanent',permanent);
+Object.values(activities).forEach(a=>{a.demo=true;if(typeof titles[a.id]==='string'&&titles[a.id].trim())a.title=titles[a.id];});
+function toast(message){const el=$('mToast');el.textContent=message;el.classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('visible'),3000)}
+function dialog(title,txt,extra,ok='Bestätigen',action=()=>{}){$('mDialogTitle').textContent=title;$('mDialogText').textContent=txt;$('mDialogExtra').innerHTML=extra||'';$('mDialogOK').textContent=ok;dialogAction=action;$('mDialog').classList.add('open')}
+function closeDialog(){$('mDialog').classList.remove('open');dialogAction=null;}
+$('mDialogCancel').onclick=closeDialog;$('mDialogOK').onclick=()=>{const action=dialogAction;closeDialog();if(action)action()};
+function showScreen(screen){currentScreen=screen;document.querySelectorAll('#mobileApp .m-screen').forEach(e=>e.classList.toggle('active',e.id==='m'+screen[0].toUpperCase()+screen.slice(1)));document.querySelectorAll('#mobileApp [data-mscreen]').forEach(b=>b.classList.toggle('active',b.dataset.mscreen===screen));$('mRecordsMenu').classList.remove('open');window.scrollTo(0,0);if(screen==='records')renderRecords();if(screen==='overview')renderHome();if(screen==='errors')renderErrors();}
+document.querySelectorAll('#mobileApp [data-mscreen]').forEach(b=>b.addEventListener('click',()=>showScreen(b.dataset.mscreen)));
+function renderHome(){const list=visibleActs(),total=list.reduce((sum,a)=>sum+a.durationSeconds,0),dist=list.reduce((sum,a)=>sum+a.distance,0);const now=new Date(),monday=new Date(now);monday.setHours(0,0,0,0);monday.setDate(monday.getDate()-(monday.getDay()+6)%7);const week=list.filter(a=>new Date(a.date+'T'+a.time)>=monday).length;const stats=[['Trainingseinheiten',list.length],['Gesamtzeit',formatTotalTime(total)],['Gesamtdistanz',fmt(dist)+' km'],['Diese Woche',week]];$('mHomeStats').innerHTML=stats.map(([n,v])=>`<div class="m-panel"><div class="m-cardname">${n}</div><div class="m-val" style="font-size:21px">${safe(v)}</div><span class="m-chip blue">Demo</span></div>`).join('');}
+function renderLive(){const metrics=[['♡ Puls','--','bpm'],['↗ Geschwindigkeit','--','km/h'],['◉ Belastung','--','%'],['↥ Sprünge','--','Anzahl'],['↑ Beschleunigung','--','m/s²'],['♢ Sprunghöhe','--','cm']];$('mLiveGrid').innerHTML=metrics.map(x=>`<div class="m-panel"><div class="m-cardname">${x[0]}</div><div class="m-val">${x[1]}</div><div class="m-unit">${x[2]}</div></div>`).join('');}
+function renderErrors(){const components=['Pulssensor','Beschleunigungssensor','GPS-Modul','Vibrationssensor','Vibrationsmotor','Audioausgabe'];$('mComponentList').innerHTML=components.map(s=>`<div class="m-panel m-flex"><strong style="font-size:13px">${s}</strong><span class="m-chip gray">Nicht geprüft</span></div>`).join('');}
+function sorted(list){const key=$('mSort').value;return list.sort((a,b)=>key==='new'?new Date(b.date+'T'+b.time)-new Date(a.date+'T'+a.time):key==='distance'?b.distance-a.distance:key==='duration'?b.durationSeconds-a.durationSeconds:b.avgSpeed-a.avgSpeed)}
+function orderedSportForMobile(){return orderedSports()}
+function renderSports(){const arr=orderedSportForMobile(),list=$('mSportsList');let html=`<div class="m-sportrow ${selectedSport==='all'?'selected':''}"><button data-sport="all">Alle Sportarten <span class="m-muted">(${visibleActs().length})</span></button></div>`;arr.forEach(s=>{html+=`<div class="m-sportrow ${selectedSport===s.id?'selected':''}"><button data-sport="${safe(s.id)}">${safe(s.label)} <span class="m-muted">(${visibleActs().filter(a=>a.sport===s.id).length})</span></button>${s.id==='unassigned'?'':`<button class="m-sportdelete" data-sportdelete="${safe(s.id)}" title="Sportart löschen">🗑</button>`}</div>`});html+=`<div class="m-sportrow"><button id="mAddSport">＋ Neue Sportart erstellen</button></div>`;list.innerHTML=html;list.querySelectorAll('[data-sport]').forEach(b=>b.onclick=()=>{selectedSport=b.dataset.sport;list.classList.remove('open');renderRecords()});list.querySelectorAll('[data-sportdelete]').forEach(b=>b.onclick=()=>deleteSportMobile(b.dataset.sportdelete));$('mAddSport').onclick=()=>createSportMobile()}
+function renderRecords(){renderSports();const q=$('mSearch').value.trim().toLocaleLowerCase('de');let list=visibleActs().filter(a=>(selectedSport==='all'||a.sport===selectedSport)&&(!q||(a.title+' '+sportName(a.sport)+' '+formatGermanDate(a.date)).toLocaleLowerCase('de').includes(q)));sorted(list);$('mSportTitle').textContent=selectedSport==='all'?'Alle Sportarten':sportName(selectedSport);$('mRecordCount').textContent=`${list.length} Einheiten`;$('mRecordBadge').textContent='Demo';$('mRecordList').innerHTML=list.length?list.map(a=>`<button class="m-record" data-record="${safe(a.id)}"><div class="m-flex"><span class="m-chip blue">${safe(sportName(a.sport))}</span><span class="m-chip gray">Demo</span></div><div class="m-record-title">${safe(a.title)}</div><div class="m-small">${formatGermanDate(a.date)} · ${safe(a.time)} Uhr</div><div class="m-recordgrid"><div><small>Distanz</small><strong>${fmt(a.distance)} km</strong></div><div><small>Dauer</small><strong>${safe(a.duration)}</strong></div><div><small>Ø Puls</small><strong>${safe(a.avgPulse)} bpm</strong></div></div><div style="color:#8dbaff;font-size:12px;font-weight:700;margin-top:13px">Details ansehen →</div></button>`).join(''):'<div class="m-empty">Keine Trainingseinheiten gefunden.</div>';$('mRecordList').querySelectorAll('[data-record]').forEach(b=>b.onclick=()=>openDetail(b.dataset.record));}
+function createSportMobile(){dialog('Neue Sportart','Gib einen Namen ein und wähle die angezeigten Kennzahlen.',`<input id="mNewSportName" class="m-field" placeholder="z. B. Tischtennis" maxlength="45"><label class="m-check"><input type="checkbox" id="mMetricDist" checked>Distanz und Pace</label><label class="m-check"><input type="checkbox" id="mMetricSpeed" checked>Höchstgeschwindigkeit</label><label class="m-check"><input type="checkbox" id="mMetricElev" checked>Höhenmeter</label>`,'Erstellen',()=>{const name=$('mNewSportName').value.trim();if(name.length<2||sportTypes.some(s=>s.label.toLowerCase()===name.toLowerCase())){toast('Name zu kurz oder bereits vergeben');return}const sport={id:'custom_'+Date.now(),label:name,description:'Benutzerdefinierte Sportart',custom:true,metrics:{distance:$('mMetricDist').checked,maxSpeed:$('mMetricSpeed').checked,elevation:$('mMetricElev').checked}};sportTypes.push(sport);saveSports();selectedSport=sport.id;renderSports();renderRecords();toast('Sportart erstellt')});}
+function deleteSportMobile(id){const s=getSport(id);if(!s||id==='unassigned')return;dialog('Sportart löschen',`„${s.label}“ wirklich löschen? Alle zugehörigen Trainingseinheiten bleiben erhalten und werden „Nicht zugewiesen“ zugeordnet.`,'','Sportart löschen',()=>{Object.values(activities).forEach(a=>{if(a.sport===id)a.sport='unassigned'});if(!s.custom&&!deletedStandardSports.includes(id))deletedStandardSports.push(id);sportTypes=sportTypes.filter(x=>x.id!==id);saveSports();saveAssignments();if(selectedSport===id)selectedSport='unassigned';renderRecords();toast('Sportart gelöscht; Trainings bleiben erhalten')})}
+$('mSportsToggle').onclick=()=>$('mSportsList').classList.toggle('open');$('mSearch').oninput=renderRecords;$('mSort').onchange=renderRecords;$('mRecordsMore').onclick=()=>$('mRecordsMenu').classList.toggle('open');$('mToggleAll').onclick=()=>{selectedSport='all';renderRecords()};$('mShowTrash').onclick=()=>{$('mRecordsMenu').classList.remove('open');renderTrash();$('mTrashView').classList.add('active')};
+function saveTitles(){put('titles',titles)}
+function openDetail(id){const a=activities[id];if(!a||trash[id])return;selectedRecord=id;selectedTab='metrics';$('mDetailTitle').textContent=a.title;$('mDetailDate').textContent=formatGermanDate(a.date)+' · '+a.time+' Uhr';$('mDetailDemo').textContent='Demo';$('mDetailSport').innerHTML=orderedSportForMobile().map(s=>`<option value="${safe(s.id)}">${safe(s.label)}</option>`).join('');$('mDetailSport').value=a.sport;const stat=[['Distanz',fmt(a.distance)+' km','distance'],['Dauer',a.duration],['Ø Geschwindigkeit',fmt(a.avgSpeed)+' km/h'],['Max. Geschwindigkeit',fmt(a.maxSpeed)+' km/h','maxSpeed'],['Ø Pace',formatPace(a.pace),'distance'],['Höhenmeter',fmt(a.elevation)+' m','elevation'],['Ø Puls',a.avgPulse+' bpm'],['Max. Puls',a.maxPulse+' bpm'],['Ø Belastung',a.avgLoad+' %'],['Max. Belastung',a.maxLoad+' %']];const sm=getSport(a.sport)?.metrics||{};$('mDetailStats').innerHTML=stat.filter(x=>!x[2]||sm[x[2]]).map(x=>`<div class="m-stat"><small>${x[0]}</small><strong>${safe(x[1])}</strong></div>`).join('');$('mGpsContent').innerHTML=demoRouteHTML(a);$('mDetail').classList.add('active');setDetailTab('metrics');}
+function demoRouteHTML(a){if(!a.demo&&!Array.isArray(a.gps))return '<div class="m-empty">Für dieses Training wurde keine GPS-Route aufgezeichnet.</div>';if(!a.demo)return '<div class="m-empty">GPS-Anzeige wird mit echten Koordinaten eingerichtet.</div>';let p=routePoints;const speeds=a.speedHistory,min=Math.min(...speeds),max=Math.max(...speeds),lines=p.slice(1).map((to,i)=>{const f=(speeds[i%speeds.length]-min)/(max-min||1);const color=f<.33?'#ef4444':f<.66?'#f59e0b':'#22c55e';return `<line x1="${p[i].x}" y1="${p[i].y}" x2="${to.x}" y2="${to.y}" stroke="${color}" stroke-width="3.5" stroke-linecap="round"/>`}).join('');return `<svg class="m-previewmap" viewBox="0 0 100 100" aria-label="Schematische Demo-Strecke"><path d="M0 25 H100 M0 50 H100 M0 75 H100 M25 0 V100 M50 0 V100 M75 0 V100" stroke="#2b3848" stroke-width=".5"/>${lines}</svg><div class="m-legend"><span><i class="m-swatch" style="background:#ef4444"></i>Langsam</span><span><i class="m-swatch" style="background:#f59e0b"></i>Mittel</span><span><i class="m-swatch" style="background:#22c55e"></i>Schnell</span></div><div class="m-info">Demo: Die Strecke ist nur eine schematische Illustration aus dem bisherigen Code. Es sind keine echten GPS-Koordinaten vorhanden.</div>`;}
+function setDetailTab(tab){selectedTab=tab;document.querySelectorAll('#mDetail [data-mtab]').forEach(b=>b.classList.toggle('active',b.dataset.mtab===tab));['metrics','charts','gps'].forEach(t=>$('m'+t[0].toUpperCase()+t.slice(1)).classList.toggle('active',tab===t));if(tab==='charts')requestAnimationFrame(()=>drawDetailCharts())}
+$('mDetailBack').onclick=()=>$('mDetail').classList.remove('active');document.querySelectorAll('#mDetail [data-mtab]').forEach(b=>b.onclick=()=>setDetailTab(b.dataset.mtab));$('mDetailMenuButton').onclick=()=>$('mTrash').click();
+$('mSaveSport').onclick=()=>{const a=activities[selectedRecord];if(!a)return;a.sport=$('mDetailSport').value;saveAssignments();renderRecords();openDetail(a.id);toast('Sportart gespeichert')};
+$('mRename').onclick=()=>{const a=activities[selectedRecord];if(!a)return;dialog('Training umbenennen','Gib einen neuen Namen ein.',`<input class="m-field" id="mRenameText" maxlength="90" value="${safe(a.title)}">`,'Speichern',()=>{const value=$('mRenameText').value.trim();if(!value){toast('Bitte einen Namen eingeben');return}a.title=value;titles[a.id]=value;saveTitles();openDetail(a.id);renderRecords();toast('Name gespeichert')})};
+function removeActivity(id){trash[id]=Date.now();put('trash',trash);$('mDetail').classList.remove('active');renderRecords();renderHome();toast('Training in den Papierkorb verschoben')}
+$('mTrash').onclick=()=>{const a=activities[selectedRecord];if(a)dialog('Training löschen',`„${a.title}“ in den Papierkorb verschieben? Du kannst es 30 Tage wiederherstellen.`,'','In Papierkorb',()=>removeActivity(a.id))};
+function renderTrash(){const ids=Object.keys(trash).filter(id=>activities[id]);$('mTrashList').innerHTML=ids.length?ids.map(id=>`<div class="m-panel"><strong>${safe(activities[id].title)}</strong><div class="m-small" style="margin:7px 0 12px">Gelöscht am ${new Date(trash[id]).toLocaleDateString('de-AT')} · Demo</div><div class="m-actions"><button class="m-secondary" data-restore="${safe(id)}">Wiederherstellen</button><button class="m-danger" data-perma="${safe(id)}">Endgültig löschen</button></div></div>`).join(''):'<div class="m-empty">Der Papierkorb ist leer.</div>';$('mTrashList').querySelectorAll('[data-restore]').forEach(b=>b.onclick=()=>{delete trash[b.dataset.restore];put('trash',trash);renderTrash();renderRecords();renderHome();toast('Training wiederhergestellt')});$('mTrashList').querySelectorAll('[data-perma]').forEach(b=>b.onclick=()=>{const id=b.dataset.perma;dialog('Endgültig löschen','Dieses Training endgültig aus dem lokalen Demo-Datenbestand entfernen?','', 'Endgültig löschen',()=>{permanent.push(id);delete trash[id];put('trash',trash);put('permanent',permanent);renderTrash();renderRecords();renderHome();toast('Training endgültig gelöscht (Demo)')})})}
+$('mTrashBack').onclick=()=>$('mTrashView').classList.remove('active');
+function chart(id,series,duration){const c=$(id);if(!c||!c.getClientRects().length)return;const w=Math.max(200,c.clientWidth||320),h=215,dpr=Math.min(window.devicePixelRatio||1,2);c.width=Math.floor(w*dpr);c.height=h*dpr;const ctx=c.getContext('2d');ctx.scale(dpr,dpr);ctx.clearRect(0,0,w,h);const left=37,right=13,top=18,bottom=34,iw=w-left-right,ih=h-top-bottom;ctx.strokeStyle='#324458';ctx.fillStyle='#aabed4';ctx.lineWidth=1;ctx.font='10px Arial';const all=series.flatMap(s=>s.values||[]).filter(x=>Number.isFinite(x));if(!all.length){ctx.fillText('Noch keine Messwerte vorhanden',45,h/2);return}let min=Math.min(...all),max=Math.max(...all);min=Math.floor((min-2)/5)*5;max=Math.ceil((max+2)/5)*5;const range=Math.max(max-min,1);for(let i=0;i<=4;i++){const yy=top+ih*i/4;ctx.beginPath();ctx.moveTo(left,yy);ctx.lineTo(w-right,yy);ctx.stroke();ctx.fillText(fmt(max-range*i/4),3,yy+3)}for(let i=0;i<=4;i++){const xx=left+iw*i/4;ctx.fillText(Math.round(duration*i/240)+'m',Math.max(0,xx-7),h-8)}for(const s of series){const vals=s.values||[];if(!vals.length)continue;const maxT=s.duration||duration;ctx.strokeStyle=s.color;ctx.lineWidth=2.5;ctx.beginPath();vals.forEach((v,i)=>{const x=left+(i/Math.max(1,vals.length-1))*maxT/duration*iw;const y=top+(max-v)/range*ih;i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke()}}
+function drawDetailCharts(){const a=activities[selectedRecord];if(!a)return;chart('mDetailPulse',[{values:a.pulseHistory,color:'#ef7171',duration:a.durationSeconds}],a.durationSeconds);chart('mDetailSpeed',[{values:a.speedHistory,color:'#66a8ff',duration:a.durationSeconds}],a.durationSeconds)}
+function expandChart(kind){const a=activities[selectedRecord];if(!a)return;dialog(kind==='pulse'?'Pulsverlauf':'Geschwindigkeitsverlauf','Verlauf über die gesamte Trainingsdauer. Für größere Ansicht das Handy quer halten.',`<div style="width:100%;overflow:hidden"><canvas id="mBigChart" class="m-chart" style="height:240px"></canvas></div>`,'Schließen',()=>{});requestAnimationFrame(()=>chart('mBigChart',[{values:kind==='pulse'?a.pulseHistory:a.speedHistory,color:kind==='pulse'?'#ef7171':'#66a8ff',duration:a.durationSeconds}],a.durationSeconds))}
+document.querySelectorAll('#mDetail [data-expand]').forEach(b=>b.onclick=()=>expandChart(b.dataset.expand));
+function compareOpen(){if(!compareIds.length)return;$('mDetail').classList.remove('active');$('mCompare').classList.add('active');renderCompare()}
+$('mAddCompare').onclick=()=>{if(!selectedRecord)return;if(!compareIds.includes(selectedRecord)&&compareIds.length<3)compareIds.push(selectedRecord);compareOpen()};$('mCompareBack').onclick=()=>{$('mCompare').classList.remove('active');if(selectedRecord)openDetail(selectedRecord)};
+function renderCompare(){compareIds=compareIds.filter(id=>activities[id]&&!trash[id]);const cross=$('mCrossSport').checked;let a=activities[compareIds[0]];const colors=['#5ba9ff','#ffb04a','#8ade89'];$('mCompareCaption').textContent=compareIds.length+' von 3 Einheiten ausgewählt';$('mCompareSelected').innerHTML=compareIds.map((id,i)=>`<div class="m-panel m-flex"><div><span style="color:${colors[i]}">●</span> <strong>${safe(activities[id].title)}</strong><div class="m-small">${safe(sportName(activities[id].sport))} · Demo</div></div><button class="m-iconbtn" data-uncompare="${safe(id)}">×</button></div>`).join('');$('mCompareSelected').querySelectorAll('[data-uncompare]').forEach(b=>b.onclick=()=>{compareIds=compareIds.filter(id=>id!==b.dataset.uncompare);renderCompare()});const options=sorted(visibleActs().filter(x=>!compareIds.includes(x.id)&&(cross||!a||x.sport===a.sport)));$('mComparePick').innerHTML=options.length?options.map(x=>`<option value="${safe(x.id)}">${safe(x.title)} (${safe(sportName(x.sport))})</option>`).join(''):'<option value="">Keine weiteren Einheiten</option>';$('mCompareAdd').disabled=compareIds.length>=3||!options.length;const chosen=compareIds.map(id=>activities[id]);$('mCompareNumbers').innerHTML=chosen.length?`<div class="m-panel"><div class="m-section-label" style="margin-top:0">Kennzahlen</div>${[['Distanz','distance','km'],['Dauer','durationSeconds','s'],['Ø Geschwindigkeit','avgSpeed','km/h'],['Ø Puls','avgPulse','bpm'],['Ø Belastung','avgLoad','%']].map(([label,key,unit])=>`<div class="m-underline"><div class="m-cardname" style="margin-bottom:7px">${label}</div><div class="m-grid2">${chosen.map((x,i)=>`<div><span style="color:${colors[i]}">● </span><strong style="font-size:13px">${key==='durationSeconds'?x.duration:fmt(x[key])+' '+unit}</strong></div>`).join('')}</div></div>`).join('')}</div>`:'';requestAnimationFrame(()=>{if(!chosen.length){chart('mComparePulse',[],60);chart('mCompareSpeed',[],60);return}const duration=Math.max(...chosen.map(x=>x.durationSeconds));chart('mComparePulse',chosen.map((x,i)=>({values:x.pulseHistory,duration:x.durationSeconds,color:colors[i]})),duration);chart('mCompareSpeed',chosen.map((x,i)=>({values:x.speedHistory,duration:x.durationSeconds,color:colors[i]})),duration)});const mode=$('mMapMode').value;$('mCompareMaps').innerHTML=chosen.length?(mode==='single'?chosen.map((x,i)=>`<div style="margin-bottom:15px"><strong style="color:${colors[i]}">${safe(x.title)}</strong><div style="margin-top:10px">${demoRouteHTML(x)}</div></div>`).join(''):`<div class="m-info">Schematische Demo-Strecken; die vorhandenen Daten enthalten keine echten GPS-Koordinaten. Ein geografisch korrekter Routenvergleich ist daher noch nicht möglich.</div><div style="margin-top:12px">${chosen.map((x,i)=>`<span class="m-chip gray" style="margin:0 4px 6px 0;color:${colors[i]}">● ${safe(x.title)}</span>`).join('')}</div>`):'<div class="m-empty">Noch keine Einheiten ausgewählt.</div>'}
+$('mCompareAdd').onclick=()=>{const id=$('mComparePick').value;if(id&&compareIds.length<3&&!compareIds.includes(id))compareIds.push(id);renderCompare()};$('mCrossSport').onchange=renderCompare;$('mMapMode').onchange=renderCompare;
+const bleInfo='Die Weboberfläche ist vorbereitet. Für eine echte Verbindung benötigen wir noch die Bluetooth-Service-/Characteristic-UUIDs und das passende Datenformat der ESP32-Firmware. Auf dem iPhone funktioniert Web Bluetooth nur in einem dafür geeigneten Browser wie Bluefy; Safari unterstützt es nicht.';
+$('mConnect').onclick=()=>{dialog('ESP32 verbinden',bleInfo,`<div class="m-info">${typeof navigator.bluetooth==='undefined'?'Dieser Browser bietet aktuell keine Web-Bluetooth-Schnittstelle.':'Web Bluetooth ist vorhanden; die ESP32-Schnittstelle ist aber noch nicht eingerichtet.'}</div>`,'Verstanden')};['mStart','mPause','mStop'].forEach(id=>$(id).onclick=()=>dialog('Trainingssteuerung',bleInfo,'','Verstanden'));
+$('mSettings').onclick=()=>{dialog('Einstellungen','Die Ansicht wird automatisch nach Bildschirmbreite angepasst. Du kannst sie jederzeit manuell wechseln.',`<div class="m-info">Aktuell: ${viewPref==='auto'?'Automatisch':viewPref==='mobile'?'Handy-Ansicht':'Desktop-Ansicht'}. Aufzeichnungen und Änderungen werden zunächst nur in diesem Browser gespeichert. Eine geräteübergreifende Cloud-Synchronisation ist noch nicht eingebunden.</div><div style="margin-top:12px"><select id="mViewChoice" class="m-field"><option value="auto">Automatisch</option><option value="mobile">Immer Handy</option><option value="desktop">Immer Desktop</option></select></div>`,'Speichern',()=>{viewPref=$('mViewChoice').value;put('view',viewPref);applyMode();toast('Ansicht gespeichert')});$('mViewChoice').value=viewPref};
+$('mTeam').onclick=()=>dialog('Fitnesstracker von Julian und Lukas','Diplomarbeit: Entwicklung eines Fitnesstrackers auf Basis eines ESP32 mit Sensoren, SD-Karte und Weboberfläche.',`<img src="Bilder/Julian_Lukas.jpeg" alt="Julian und Lukas" style="width:100%;max-height:260px;object-fit:contain;border-radius:12px" onerror="this.style.display='none'">`,'Schließen');
+$('mLivePulse').addEventListener('click',()=>toast('Noch keine Live-Messwerte'));
+renderHome();renderLive();renderErrors();renderRecords();applyMode();window.addEventListener('orientationchange',()=>{if(selectedTab==='charts')setTimeout(drawDetailCharts,130);if($('mCompare').classList.contains('active'))setTimeout(renderCompare,130)});
+})();
+</script>
 
 </body>
 </html>
