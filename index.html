@@ -3112,6 +3112,603 @@ header {
     }
 }
 
+
+
+/* ================================================================
+   LAPTOP / DESKTOP – SPORTTRACKER-DASHBOARD
+   Eigenständiges, responsives Desktop-Layout.
+   Die bereits gestaltete Handy-Oberfläche bleibt unverändert.
+================================================================ */
+
+@media (min-width: 801px) {
+    body:not(.force-mobile) {
+        background: #101720;
+        background-image:
+            radial-gradient(ellipse at 82% 0%, rgba(255, 111, 71, .09), transparent 42%),
+            radial-gradient(ellipse at 12% 90%, rgba(31, 195, 184, .06), transparent 46%);
+    }
+
+    body:not(.force-mobile)::before {
+        opacity: .055;
+        background-position: right 2% bottom 1%;
+        background-size: min(580px, 43vw) auto;
+    }
+
+    body:not(.force-mobile) .container {
+        max-width: 1760px;
+        min-height: 100vh;
+        padding: 22px clamp(18px, 3vw, 52px) 70px;
+        display: grid;
+        grid-template-columns: 235px minmax(0, 1fr);
+        grid-template-rows: auto 1fr;
+        column-gap: clamp(23px, 3.5vw, 56px);
+        align-items: start;
+    }
+
+    body:not(.force-mobile) .container > header {
+        grid-column: 1 / -1;
+        grid-row: 1;
+        padding: 11px 0 25px;
+        margin-bottom: 33px;
+        border-bottom: 1px solid #2d3d4d;
+        position: relative;
+    }
+
+    body:not(.force-mobile) .project-header {
+        padding-left: 64px;
+        position: relative;
+        gap: 5px;
+    }
+
+    body:not(.force-mobile) .project-header::before {
+        content: '⌁';
+        position: absolute;
+        left: 0;
+        top: 2px;
+        width: 48px;
+        height: 48px;
+        border-radius: 16px;
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-size: 31px;
+        font-weight: 900;
+        background: linear-gradient(145deg, #ff754e, #e94e40);
+        box-shadow: 0 8px 30px rgba(255, 102, 68, .23);
+    }
+
+    body:not(.force-mobile) .project-label {
+        color: #ff9f79;
+        letter-spacing: 1.7px;
+        font-size: 10px;
+    }
+
+    body:not(.force-mobile) .project-title {
+        font-size: clamp(20px, 2vw, 27px);
+        letter-spacing: -.7px;
+    }
+
+    body:not(.force-mobile) .project-subtitle {
+        color: #9dabbd;
+    }
+
+    body:not(.force-mobile) .header-right {
+        gap: 15px;
+    }
+
+    body:not(.force-mobile) .view-choice-wrap,
+    body:not(.force-mobile) .system-status {
+        background: #1c2937;
+        border: 1px solid #36485c;
+        border-radius: 13px;
+        padding: 9px 13px;
+        color: #c7d6e7;
+    }
+
+    body:not(.force-mobile) .view-choice {
+        background: #223247;
+        border: 1px solid #496078;
+        border-radius: 8px;
+        color: #f0f6ff;
+        padding: 7px;
+        cursor: pointer;
+    }
+
+    body:not(.force-mobile) .system-status {
+        color: #ffbf83;
+        font-size: 11px;
+        letter-spacing: .3px;
+    }
+
+    body:not(.force-mobile) .team-photo {
+        width: 51px;
+        height: 51px;
+        border: 2px solid #536c86;
+        transition: transform .2s, border-color .2s;
+    }
+
+    body:not(.force-mobile) .photo-button:hover .team-photo {
+        transform: scale(1.06);
+        border-color: #ff9672;
+    }
+
+    body:not(.force-mobile) .tabs {
+        grid-column: 1;
+        grid-row: 2;
+        position: sticky;
+        top: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        overflow: visible;
+        margin: 0;
+        padding: 17px 12px;
+        border: 1px solid #2b3b4c;
+        border-radius: 23px;
+        background: rgba(22, 32, 44, .92);
+        box-shadow: 0 14px 50px rgba(0, 0, 0, .12);
+        min-height: 320px;
+    }
+
+    body:not(.force-mobile) .tabs::before {
+        content: 'DEIN DASHBOARD';
+        font-size: 10px;
+        letter-spacing: 1.8px;
+        color: #8196ad;
+        font-weight: 800;
+        padding: 12px 13px 9px;
+    }
+
+    body:not(.force-mobile) .tabs::after {
+        content: 'FITNESSTRACKER  •  HTL PINKAFELD';
+        color: #627c94;
+        border-top: 1px solid #324151;
+        line-height: 1.7;
+        font-size: 9px;
+        letter-spacing: 1px;
+        margin: 20px 8px 0;
+        padding: 18px 6px 5px;
+    }
+
+    body:not(.force-mobile) .tab-button {
+        border: 1px solid transparent;
+        border-radius: 13px;
+        text-align: left;
+        font-size: 14px;
+        font-weight: 700;
+        padding: 16px 13px;
+        color: #abbcce;
+        transition: background .18s, color .18s, border-color .18s;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    body:not(.force-mobile) .tab-button::before {
+        width: 24px;
+        display: inline-block;
+        flex-shrink: 0;
+        font-size: 20px;
+        text-align: center;
+        font-weight: normal;
+    }
+
+    body:not(.force-mobile) .tab-button[data-tab="overview"]::before {content: '⌂';}
+    body:not(.force-mobile) .tab-button[data-tab="live"]::before {content: '⌁';}
+    body:not(.force-mobile) .tab-button[data-tab="errors"]::before {content: '⚠';}
+    body:not(.force-mobile) .tab-button[data-tab="records"]::before {content: '▤';}
+
+    body:not(.force-mobile) .tab-button:hover {
+        background: #263447;
+        color: #fff;
+    }
+
+    body:not(.force-mobile) .tab-button.active {
+        color: #ffab85;
+        background: linear-gradient(100deg, rgba(255, 111, 71, .2), rgba(255, 111, 71, .045));
+        border-color: rgba(255, 135, 90, .3);
+        box-shadow: inset 3px 0 0 #ff805a;
+    }
+
+    body:not(.force-mobile) .tab-content {
+        grid-column: 2;
+        grid-row: 2;
+        min-width: 0;
+        animation: desktopEntrance .25s ease-out;
+    }
+
+    @keyframes desktopEntrance {
+        from {opacity: .65; transform: translateY(8px);}
+        to {opacity: 1; transform: translateY(0);}
+    }
+
+    body:not(.force-mobile) .overview-title,
+    body:not(.force-mobile) .sport-current-title {
+        font-size: clamp(24px, 2.7vw, 34px);
+        font-weight: 850;
+        letter-spacing: -.9px;
+        margin-bottom: 8px;
+    }
+
+    body:not(.force-mobile) .overview-text,
+    body:not(.force-mobile) .section-description,
+    body:not(.force-mobile) .sport-current-description {
+        color: #9daec1;
+        font-size: 14px;
+    }
+
+    body:not(.force-mobile) .section-title {
+        font-size: 16px;
+        font-weight: 800;
+        letter-spacing: .45px;
+        text-transform: none;
+        margin-bottom: 19px;
+    }
+
+    body:not(.force-mobile) .overall-status,
+    body:not(.force-mobile) .card,
+    body:not(.force-mobile) .data-section,
+    body:not(.force-mobile) .summary-card,
+    body:not(.force-mobile) .record-card,
+    body:not(.force-mobile) .info-box,
+    body:not(.force-mobile) .activity-box,
+    body:not(.force-mobile) .chart-section,
+    body:not(.force-mobile) .comparison-metric,
+    body:not(.force-mobile) .comparison-head-card {
+        background: #1b2634;
+        border: 1px solid #35485c;
+        border-radius: 19px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, .09);
+    }
+
+    body:not(.force-mobile) .card {
+        padding: 23px;
+        min-height: 142px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    body:not(.force-mobile) .card::before {
+        content: '';
+        height: 3px;
+        background: linear-gradient(90deg, #ff8961, #f6bb72);
+        position: absolute;
+        top: 0;
+        left: 21px;
+        right: 21px;
+        border-radius: 4px;
+    }
+
+    body:not(.force-mobile) .cards > :nth-child(2)::before {background: #42caba;}
+    body:not(.force-mobile) .cards > :nth-child(3)::before {background: #a79aff;}
+    body:not(.force-mobile) .cards > :nth-child(4)::before {background: #f3bc63;}
+    body:not(.force-mobile) .cards {grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px;}
+    body:not(.force-mobile) .card-title {color: #a9bacd; font-size: 13px;}
+    body:not(.force-mobile) .card-value {font-size: 27px; letter-spacing: -.7px;}
+    body:not(.force-mobile) .card-info {color: #a1b5c8; line-height: 1.5;}
+
+    body:not(.force-mobile) .overall-status {
+        border-color: rgba(255, 164, 104, .38);
+        background: linear-gradient(105deg, rgba(72, 47, 43, .95), #1b2634 65%);
+        padding: 22px;
+    }
+
+    body:not(.force-mobile) .overall-led {
+        background: #f6ac61;
+        box-shadow: 0 0 0 7px rgba(246, 172, 97, .1);
+    }
+
+    body:not(.force-mobile) .overall-title {font-size: 19px;}
+    body:not(.force-mobile) .overall-label {color: #ffc088;}
+    body:not(.force-mobile) .overall-description {line-height: 1.6;}
+
+    body:not(.force-mobile) .data-section {padding: 26px;}
+    body:not(.force-mobile) .data-header {border-bottom-color: #34485c;}
+    body:not(.force-mobile) .data-title {font-size: 18px;}
+    body:not(.force-mobile) .data-number {color: #fff; font-size: 32px;}
+
+    body:not(.force-mobile) .error-summary,
+    body:not(.force-mobile) .record-summary {gap: 17px;}
+
+    body:not(.force-mobile) .summary-card {padding: 23px;}
+    body:not(.force-mobile) .summary-number {color: #ffb189;}
+
+    body:not(.force-mobile) .sports-dropdown {max-width: 100%; width: 100%; margin: 0 0 30px;}
+    body:not(.force-mobile) .sports-dropdown-button {
+        border: 1px solid #3e526a;
+        background: #26364a;
+        border-radius: 13px;
+        padding: 17px 21px;
+    }
+    body:not(.force-mobile) .sports-dropdown-panel {
+        background: #1b2939;
+        border-radius: 13px;
+        overflow: visible;
+        box-shadow: 0 25px 70px #070d16bb;
+    }
+    body:not(.force-mobile) .record-list {grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px;}
+    body:not(.force-mobile) .record-card {
+        padding: 24px;
+        position: relative;
+        overflow: hidden;
+        transition: transform .18s, border-color .18s, box-shadow .18s;
+    }
+    body:not(.force-mobile) .record-card::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 18px;
+        bottom: 18px;
+        width: 4px;
+        background: linear-gradient(180deg, #ff805a, #f6b768);
+        border-radius: 0 4px 4px 0;
+    }
+    body:not(.force-mobile) .record-card:hover,
+    body:not(.force-mobile) .sensor-card:hover {
+        transform: translateY(-3px);
+        border-color: #fc9874;
+        box-shadow: 0 20px 48px rgba(0, 0, 0, .2);
+    }
+    body:not(.force-mobile) .record-title {font-size: 18px; line-height: 1.3;}
+    body:not(.force-mobile) .record-sport-badge {
+        border: 0;
+        border-radius: 999px;
+        background: rgba(255, 131, 87, .17);
+        color: #ffad88;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+    body:not(.force-mobile) .record-meta {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 9px;
+    }
+    body:not(.force-mobile) .record-meta-box {
+        background: #14202d;
+        border: 1px solid #2b3b4e;
+        border-radius: 11px;
+        padding: 13px;
+    }
+    body:not(.force-mobile) .record-meta-value {font-size: 17px;}
+    body:not(.force-mobile) .record-action {color: #58dec9;}
+    body:not(.force-mobile) .empty-records {grid-column: 1/-1; border-radius: 16px;}
+
+    body:not(.force-mobile) .modal {backdrop-filter: blur(8px);}
+    body:not(.force-mobile) .modal-content {
+        background: #192634;
+        border: 1px solid #40536a;
+        border-radius: 23px;
+        box-shadow: 0 28px 90px rgba(0, 0, 0, .5);
+    }
+    body:not(.force-mobile) .modal-small-title {color: #ffaf87;}
+    body:not(.force-mobile) .modal-title {letter-spacing: -.5px;}
+    body:not(.force-mobile) .activity-box,
+    body:not(.force-mobile) .chart-section,
+    body:not(.force-mobile) .chart-card,
+    body:not(.force-mobile) .comparison-metric,
+    body:not(.force-mobile) .comparison-head-card {border-radius: 15px;}
+    body:not(.force-mobile) .activity-box-title {color: #61dfcf;}
+    body:not(.force-mobile) .primary-button,
+    body:not(.force-mobile) .sport-save-button {
+        border: 1px solid #ff9670;
+        background: #e96747;
+        color: #fff;
+        border-radius: 10px;
+        font-weight: 700;
+    }
+    body:not(.force-mobile) .secondary-button,
+    body:not(.force-mobile) .compare-button,
+    body:not(.force-mobile) .compare-selection-cancel,
+    body:not(.force-mobile) .sport-select,
+    body:not(.force-mobile) .sport-name-input {
+        border-radius: 10px;
+    }
+    body:not(.force-mobile) button:focus-visible,
+    body:not(.force-mobile) select:focus-visible,
+    body:not(.force-mobile) input:focus-visible {
+        outline: 2px solid #ff9874;
+        outline-offset: 3px;
+    }
+}
+
+/* Desktop-Zusatzbereiche: Kennzahlen und Testtraining */
+.desktop-sport-hero,
+.desktop-stats,
+.desktop-training-panel,
+.desktop-section-lead {
+    display: none;
+}
+
+@media (min-width: 801px) {
+    body:not(.force-mobile) .desktop-sport-hero,
+    body:not(.force-mobile) .desktop-stats,
+    body:not(.force-mobile) .desktop-training-panel,
+    body:not(.force-mobile) .desktop-section-lead {display: block;}
+
+    body:not(.force-mobile) .desktop-sport-hero {
+        background: linear-gradient(111deg, #243e4b, #1c2b3a 53%, #303143);
+        border: 1px solid #466070;
+        border-radius: 24px;
+        padding: clamp(24px, 3vw, 38px);
+        margin-bottom: 25px;
+        overflow: hidden;
+        position: relative;
+        isolation: isolate;
+    }
+    body:not(.force-mobile) .desktop-sport-hero::before {
+        content: '⌁';
+        position: absolute;
+        font-size: 235px;
+        font-weight: 900;
+        line-height: .7;
+        right: 36px;
+        top: 38px;
+        color: rgba(255, 157, 100, .1);
+        transform: rotate(-12deg);
+        pointer-events: none;
+        z-index: -1;
+    }
+    body:not(.force-mobile) .desktop-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-transform: uppercase;
+        letter-spacing: 1.4px;
+        font-size: 10px;
+        font-weight: 800;
+        color: #63dfcf;
+        margin-bottom: 16px;
+    }
+    body:not(.force-mobile) .desktop-sport-hero h2 {
+        font-size: clamp(26px, 3vw, 40px);
+        letter-spacing: -1.2px;
+        line-height: 1.1;
+        margin-bottom: 15px;
+    }
+    body:not(.force-mobile) .desktop-sport-hero h2 span {color: #ffad82;}
+    body:not(.force-mobile) .desktop-sport-hero p {max-width: 570px; color: #b6c6d6; line-height: 1.65; font-size: 14px;}
+    body:not(.force-mobile) .desktop-hero-actions {display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px;}
+    body:not(.force-mobile) .desktop-btn {
+        background: #263649;
+        color: #f4f8ff;
+        border: 1px solid #4c627a;
+        border-radius: 12px;
+        padding: 13px 19px;
+        cursor: pointer;
+        font-weight: 800;
+        font-size: 13px;
+        transition: background .2s, transform .2s;
+    }
+    body:not(.force-mobile) .desktop-btn:hover {background: #36495e; transform: translateY(-1px);}
+    body:not(.force-mobile) .desktop-btn.primary {background: #f47551; color: #181e27; border-color: #ff976f;}
+    body:not(.force-mobile) .desktop-btn.primary:hover {background: #ffa078;}
+    body:not(.force-mobile) .desktop-btn:disabled {opacity: .42; cursor: not-allowed; transform: none;}
+    body:not(.force-mobile) .desktop-btn.alert {background: #4c2932; color: #ffb1ad; border-color: #844352;}
+
+    body:not(.force-mobile) .desktop-section-lead {
+        font-size: 11px;
+        font-weight: 850;
+        letter-spacing: 1.5px;
+        color: #90abc3;
+        text-transform: uppercase;
+        margin: 31px 0 17px;
+    }
+    body:not(.force-mobile) .desktop-stats {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    body:not(.force-mobile) .desktop-stat {
+        background: #1c2837;
+        border: 1px solid #34495e;
+        border-radius: 17px;
+        padding: 23px 19px;
+        position: relative;
+        overflow: hidden;
+    }
+    body:not(.force-mobile) .desktop-stat::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--accent, #fa845e);
+    }
+    body:not(.force-mobile) .desktop-stat:nth-child(2) {--accent: #4fd5c5;}
+    body:not(.force-mobile) .desktop-stat:nth-child(3) {--accent: #a99afa;}
+    body:not(.force-mobile) .desktop-stat:nth-child(4) {--accent: #f7c16a;}
+    body:not(.force-mobile) .desktop-stat-label {font-size: 12px; color: #a1b3c9; margin-bottom: 16px;}
+    body:not(.force-mobile) .desktop-stat-number {font-size: clamp(22px, 2.5vw, 35px); letter-spacing: -1px; font-weight: 850; font-variant-numeric: tabular-nums; overflow-wrap: anywhere;}
+    body:not(.force-mobile) .desktop-stat-icon {
+        position: absolute;
+        top: 17px;
+        right: 16px;
+        color: var(--accent, #fa845e);
+        font-size: 21px;
+    }
+
+    body:not(.force-mobile) .desktop-training-panel {
+        background: linear-gradient(105deg, #1d3441, #1b2838);
+        border: 1px solid #3a5b68;
+        border-radius: 20px;
+        padding: 25px;
+        margin: 0 0 26px;
+    }
+    body:not(.force-mobile) .desktop-training-top {display: flex; align-items: center; justify-content: space-between; gap: 15px; flex-wrap: wrap;}
+    body:not(.force-mobile) .desktop-training-top h3 {font-size: 19px; margin-bottom: 5px;}
+    body:not(.force-mobile) .desktop-train-status {
+        background: #233e47;
+        color: #80ebd3;
+        border-radius: 999px;
+        border: 1px solid #426874;
+        padding: 8px 13px;
+        font-size: 11px;
+        font-weight: 800;
+    }
+    body:not(.force-mobile) .desktop-clock {
+        font-size: clamp(37px, 4.2vw, 62px);
+        font-weight: 850;
+        letter-spacing: -2px;
+        margin: 20px 0;
+        font-variant-numeric: tabular-nums;
+    }
+    body:not(.force-mobile) .desktop-training-actions {display: flex; flex-wrap: wrap; gap: 10px;}
+    body:not(.force-mobile) .desktop-training-footnote {font-size: 12px; line-height: 1.6; color: #a3b7ca; margin-top: 15px;}
+    body:not(.force-mobile) .desktop-info-strip {
+        border: 1px solid #365366;
+        background: #1d3041;
+        color: #abc7d6;
+        font-size: 12px;
+        border-radius: 13px;
+        padding: 15px 17px;
+        line-height: 1.6;
+        margin-bottom: 23px;
+    }
+    body:not(.force-mobile) .desktop-info-strip strong {color: #e2f4ff;}
+}
+
+/* Für schmale Laptop-Fenster bleibt die Navigation kompakt. */
+@media (min-width: 801px) and (max-width: 1180px) {
+    body:not(.force-mobile) .container {grid-template-columns: 195px minmax(0, 1fr); column-gap: 22px;}
+    body:not(.force-mobile) .desktop-stats {grid-template-columns: repeat(2, minmax(0, 1fr));}
+    body:not(.force-mobile) .record-list {grid-template-columns: 1fr;}
+    body:not(.force-mobile) .header-right {gap: 9px;}
+}
+
+/* Bei erzwungener Desktop-Ansicht auf einem Handy gelten die Desktop-Stile ebenfalls. */
+@media (max-width: 800px) {
+    body.force-desktop .container {
+        background: #101720;
+    }
+    body.force-desktop .desktop-sport-hero,
+    body.force-desktop .desktop-stats,
+    body.force-desktop .desktop-training-panel,
+    body.force-desktop .desktop-section-lead {display: block;}
+    body.force-desktop .desktop-sport-hero,
+    body.force-desktop .desktop-training-panel {
+        background: #1b2939;
+        padding: 25px;
+        margin-bottom: 20px;
+        border: 1px solid #3d5065;
+        border-radius: 17px;
+    }
+    body.force-desktop .desktop-stats {display:grid;grid-template-columns: repeat(4, minmax(0,1fr));gap: 12px;margin: 15px 0 30px;}
+    body.force-desktop .desktop-stat {background: #202f41;border:1px solid #375069;border-radius:15px;padding:15px;}
+    body.force-desktop .desktop-stat-label {color:#aabbce;font-size:13px;margin-bottom:8px;}
+    body.force-desktop .desktop-stat-number {font-weight:800;font-size:22px;}
+    body.force-desktop .desktop-stat-icon {display:none;}
+    body.force-desktop .desktop-training-top {display:flex;gap:15px;align-items:center;justify-content:space-between;}
+    body.force-desktop .desktop-clock {font-size:42px;font-weight:800;font-variant-numeric:tabular-nums;margin:16px 0;}
+    body.force-desktop .desktop-training-actions {display:flex;gap:10px;}
+    body.force-desktop .desktop-btn {padding:10px 15px;border:1px solid #58708b;background:#283b52;color:white;border-radius:9px;}
+    body.force-desktop .desktop-btn.primary {background:#ed7652;}
+    body.force-desktop .desktop-btn:disabled {opacity:.4;}
+    body.force-desktop .desktop-training-footnote {color:#a7bacd;font-size:12px;margin-top:10px;}
+    body.force-desktop .desktop-section-lead {margin:22px 0 12px;color:#aac6d8;}
+    body.force-desktop .desktop-info-strip {background:#203244;border:1px solid #3c5770;padding:15px;margin-bottom:20px;}
+}
+
 </style>
 
 </head>
@@ -3261,6 +3858,29 @@ header {
 
         </div>
 
+
+
+        <!-- =====================================================
+             DESKTOP-STARTBEREICH – moderne Sporttracker-Optik
+        ====================================================== -->
+        <div class="desktop-sport-hero">
+            <div class="desktop-eyebrow">● DEIN SPORT. DEIN FORTSCHRITT.</div>
+            <h2>Dein Training.<br><span>Deine Leistung.</span></h2>
+            <p>Alle Einheiten, Statistiken und Trainingsdaten an einem Ort. Starte zum Ausprobieren ein Testtraining – die Stoppuhr funktioniert auch ohne angeschlossenen ESP32.</p>
+            <div class="desktop-hero-actions">
+                <button class="desktop-btn primary" id="desktopGoLive">▶ Training starten</button>
+                <button class="desktop-btn" id="desktopGoRecords">▤ Aufzeichnungen ansehen</button>
+                <button class="desktop-btn" id="desktopConnect">⌁ ESP32 verbinden</button>
+            </div>
+        </div>
+        <div class="desktop-section-lead">Deine Trainingsstatistik</div>
+        <div class="desktop-stats" id="desktopStats" aria-live="polite">
+            <div class="desktop-stat"><span class="desktop-stat-icon">▤</span><div class="desktop-stat-label">Trainingseinheiten</div><div class="desktop-stat-number" id="desktopStatCount">--</div></div>
+            <div class="desktop-stat"><span class="desktop-stat-icon">◷</span><div class="desktop-stat-label">Gesamtzeit</div><div class="desktop-stat-number" id="desktopStatTime">--</div></div>
+            <div class="desktop-stat"><span class="desktop-stat-icon">↗</span><div class="desktop-stat-label">Gesamtdistanz</div><div class="desktop-stat-number" id="desktopStatDistance">--</div></div>
+            <div class="desktop-stat"><span class="desktop-stat-icon">◈</span><div class="desktop-stat-label">Diese Woche</div><div class="desktop-stat-number" id="desktopStatWeek">--</div></div>
+        </div>
+        <div class="desktop-info-strip"><strong>Hinweis:</strong> Die Beispiel-Einheiten dienen zur Demonstration. Bei einem Testtraining wird ausschließlich die Zeit aufgezeichnet. Eine echte ESP32-Verbindung ist derzeit noch nicht möglich.</div>
 
         <div class="overall-status">
 
@@ -3416,6 +4036,27 @@ header {
     <div
         id="live"
         class="tab-content">
+
+        <!-- =====================================================
+             DESKTOP-TESTTRAINING – gemeinsame Trainingsdaten
+        ====================================================== -->
+        <div class="desktop-training-panel" id="desktopTrainingPanel">
+            <div class="desktop-training-top">
+                <div>
+                    <h3>Trainingssteuerung</h3>
+                    <p style="color:#a4b7c9;font-size:12px">Stoppuhr zum Testen, auch ohne ESP32</p>
+                </div>
+                <span id="desktopTrainingStatus" class="desktop-train-status">Testbereit</span>
+            </div>
+            <div class="desktop-clock" id="desktopClock">00:00:00</div>
+            <div class="desktop-training-actions">
+                <button class="desktop-btn primary" id="desktopStart">▶ Starten</button>
+                <button class="desktop-btn" id="desktopPause">Ⅱ Pause</button>
+                <button class="desktop-btn alert" id="desktopStop">■ Beenden</button>
+            </div>
+            <p class="desktop-training-footnote">Hier läuft nur die Zeit. Puls, Geschwindigkeit, Belastung und GPS werden ohne ESP32 nicht aufgezeichnet. Nach dem Beenden findest du das Testtraining unter „Aufzeichnungen“.</p>
+        </div>
+        <div class="desktop-info-strip"><strong>Live-Messwerte:</strong> Derzeit keine echte Sensorverbindung. Die folgenden Live-Daten sind daher nicht verfügbar.</div>
 
         <section>
 
@@ -6026,6 +6667,10 @@ header {
         seconds
     ) {
 
+        if (!Number.isFinite(seconds) || seconds <= 0) {
+            return '--';
+        }
+
         let min =
             Math.floor(
                 seconds / 60
@@ -6835,7 +7480,9 @@ header {
             .filter(
                 activity =>
                     activity.sport ===
-                    sportId
+                    sportId &&
+                    !loadJSON('ft_m_trash', {})[activity.id] &&
+                    !loadJSON('ft_m_permanent', []).includes(activity.id)
             )
             .sort(
                 (
@@ -10469,6 +11116,21 @@ header {
     renderErrors();
     renderRecords();
     applyMode();
+    // Auch die Laptop-Ansicht kann dieselbe Test-Stoppuhr bedienen.
+    // Dadurch entstehen keine zwei unabhängigen Trainingszustände.
+    window.fitnesstrackerTest = {
+        start: startTraining,
+        pause: pauseTraining,
+        finish: finishTraining,
+        seconds: trainingSeconds,
+        state: () => training.state,
+        records: visibleActs,
+        refresh: () => {
+            renderHome();
+            renderRecords();
+        }
+    };
+
     window.addEventListener('orientationchange', () =>
     {
         if (selectedTab === 'charts')
@@ -10479,6 +11141,224 @@ header {
     });
 })();
 
+</script>
+
+
+<script>
+/* ================================================================
+   LAPTOP / DESKTOP – Trainingsanzeige und Bedienung
+   Teilt die Trainingssteuerung und Speicherung mit der Handy-App.
+================================================================ */
+(() => {
+    'use strict';
+
+    const byId = id => document.getElementById(id);
+    const api = window.fitnesstrackerTest;
+
+    if (!api) {
+        console.warn('Die gemeinsame Trainingssteuerung wurde nicht geladen.');
+        return;
+    }
+
+    /* ------------------------------------------------------------
+       Desktop-Navigation: dieselben vier Funktionsbereiche.
+    ------------------------------------------------------------- */
+    function openDesktopTab(name) {
+        const button = document.querySelector('.tabs .tab-button[data-tab="' + name + '"]');
+        if (button) {
+            button.click();
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    byId('desktopGoLive').addEventListener('click', () => {
+        openDesktopTab('live');
+    });
+
+    byId('desktopGoRecords').addEventListener('click', () => {
+        openDesktopTab('records');
+    });
+
+    byId('desktopConnect').addEventListener('click', () => {
+        window.alert('Verbinden ist zurzeit noch nicht möglich.');
+    });
+
+    /* ------------------------------------------------------------
+       Kein künstlicher ESP32-Online-Status und keine erfundenen
+       Live-Sensormesswerte, solange BLE nicht angeschlossen ist.
+    ------------------------------------------------------------- */
+    function setConnectionInformation() {
+        const status = document.querySelector('.container .system-status');
+        if (status) {
+            status.innerHTML = '<span class="dot orange"></span> ESP32 NICHT VERBUNDEN';
+        }
+
+        const overall = document.querySelector('#overview .overall-status');
+        if (overall) {
+            const title = overall.querySelector('.overall-title');
+            const description = overall.querySelector('.overall-description');
+            const label = overall.querySelector('.overall-label');
+            const led = overall.querySelector('.overall-led');
+
+            if (title) title.textContent = 'ESP32 nicht verbunden';
+            if (description) description.textContent = 'Die Webseite ist bereit. Echte Sensorwerte erscheinen erst nach einer später eingerichteten ESP32-Verbindung.';
+            if (label) label.textContent = 'Offline';
+            if (led) led.style.background = '#f5b16c';
+        }
+
+        const cards = document.querySelectorAll('#overview .cards > .card');
+        const values = [
+            ['ESP32', 'Offline', 'Keine Bluetooth-Verbindung'],
+            ['Datenübertragung', 'Nicht aktiv', 'Noch keine Schnittstelle eingerichtet'],
+            ['Sensoren & Module', 'Ungeprüft', 'Status erst nach Verbindung verfügbar'],
+            ['Letzte Aktualisierung', '--', 'Noch keine echten Messdaten']
+        ];
+
+        cards.forEach((card, index) => {
+            const data = values[index];
+            if (!data) return;
+
+            const title = card.querySelector('.card-title');
+            const value = card.querySelector('.card-value');
+            const info = card.querySelector('.card-info');
+            if (title) title.textContent = data[0];
+            if (value) value.textContent = data[1];
+            if (info) info.textContent = data[2];
+        });
+
+        document.querySelectorAll('#sensorModal .component-state').forEach(element => {
+            element.textContent = 'Nicht geprüft';
+            element.style.color = '#ffbc83';
+        });
+
+        const errorNotice = document.querySelector('#errors .info-box');
+        if (errorNotice) {
+            errorNotice.textContent = 'Ohne ESP32-Verbindung können derzeit keine Sensorfehler geprüft werden.';
+        }
+
+        document.querySelectorAll('#live .data-number').forEach(element => {
+            const unit = element.querySelector('.data-unit');
+            element.textContent = '--';
+            if (unit) {
+                element.appendChild(unit);
+            }
+        });
+        document.querySelectorAll('#live .data-status').forEach(element => {
+            element.textContent = 'Keine Live-Daten';
+        });
+    }
+
+    /* ------------------------------------------------------------
+       Zusammenfassung inklusive vorhandener Testaufzeichnungen.
+       Die gleiche Statistikbasis wird in der Handy-App verwendet.
+    ------------------------------------------------------------- */
+    function renderStatistics() {
+        const list = api.records();
+        const totalSeconds = list.reduce((sum, activity) => {
+            return sum + (Number(activity.durationSeconds) || 0);
+        }, 0);
+        const distance = list.reduce((sum, activity) => {
+            return sum + (Number(activity.distance) || 0);
+        }, 0);
+        const monday = new Date();
+        monday.setHours(0, 0, 0, 0);
+        monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
+
+        const weeklyCount = list.filter(activity => {
+            const date = new Date(activity.date + 'T' + activity.time);
+            return date >= monday;
+        }).length;
+
+        byId('desktopStatCount').textContent = String(list.length);
+        byId('desktopStatTime').textContent = formatTotalTime(totalSeconds);
+        byId('desktopStatDistance').textContent = distance.toLocaleString('de-AT', {
+            maximumFractionDigits: 1
+        }) + ' km';
+        byId('desktopStatWeek').textContent = String(weeklyCount);
+    }
+
+    /* ------------------------------------------------------------
+       Die Laufzeit kommt aus der gemeinsamen Trainingssteuerung.
+       Auf Handy und Desktop läuft dieselbe Stoppuhr.
+    ------------------------------------------------------------- */
+    function showClock(seconds) {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const remaining = Math.floor(seconds % 60);
+        return [hours, minutes, remaining]
+            .map(n => String(n).padStart(2, '0'))
+            .join(':');
+    }
+
+    function renderTrainingControls() {
+        const state = api.state();
+        const active = state !== 'idle';
+        const running = state === 'running';
+
+        byId('desktopClock').textContent = showClock(api.seconds());
+        byId('desktopTrainingStatus').textContent = running
+            ? '● Test läuft'
+            : active ? 'Ⅱ Pausiert' : 'Testbereit';
+        byId('desktopStart').textContent = state === 'paused'
+            ? '▶ Fortsetzen'
+            : '▶ Starten';
+
+        byId('desktopStart').disabled = running;
+        byId('desktopPause').disabled = !running;
+        byId('desktopStop').disabled = !active;
+    }
+
+    byId('desktopStart').addEventListener('click', () => {
+        api.start();
+        renderTrainingControls();
+    });
+
+    byId('desktopPause').addEventListener('click', () => {
+        api.pause();
+        renderTrainingControls();
+    });
+
+    byId('desktopStop').addEventListener('click', () => {
+        if (api.state() === 'idle') return;
+
+        const confirmed = window.confirm(
+            'Testtraining beenden und die bisherige Zeit speichern? ' +
+            'Es wurden keine echten Sensorwerte aufgezeichnet.'
+        );
+
+        if (!confirmed) return;
+
+        api.finish();
+        // Neue Testeinheiten landen standardmäßig bei „Nicht zugewiesen“.
+        // Den passenden Sportbereich direkt anzeigen.
+        currentSport = 'unassigned';
+        renderSports();
+        renderRecords();
+        renderStatistics();
+        renderTrainingControls();
+        openDesktopTab('records');
+    });
+
+    /* ------------------------------------------------------------
+       Aktualisieren, ohne andere Funktionen zu verändern.
+    ------------------------------------------------------------- */
+    setConnectionInformation();
+    renderStatistics();
+    renderTrainingControls();
+
+    setInterval(renderTrainingControls, 1000);
+
+    document.querySelectorAll('.tabs .tab-button').forEach(button => {
+        button.addEventListener('click', () => {
+            renderStatistics();
+        });
+    });
+
+    window.addEventListener('storage', () => {
+        renderStatistics();
+        renderTrainingControls();
+    });
+})();
 </script>
 
 </body>
