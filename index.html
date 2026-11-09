@@ -4770,55 +4770,6 @@ body.force-mobile::before {
     </button>
    </div>
    <div class="m-section-label">
-    Aktuelle Messwerte
-   </div>
-   <div class="m-grid2">
-    <div class="m-panel">
-     <div class="m-cardname">
-      ♡ Puls
-     </div>
-     <div class="m-val" data-metric="pulse">
-      --
-     </div>
-     <div class="m-unit">
-      bpm
-     </div>
-    </div>
-    <div class="m-panel">
-     <div class="m-cardname">
-      ↗ Geschwindigkeit
-     </div>
-     <div class="m-val" data-metric="speed">
-      --
-     </div>
-     <div class="m-unit">
-      km/h
-     </div>
-    </div>
-    <div class="m-panel">
-     <div class="m-cardname">
-      ◉ Belastung
-     </div>
-     <div class="m-val" data-metric="load">
-      --
-     </div>
-     <div class="m-unit">
-      %
-     </div>
-    </div>
-    <div class="m-panel">
-     <div class="m-cardname">
-      ↥ Sprünge
-     </div>
-     <div class="m-val" data-metric="jumps">
-      --
-     </div>
-     <div class="m-unit">
-      Anzahl
-     </div>
-    </div>
-   </div>
-   <div class="m-section-label">
     Deine Trainingsstatistik
    </div>
    <div class="m-grid2" id="mHomeStats">
@@ -9943,11 +9894,14 @@ body.force-mobile::before {
     };
     $('mCrossSport').onchange = renderCompare;
     $('mMapMode').onchange = renderCompare;
-    const bleInfo = 'Die Weboberfläche ist vorbereitet. Für eine echte Verbindung benötigen wir noch die Bluetooth-Service-/Characteristic-UUIDs und das passende Datenformat der ESP32-Firmware. Auf dem iPhone funktioniert Web Bluetooth nur in einem dafür geeigneten Browser wie Bluefy; Safari unterstützt es nicht.';
     $('mConnect').onclick = () =>
     {
-        dialog('ESP32 verbinden', bleInfo, `<div class="m-info">${typeof navigator.bluetooth === 'undefined' ? 'Dieser Browser bietet aktuell keine Web-Bluetooth-Schnittstelle.' : 'Web Bluetooth ist vorhanden; die ESP32-Schnittstelle ist aber noch nicht eingerichtet.'}</div>`, 'Verstanden');
-
+        dialog(
+            'ESP32 verbinden',
+            'Verbinden ist zurzeit noch nicht möglich.',
+            '',
+            'Verstanden'
+        );
     };
     /* Test-Stoppuhr: unabhängig vom ESP32, ohne Messdaten. */
     $('mStart').onclick = startTraining;
