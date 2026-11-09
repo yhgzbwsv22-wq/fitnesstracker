@@ -2586,6 +2586,532 @@ body.force-mobile::before {
     }
 }
 
+
+/* =====================================================
+   DESIGN-UPDATE 2026 – SPORTTRACKER-LOOK
+   Rein visuelle Änderungen: keine Trainings-, Speicher-
+   oder Navigationslogik wird dadurch verändert.
+   Farben: Nachtblau / Korallorange / Türkis.
+===================================================== */
+
+:root {
+    --sport-accent: #ff7048;
+    --sport-accent-light: #ffad78;
+    --sport-teal: #52ded2;
+    --sport-text: #f7f9ff;
+    --sport-muted: #a7b6ca;
+}
+
+/* -------- Desktop: Farben und Oberflächen -------- */
+
+body {
+    background: #0c111a;
+    color: var(--sport-text);
+}
+
+body::before {
+    opacity: 0.14;
+}
+
+.container {
+    max-width: 1420px;
+}
+
+header {
+    border-bottom-color: #2b3847;
+    background: linear-gradient(110deg, rgba(255,112,72,.08), transparent 55%);
+    border-radius: 0 0 14px 14px;
+}
+
+.project-label, .modal-small-title {
+    color: var(--sport-accent-light);
+}
+
+.project-title {
+    letter-spacing: -.6px;
+}
+
+.tabs {
+    border-bottom: 1px solid #263544;
+}
+
+.tab-button {
+    border-radius: 12px 12px 0 0;
+    transition: background .2s ease, color .2s ease;
+}
+
+.tab-button:hover {
+    background: rgba(255,112,72,.08);
+}
+
+.tab-button.active {
+    color: #fff;
+    background: rgba(255,112,72,.11);
+    border-bottom-color: var(--sport-accent);
+}
+
+.card, .data-section, .summary-card, .record-card,
+.activity-box, .chart-section, .chart-card,
+.comparison-head-card, .comparison-metric, .info-box {
+    border-radius: 16px;
+    border-color: #304153;
+    background: #18212d;
+    box-shadow: 0 8px 28px rgba(0,0,0,.10);
+}
+
+.card:hover, .sensor-card:hover,
+.record-card:hover {
+    border-color: #ff946d;
+}
+
+.record-card {
+    position: relative;
+    overflow: hidden;
+    transition: transform .2s ease, border-color .2s ease;
+}
+
+.record-card::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--sport-accent), #ffb36c);
+}
+
+.record-card:hover {
+    transform: translateY(-2px);
+}
+
+.record-sport-badge {
+    border-radius: 100px;
+    border-color: rgba(82,222,210,.32);
+    background: rgba(82,222,210,.12);
+    color: #8aeee4;
+}
+
+.record-meta-box, .activity-stat, .comparison-value {
+    border-radius: 10px;
+}
+
+.record-action, .sensor-details {
+    color: #ffab83;
+}
+
+.primary-button, .sport-save-button {
+    background: #f76543;
+    border-color: #ff9876;
+    color: #fff;
+    border-radius: 10px;
+}
+
+.secondary-button, .compare-button,
+.sports-dropdown-button, .sports-dropdown-panel,
+.sport-select, .sport-name-input {
+    border-radius: 10px;
+}
+
+.modal-content {
+    border-radius: 20px;
+    background: #192331;
+}
+
+.view-choice, #mobileApp .m-viewchoice {
+    border-color: #47677b;
+    background: #243546;
+    border-radius: 12px;
+}
+
+/* -------- Mobile: Hintergrund, Typografie und Header -------- */
+
+#mobileApp {
+    --mc: #0c121b;
+    --ms: #192431;
+    --ms2: #253245;
+    --ml: #ff7048;
+    --mt: #f7f9ff;
+    --mm: #a8b8cc;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+    background:
+        radial-gradient(ellipse 90% 360px at 100% 0%, rgba(255,111,69,.105), transparent 72%),
+        radial-gradient(ellipse 75% 320px at 0% 33%, rgba(75,212,206,.045), transparent 72%),
+        #0c121b;
+    letter-spacing: .05px;
+}
+
+#mobileApp .m-header {
+    background: rgba(17,25,35,.97);
+    border-bottom: 1px solid #2c3949;
+    box-shadow: 0 5px 24px rgba(0,0,0,.22);
+}
+
+#mobileApp .m-logo {
+    width: 43px;
+    height: 43px;
+    border-radius: 14px;
+    background: linear-gradient(145deg, #ff935e, #f45143);
+    color: white;
+    box-shadow: 0 6px 18px rgba(255,109,73,.25);
+    font-size: 26px;
+}
+
+#mobileApp .m-heading {
+    font-size: 18px;
+    letter-spacing: -.4px;
+}
+
+#mobileApp .m-iconbtn {
+    background: #253344;
+    border-color: #3a4b5e;
+    border-radius: 13px;
+    transition: background .18s ease;
+}
+
+#mobileApp .m-iconbtn:active {
+    background: #35485d;
+}
+
+#mobileApp .m-headerline {
+    flex-wrap: wrap;
+}
+
+#mobileApp .m-chip {
+    padding: 6px 11px;
+    border-radius: 100px;
+    background: rgba(255,143,76,.13);
+    color: #ffb67f;
+}
+
+#mobileApp .m-chip.blue {
+    background: rgba(82,222,210,.13);
+    color: #7ce9df;
+}
+
+#mobileApp .m-chip.green {
+    background: rgba(70,206,144,.15);
+    color: #7df4ae;
+}
+
+#mobileApp .m-chip.gray {
+    background: #2c3949;
+    color: #c5d2e1;
+}
+
+#mobileApp .m-screen {
+    padding-top: 24px;
+}
+
+#mobileApp h2 {
+    font-size: clamp(25px, 6vw, 31px);
+    letter-spacing: -.8px;
+}
+
+#mobileApp h3 {
+    letter-spacing: -.2px;
+}
+
+#mobileApp .m-section-label {
+    color: #cdd8e8;
+    letter-spacing: 1.1px;
+    font-size: 11px;
+    margin-top: 25px;
+}
+
+/* -------- Mobile: Panels / Kennzahlen -------- */
+
+#mobileApp .m-panel {
+    background: linear-gradient(160deg, #1d2938, #17212d);
+    border: 1px solid #324358;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.12);
+}
+
+#mobileApp .m-panel.m-hero {
+    background:
+        radial-gradient(circle at 91% 8%, rgba(255,157,99,.14), transparent 42%),
+        linear-gradient(145deg, #26374a, #182433 75%);
+    border-color: #455c70;
+    border-radius: 24px;
+}
+
+#mobileApp .m-round {
+    border-color: #45576a;
+    box-shadow: 0 0 0 7px rgba(255,117,70,.055), inset 0 0 0 2px #34475b;
+}
+
+#mobileApp .m-round span {
+    color: #ffa87b;
+}
+
+#mobileApp .m-primary,
+#mobileApp .m-secondary,
+#mobileApp .m-danger {
+    border-radius: 13px;
+    min-height: 46px;
+    font-weight: 750;
+}
+
+#mobileApp .m-primary {
+    background: linear-gradient(115deg, #ff794e, #f45147);
+    border-color: #ff9c74;
+    box-shadow: 0 5px 14px rgba(246,96,63,.22);
+}
+
+#mobileApp .m-secondary {
+    background: #27394c;
+    color: #eff7ff;
+    border-color: #476076;
+    box-shadow: none;
+}
+
+#mobileApp .m-danger {
+    background: #5a2936;
+    border-color: #a75c6c;
+    box-shadow: none;
+}
+
+#mobileApp .m-grid2 {
+    gap: 12px;
+}
+
+#mobileApp #mHomeStats > .m-panel {
+    position: relative;
+    overflow: hidden;
+    min-height: 112px;
+    padding: 17px 15px;
+    background: linear-gradient(145deg, #243146, #19232f);
+}
+
+#mobileApp #mHomeStats > .m-panel::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 15px;
+    bottom: 15px;
+    width: 4px;
+    border-radius: 0 8px 8px 0;
+    background: #ff8159;
+}
+
+#mobileApp #mHomeStats > .m-panel:nth-child(2)::before {
+    background: #54ddd0;
+}
+
+#mobileApp #mHomeStats > .m-panel:nth-child(3)::before {
+    background: #e5b96d;
+}
+
+#mobileApp #mHomeStats > .m-panel:nth-child(4)::before {
+    background: #ac97ff;
+}
+
+#mobileApp #mHomeStats .m-cardname {
+    color: #b8c7d8;
+    font-size: 12px;
+}
+
+#mobileApp #mHomeStats .m-val {
+    margin-top: 15px;
+    font-size: clamp(22px, 5vw, 30px);
+    letter-spacing: -.9px;
+}
+
+#mobileApp #mHomeStats > .m-panel:nth-child(1) .m-val { color: #ffb08e; }
+#mobileApp #mHomeStats > .m-panel:nth-child(2) .m-val { color: #91efe5; }
+#mobileApp #mHomeStats > .m-panel:nth-child(3) .m-val { color: #ffdda0; }
+#mobileApp #mHomeStats > .m-panel:nth-child(4) .m-val { color: #c4b7ff; }
+
+#mobileApp #mLiveGrid > .m-panel {
+    background: linear-gradient(150deg, #202e3e, #18222d);
+    min-height: 135px;
+}
+
+#mobileApp #mLiveGrid .m-val {
+    color: #c9f7f3;
+}
+
+#mobileApp .m-trainingclock {
+    color: #ffb08a;
+    text-shadow: 0 0 28px rgba(255,112,72,.12);
+    letter-spacing: -1.2px;
+}
+
+/* -------- Mobile: Trainingsliste und Eingabefelder -------- */
+
+#mobileApp .m-field {
+    background: #192533;
+    border-color: #3d5064;
+    color: #f2f7ff;
+    border-radius: 13px;
+}
+
+#mobileApp .m-field:focus {
+    border-color: #ff8d64;
+    box-shadow: 0 0 0 3px rgba(255,112,72,.10);
+}
+
+#mobileApp #mSportsToggle {
+    background: #27394b;
+    border-color: #4a6377;
+    text-align: left;
+}
+
+#mobileApp .m-sportlist {
+    background: #1b2938;
+    border-color: #40566c;
+    border-radius: 15px;
+}
+
+#mobileApp .m-sportrow.selected {
+    background: rgba(255,112,72,.12);
+}
+
+#mobileApp .m-record {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(150deg, #202c3d, #172330);
+    border: 1px solid #3b5063;
+    border-radius: 21px;
+    padding: 19px 17px 18px;
+    margin-bottom: 14px;
+    box-shadow: 0 10px 25px rgba(0,0,0,.10);
+    transition: transform .18s ease, border-color .18s ease;
+}
+
+#mobileApp .m-record::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 4px;
+    background: linear-gradient(180deg, #ff8158, #ffd28f);
+}
+
+#mobileApp .m-record:nth-child(3n + 2)::before {
+    background: linear-gradient(180deg, #55e1d2, #80b8ff);
+}
+
+#mobileApp .m-record:nth-child(3n + 3)::before {
+    background: linear-gradient(180deg, #b89cff, #ff89a6);
+}
+
+#mobileApp .m-record:active {
+    border-color: #ff966c;
+    transform: scale(.992);
+}
+
+#mobileApp .m-record-title {
+    font-size: clamp(17px, 4.1vw, 20px);
+    letter-spacing: -.3px;
+    margin-top: 13px;
+}
+
+#mobileApp .m-recordgrid {
+    border-top-color: #3a4b60;
+    margin-top: 15px;
+    padding-top: 15px;
+}
+
+#mobileApp .m-recordgrid strong {
+    font-size: 14px;
+    color: #f7f9ff;
+}
+
+#mobileApp .m-recordgrid small {
+    color: #aebed0;
+}
+
+#mobileApp .m-record [style*="color:#8dbaff"] {
+    color: #ffab83 !important;
+}
+
+#mobileApp .m-info {
+    background: #1e3340;
+    border-color: #3b6671;
+    color: #c1e8e7;
+}
+
+#mobileApp .m-subtabs {
+    background: #213044;
+    border-radius: 15px;
+}
+
+#mobileApp .m-subtabs button.active {
+    background: linear-gradient(110deg, #f9774d, #e85d4b);
+    color: #fff;
+}
+
+#mobileApp .m-stat {
+    background: #253345;
+    border-color: #3b5064;
+    border-radius: 16px;
+}
+
+#mobileApp .m-detail {
+    background: #101823;
+}
+
+#mobileApp .m-dialogbox {
+    background: #1d2937;
+    border-color: #50677b;
+    border-radius: 22px;
+}
+
+#mobileApp .m-popover {
+    background: #253648;
+    border-color: #476076;
+}
+
+/* -------- Mobile: Navigation als moderne Sport-App -------- */
+
+#mobileApp .m-bottom {
+    background: rgba(22,31,42,.97);
+    border-top: 1px solid #35485a;
+    box-shadow: 0 -9px 26px rgba(0,0,0,.23);
+    padding: 9px 9px calc(9px + env(safe-area-inset-bottom));
+    gap: 5px;
+}
+
+#mobileApp .m-navbtn {
+    color: #a8b7c9;
+    border-radius: 16px;
+    padding: 9px 2px 8px;
+    transition: background .2s ease, color .2s ease;
+}
+
+#mobileApp .m-navbtn b {
+    font-size: 23px;
+    line-height: 1.1;
+}
+
+#mobileApp .m-navbtn.active {
+    background: rgba(255,111,71,.15);
+    color: #ff9e76;
+    font-weight: 750;
+}
+
+#mobileApp .m-toast {
+    background: #1d5943;
+    border-color: #54c48f;
+}
+
+@media (max-width: 400px) {
+    #mobileApp .m-record {
+        padding: 16px 14px;
+    }
+    #mobileApp #mHomeStats > .m-panel {
+        min-height: 107px;
+        padding: 14px 12px;
+    }
+    #mobileApp #mHomeStats .m-val {
+        font-size: 21px;
+    }
+    #mobileApp .m-heading {
+        font-size: 16px;
+    }
+    #mobileApp .m-headerline {
+        gap: 6px;
+    }
+}
+
 </style>
 
 </head>
@@ -4732,9 +5258,7 @@ body.force-mobile::before {
       Dein Training auf einen Blick
      </div>
     </div>
-    <span class="m-chip blue">
-     Demo-Aufzeichnungen
-    </span>
+
    </div>
    <div class="m-panel m-hero">
     <div class="m-round">
@@ -4775,7 +5299,7 @@ body.force-mobile::before {
    <div class="m-grid2" id="mHomeStats">
    </div>
    <div class="m-canvasnote">
-    Beispiele tragen „Demo“, reine Stoppuhr-Aufzeichnungen „Test“. Echte Messdaten werden noch nicht erfasst.
+    Die Statistik enthält bisherige Beispiel- und Stoppuhr-Aufzeichnungen. Sensorwerte werden erst nach der ESP32-Anbindung erfasst.
    </div>
   </section>
   <section class="m-screen" id="mLive">
@@ -4948,9 +5472,7 @@ body.force-mobile::before {
      <div class="m-small" id="mRecordCount">
      </div>
     </div>
-    <span class="m-chip blue" id="mRecordBadge">
-     Demo
-    </span>
+
    </div>
    <div id="mRecordList">
    </div>
@@ -9440,7 +9962,7 @@ body.force-mobile::before {
         monday.setDate(monday.getDate() - (monday.getDay() + 6) % 7);
         const week = list.filter(a => new Date(a.date + 'T' + a.time) >= monday).length;
         const stats = [['Trainingseinheiten', list.length], ['Gesamtzeit', formatTotalTime(total)], ['Gesamtdistanz', fmt(dist) + ' km'], ['Diese Woche', week]];
-        $('mHomeStats').innerHTML = stats.map(([n, v]) => `<div class="m-panel"><div class="m-cardname">${n}</div><div class="m-val" style="font-size:21px">${safe(v)}</div><span class="m-chip blue">Demo + Test</span></div>`).join('');
+        $('mHomeStats').innerHTML = stats.map(([n, v]) => `<div class="m-panel"><div class="m-cardname">${n}</div><div class="m-val">${safe(v)}</div></div>`).join('');
 
     }
     function renderLive()
@@ -9496,7 +10018,7 @@ body.force-mobile::before {
         sorted(list);
         $('mSportTitle').textContent = selectedSport === 'all' ? 'Alle Sportarten' : sportName(selectedSport);
         $('mRecordCount').textContent = `${list.length} Einheiten`;
-        $('mRecordBadge').textContent = 'Demo / Test';
+
 
         $('mRecordList').innerHTML = list.length
             ? list.map(a =>
