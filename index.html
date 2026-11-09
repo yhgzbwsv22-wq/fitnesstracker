@@ -3773,6 +3773,151 @@ header {
     body.force-desktop .desktop-info-strip {background:#203244;border:1px solid #3c5770;padding:15px;margin-bottom:20px;}
 }
 
+
+/* ==============================================================
+   DESKTOP AUFZEICHNUNGEN – SUCHE, SORTIERUNG, PAPIERKORB
+============================================================== */
+.desktop-record-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 6px 0 18px;
+}
+.desktop-record-field {
+    min-height: 48px;
+    border: 1px solid #405268;
+    border-radius: 13px;
+    padding: 12px 16px;
+    background: #152130;
+    color: #edf3fb;
+    font: inherit;
+    outline: none;
+}
+.desktop-record-field:focus {
+    border-color: #5ed4c5;
+    box-shadow: 0 0 0 3px rgba(94, 212, 197, 0.12);
+}
+#desktopRecordSearch {
+    flex: 1;
+    min-width: 130px;
+}
+.desktop-record-select {
+    width: 160px;
+}
+.desktop-trash-open {
+    min-height: 48px;
+    padding: 11px 18px;
+    background: #233345;
+    color: #e8f0f8;
+    border: 1px solid #435a71;
+    border-radius: 13px;
+    cursor: pointer;
+    font-weight: 700;
+}
+.desktop-trash-open:hover {
+    background: #30465d;
+}
+.desktop-delete-button {
+    min-height: 40px;
+    border: 1px solid #a95d65;
+    border-radius: 10px;
+    background: #542c36;
+    color: #ffd7db;
+    padding: 10px 16px;
+    font-weight: 700;
+    cursor: pointer;
+}
+.desktop-delete-button:hover {
+    background: #713442;
+}
+.desktop-trash-modal-content {
+    max-width: 800px;
+}
+.desktop-trash-description {
+    margin: -5px 0 23px;
+    color: #adbfce;
+    line-height: 1.6;
+}
+.desktop-trash-list {
+    display: grid;
+    gap: 12px;
+}
+.desktop-trash-entry {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 18px;
+    background: #172332;
+    border: 1px solid #37485d;
+    border-radius: 14px;
+    padding: 17px;
+}
+.desktop-trash-entry strong {
+    display: block;
+    margin-bottom: 6px;
+}
+.desktop-trash-entry small {
+    display: block;
+    color: #a5b6c9;
+}
+.desktop-trash-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+}
+.desktop-trash-actions button {
+    border-radius: 9px;
+    padding: 10px 12px;
+    cursor: pointer;
+}
+.desktop-record-badges {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-bottom: 10px;
+}
+.desktop-record-chip {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 999px;
+    border: 1px solid #45617e;
+    background: #203b58;
+    color: #a9d0ff;
+    font-size: 11px;
+    font-weight: 700;
+}
+.desktop-record-chip.test {
+    color: #8febcd;
+    border-color: #316d5d;
+    background: #193f37;
+}
+.desktop-record-chip.demo {
+    color: #b2bdca;
+    border-color: #435266;
+    background: #2c3746;
+}
+.desktop-record-date {
+    font-size: 12px;
+    color: #b1c0d1;
+    margin-bottom: 13px;
+}
+@media (max-width: 680px) {
+    .desktop-record-toolbar {
+        flex-wrap: wrap;
+    }
+    #desktopRecordSearch {
+        flex-basis: 100%;
+    }
+    .desktop-record-select {
+        flex: 1;
+    }
+    .desktop-trash-open {
+        flex: 1;
+    }
+}
+
 </style>
 
 </head>
@@ -4657,6 +4802,33 @@ header {
 
 
 
+            <!-- DESKTOP: SUCHE, SORTIERUNG UND PAPIERKORB -->
+            <div class="desktop-record-toolbar">
+                <input
+                    id="desktopRecordSearch"
+                    class="desktop-record-field"
+                    type="search"
+                    placeholder="Training suchen …"
+                    aria-label="Training suchen">
+
+                <select
+                    id="desktopRecordSort"
+                    class="desktop-record-field desktop-record-select"
+                    aria-label="Trainings sortieren">
+                    <option value="new">Neueste</option>
+                    <option value="distance">Distanz</option>
+                    <option value="duration">Dauer</option>
+                    <option value="speed">Tempo</option>
+                </select>
+
+                <button
+                    id="desktopOpenTrash"
+                    type="button"
+                    class="desktop-trash-open">
+                    ♻ Papierkorb
+                </button>
+            </div>
+
             <!-- =============================================
                  NEUES SPORTARTEN DROPDOWN
             ============================================== -->
@@ -5172,6 +5344,31 @@ header {
 
 
 <!-- =========================================================
+     DESKTOP: PAPIERKORB FÜR TRAININGSEINHEITEN
+========================================================= -->
+<div class="modal" id="desktopTrashModal">
+    <div class="modal-content desktop-trash-modal-content">
+        <button
+            class="modal-close"
+            data-close="desktopTrashModal"
+            aria-label="Papierkorb schließen">×</button>
+
+        <div class="modal-small-title">Aufzeichnungen</div>
+        <h2 class="modal-title">Papierkorb</h2>
+        <p class="desktop-trash-description">
+            Gelöschte Trainingseinheiten können bis zu 30 Tage wiederhergestellt werden.
+        </p>
+        <div id="desktopTrashList" class="desktop-trash-list"></div>
+        <div class="create-actions">
+            <button
+                type="button"
+                class="secondary-button"
+                data-close="desktopTrashModal">Schließen</button>
+        </div>
+    </div>
+</div>
+
+<!-- =========================================================
      AKTIVITÄTSDETAIL
 ========================================================= -->
 
@@ -5214,6 +5411,13 @@ header {
                     class="desktop-rename-button"
                     id="desktopRenameButton">
                     ✎ Umbenennen
+                </button>
+
+                <button
+                    type="button"
+                    class="desktop-delete-button"
+                    id="desktopDeleteTraining">
+                    🗑 Löschen
                 </button>
 
                 <button
@@ -11052,6 +11256,7 @@ header {
         $('mDetail').classList.remove('active');
         renderRecords();
         renderHome();
+        window.dispatchEvent(new Event('tracker:records-changed'));
         toast('Training in den Papierkorb verschoben');
 
     }
@@ -11073,6 +11278,7 @@ header {
             renderTrash();
             renderRecords();
             renderHome();
+            window.dispatchEvent(new Event('tracker:records-changed'));
             toast('Training wiederhergestellt');
 
         });
@@ -11088,6 +11294,7 @@ header {
                 renderTrash();
                 renderRecords();
                 renderHome();
+                window.dispatchEvent(new Event('tracker:records-changed'));
                 toast('Training endgültig gelöscht (Demo)');
 
             });
@@ -11314,6 +11521,68 @@ header {
         refresh: () => {
             renderHome();
             renderRecords();
+        }
+    };
+
+    /* =====================================================
+       GEMEINSAMER PAPIERKORB FÜR LAPTOP UND HANDY
+       Beide Ansichten verändern exakt dieselben gespeicherten Daten.
+    ===================================================== */
+    const announceRecords = () => {
+        window.dispatchEvent(new Event('tracker:records-changed'));
+    };
+
+    window.fitnesstrackerRecordStore = {
+        trashEntries: () => Object.entries(trash)
+            .filter(([id]) => activities[id] && !permanent.includes(id))
+            .sort((a, b) => b[1] - a[1])
+            .map(([id, deletedAt]) => ({
+                id,
+                title: activities[id].title,
+                deletedAt,
+                testMode: !!activities[id].testMode
+            })),
+
+        remove(id) {
+            if (!activities[id] || trash[id] || permanent.includes(id)) {
+                return false;
+            }
+            trash[id] = Date.now();
+            put('trash', trash);
+            renderRecords();
+            renderHome();
+            announceRecords();
+            return true;
+        },
+
+        restore(id) {
+            if (!trash[id]) {
+                return false;
+            }
+            delete trash[id];
+            put('trash', trash);
+            renderTrash();
+            renderRecords();
+            renderHome();
+            announceRecords();
+            return true;
+        },
+
+        purge(id) {
+            if (!trash[id]) {
+                return false;
+            }
+            if (!permanent.includes(id)) {
+                permanent.push(id);
+            }
+            delete trash[id];
+            put('trash', trash);
+            put('permanent', permanent);
+            renderTrash();
+            renderRecords();
+            renderHome();
+            announceRecords();
+            return true;
         }
     };
 
@@ -11544,6 +11813,277 @@ header {
         renderStatistics();
         renderTrainingControls();
     });
+})();
+</script>
+
+<script>
+/* ================================================================
+   DESKTOP: MODERNE AUFZEICHNUNGEN
+   Suche, Sortierung, alle Sportarten und gemeinsamer Papierkorb
+================================================================ */
+(() => {
+    'use strict';
+
+    const byId = id => document.getElementById(id);
+    const store = window.fitnesstrackerRecordStore;
+    const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    }[char]));
+
+    if (!store) {
+        console.error('Die gemeinsame Aufzeichnungsverwaltung ist nicht verfügbar.');
+        return;
+    }
+
+    const oldRenderSports = renderSports;
+
+    /* Zeigt "Alle Sportarten" wie in der Handy-Version ganz oben. */
+    renderSports = function () {
+        oldRenderSports();
+
+        const navigation = byId('sportNavigation');
+        const row = document.createElement('div');
+        row.className = 'sport-tab-wrapper';
+
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'sport-button';
+        button.textContent = 'Alle Sportarten';
+        if (currentSport === 'all') {
+            button.classList.add('active');
+        }
+
+        const count = document.createElement('span');
+        count.className = 'sport-button-count';
+        count.textContent = String(window.fitnesstrackerTest.records().length);
+        button.appendChild(count);
+
+        button.addEventListener('click', event => {
+            event.stopPropagation();
+            currentSport = 'all';
+            compareMode = false;
+            compareSource = null;
+            byId('compareSelectionBanner').classList.remove('active');
+            closeSportsDropdown();
+            renderSports();
+            renderRecords();
+        });
+
+        row.appendChild(button);
+        navigation.prepend(row);
+    };
+
+    const normalDate = a => new Date(a.date + 'T' + (a.time || '00:00')).getTime() || 0;
+
+    /* Beinhaltet sowohl Demo-Einheiten als auch gespeicherte Testtrainings. */
+    renderRecords = function () {
+        const all = window.fitnesstrackerTest.records();
+        const sport = currentSport === 'all' ? null : getSport(currentSport);
+
+        if (currentSport !== 'all' && !sport) {
+            currentSport = 'all';
+        }
+
+        const activeSport = currentSport === 'all' ? null : getSport(currentSport);
+        const search = byId('desktopRecordSearch').value.trim().toLocaleLowerCase('de');
+        const order = byId('desktopRecordSort').value;
+
+        const list = all.filter(activity => {
+            const sportFits = currentSport === 'all' || activity.sport === currentSport;
+            const queryText = [
+                activity.title,
+                getSport(activity.sport)?.label || 'Nicht zugewiesen',
+                formatGermanDate(activity.date)
+            ].join(' ').toLocaleLowerCase('de');
+            return sportFits && (!search || queryText.includes(search));
+        });
+
+        list.sort((a, b) => {
+            if (order === 'distance') {
+                return (b.distance || 0) - (a.distance || 0) || normalDate(b) - normalDate(a);
+            }
+            if (order === 'duration') {
+                return (b.durationSeconds || 0) - (a.durationSeconds || 0) || normalDate(b) - normalDate(a);
+            }
+            if (order === 'speed') {
+                return (b.avgSpeed || 0) - (a.avgSpeed || 0) || normalDate(b) - normalDate(a);
+            }
+            return normalDate(b) - normalDate(a);
+        });
+
+        byId('sportCurrentTitle').textContent = activeSport ? activeSport.label : 'Alle Sportarten';
+        byId('sportCurrentDescription').textContent = activeSport
+            ? activeSport.description
+            : `${list.length} Trainingseinheiten`;
+        byId('sportActivityCount').textContent = String(list.length);
+        byId('sportTotalDistance').textContent = formatDistance(
+            list.reduce((sum, a) => sum + (a.distance || 0), 0)
+        );
+        byId('sportTotalTime').textContent = formatTotalTime(
+            list.reduce((sum, a) => sum + (a.durationSeconds || 0), 0)
+        );
+        byId('sportDistanceSummary').classList.toggle(
+            'metric-hidden', !!activeSport && !activeSport.metrics.distance
+        );
+
+        const container = byId('recordList');
+        container.replaceChildren();
+
+        if (!list.length) {
+            container.innerHTML = '<div class="empty-records">Keine Trainingseinheiten gefunden.</div>';
+            return;
+        }
+
+        list.forEach(activity => {
+            const isTest = !!activity.testMode;
+            const activitySport = getSport(activity.sport);
+            const sportName = activitySport?.label || 'Nicht zugewiesen';
+            const distance = isTest ? '--' : formatDistance(activity.distance || 0);
+            const pulse = isTest ? '--' : `${activity.avgPulse ?? '--'} bpm`;
+
+            const card = document.createElement('button');
+            card.type = 'button';
+            card.className = 'record-card';
+
+            if (compareMode) {
+                card.classList.add(activity.id === compareSource ? 'compare-source' : 'compare-option');
+            }
+
+            card.innerHTML = `
+                <div class="desktop-record-badges">
+                    <span class="desktop-record-chip">${escapeHtml(sportName)}</span>
+                    <span class="desktop-record-chip ${isTest ? 'test' : 'demo'}">
+                        ${isTest ? 'Test · nur Zeit' : 'Demo'}
+                    </span>
+                </div>
+                <div class="record-title">${escapeHtml(activity.title)}</div>
+                <div class="desktop-record-date">
+                    ${escapeHtml(formatGermanDate(activity.date))} · ${escapeHtml(activity.time)} Uhr
+                </div>
+                <div class="record-meta">
+                    ${recordBox('Distanz', distance)}
+                    ${recordBox('Dauer', escapeHtml(activity.duration))}
+                    ${recordBox('Ø Puls', pulse)}
+                </div>
+                <div class="record-action">
+                    ${compareMode
+                        ? activity.id === compareSource ? 'Ausgangseinheit' : 'Für Vergleich auswählen →'
+                        : 'Details ansehen →'}
+                </div>
+            `;
+
+            card.onclick = () => {
+                if (compareMode) {
+                    if (activity.id !== compareSource && activities[compareSource]) {
+                        openComparison(activities[compareSource], activity);
+                    }
+                } else {
+                    openActivity(activity);
+                }
+            };
+            container.appendChild(card);
+        });
+    };
+
+    /* Trainingsdetails: löschen wie auf dem Handy. */
+    byId('desktopDeleteTraining').addEventListener('click', () => {
+        if (!currentActivity) {
+            return;
+        }
+
+        const training = currentActivity;
+        const accepted = window.confirm(
+            `„${training.title}“ in den Papierkorb verschieben?\n\n` +
+            'Du kannst die Einheit innerhalb von 30 Tagen wiederherstellen.'
+        );
+
+        if (!accepted) {
+            return;
+        }
+
+        if (store.remove(training.id)) {
+            closeModal('activityModal');
+            currentActivity = null;
+            renderSports();
+            renderRecords();
+        }
+    });
+
+    /* Wiederherstellen oder endgültig löschen, geräteübergreifend im UI. */
+    function showDesktopTrash() {
+        const entries = store.trashEntries();
+        const container = byId('desktopTrashList');
+        container.replaceChildren();
+
+        if (!entries.length) {
+            container.innerHTML = '<div class="empty-records">Der Papierkorb ist leer.</div>';
+            return;
+        }
+
+        entries.forEach(entry => {
+            const row = document.createElement('div');
+            row.className = 'desktop-trash-entry';
+
+            const details = document.createElement('div');
+            const title = document.createElement('strong');
+            title.textContent = entry.title;
+            const timestamp = document.createElement('small');
+            timestamp.textContent = `Gelöscht am ${new Date(entry.deletedAt).toLocaleDateString('de-AT')}`;
+            details.append(title, timestamp);
+
+            const actions = document.createElement('div');
+            actions.className = 'desktop-trash-actions';
+
+            const restore = document.createElement('button');
+            restore.type = 'button';
+            restore.className = 'secondary-button';
+            restore.textContent = 'Wiederherstellen';
+            restore.onclick = () => {
+                store.restore(entry.id);
+                showDesktopTrash();
+            };
+
+            const purge = document.createElement('button');
+            purge.type = 'button';
+            purge.className = 'delete-button';
+            purge.textContent = 'Endgültig löschen';
+            purge.onclick = () => {
+                if (window.confirm(`„${entry.title}“ endgültig löschen?`)) {
+                    store.purge(entry.id);
+                    showDesktopTrash();
+                }
+            };
+
+            actions.append(restore, purge);
+            row.append(details, actions);
+            container.appendChild(row);
+        });
+    }
+
+    byId('desktopOpenTrash').addEventListener('click', () => {
+        showDesktopTrash();
+        openModal('desktopTrashModal');
+    });
+
+    byId('desktopRecordSearch').addEventListener('input', renderRecords);
+    byId('desktopRecordSort').addEventListener('change', renderRecords);
+
+    window.addEventListener('tracker:records-changed', () => {
+        renderSports();
+        renderRecords();
+        if (byId('desktopTrashModal').classList.contains('active')) {
+            showDesktopTrash();
+        }
+    });
+
+    /* Standard: alle Trainings wie auf dem Handy. */
+    currentSport = 'all';
+    renderSports();
+    renderRecords();
 })();
 </script>
 
