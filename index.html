@@ -1791,20 +1791,7 @@
 .mobile-only-switch {
     display:none;
 }
-#mViewToggle {
-    position:fixed;
-    right:16px;
-    bottom:16px;
-    z-index:980;
-    background:#263b59;
-    color:#e8f1ff;
-    border:1px solid #5c91d2;
-    border-radius:100px;
-    padding:10px 14px;
-    box-shadow:0 8px 25px #0006;
-    cursor:pointer;
-    font:600 12px Arial,sans-serif;
-}
+/* Der alte, störende Schalter am unteren Bildschirmrand entfällt. */
 body.force-mobile .container {
     display:none!important;
 }
@@ -2511,6 +2498,94 @@ body.force-mobile::before {
     }
 }
 
+
+/* =====================================================
+   ANSICHTSWAHL IN BEIDEN KOPFZEILEN
+===================================================== */
+.view-choice-wrap {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #a8b9cf;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.view-choice,
+#mobileApp .m-viewchoice {
+    appearance: auto;
+    -webkit-appearance: menulist;
+    color: #e8f1ff;
+    background: #25374e;
+    border: 1px solid #5274a1;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 9px 7px;
+    min-height: 40px;
+    cursor: pointer;
+}
+#mobileApp .m-viewchoice {
+    max-width: 94px;
+    min-width: 82px;
+    font-size: 12px;
+}
+#mobileApp .m-topline > div:last-child {
+    gap: 6px !important;
+}
+#mobileApp .m-headerline #mBattery {
+    white-space: nowrap;
+}
+#mobileApp .m-trainingclock {
+    font-size: 42px;
+    text-align: center;
+    font-weight: 800;
+    letter-spacing: 1px;
+    font-variant-numeric: tabular-nums;
+    margin: 13px 0 6px;
+    color: #ffffff;
+}
+#mobileApp .m-trainingnote {
+    color: #9aafc9;
+    font-size: 12px;
+    line-height: 1.5;
+    margin: 8px 0 13px;
+}
+#mobileApp .m-actions > button:disabled {
+    opacity: .38;
+    cursor: not-allowed;
+}
+#mobileApp .m-training-running {
+    color: #86efac;
+}
+#mobileApp .m-training-paused {
+    color: #fbbf74;
+}
+@media(max-width: 440px) {
+    #mobileApp .m-headerline > .m-small {
+        display: none;
+    }
+    #mobileApp .m-heading {
+        font-size: 15px;
+    }
+}
+@media(max-width: 800px) {
+    /* Desktop erzwungen: Wechsel bleibt auf dem Handy links erreichbar. */
+    body.force-desktop .view-choice-wrap {
+        position: fixed;
+        top: calc(8px + env(safe-area-inset-top));
+        left: 8px;
+        z-index: 1200;
+        background: #1d2939;
+        padding: 5px 7px;
+        border: 1px solid #5574a0;
+        border-radius: 9px;
+    }
+    body.force-desktop .container {
+        padding-top: 65px;
+    }
+}
+
 </style>
 
 </head>
@@ -2556,6 +2631,16 @@ body.force-mobile::before {
 
 
         <div class="header-right">
+
+            <!-- Ansichtsmodus: oben im Desktop-Kopfbereich -->
+            <label class="view-choice-wrap" for="desktopViewChoice">
+                Ansicht
+                <select id="desktopViewChoice" class="view-choice" aria-label="Ansichtsmodus wählen">
+                    <option value="auto">Automatisch</option>
+                    <option value="mobile">Handy</option>
+                    <option value="desktop">Desktop</option>
+                </select>
+            </label>
 
             <div class="system-status">
 
@@ -4613,9 +4698,11 @@ body.force-mobile::before {
     </div>
    </div>
    <div style="display:flex;gap:7px;align-items:center">
-    <span class="m-chip gray" id="mBattery">
-     🔋 --
-    </span>
+    <select id="mobileViewChoice" class="m-viewchoice" aria-label="Ansicht einstellen">
+     <option value="auto">Auto</option>
+     <option value="mobile">Handy</option>
+     <option value="desktop">Desktop</option>
+    </select>
     <button aria-label="Einstellungen" class="m-iconbtn" id="mSettings">
      ⚙
     </button>
@@ -4628,6 +4715,7 @@ body.force-mobile::before {
    <span class="m-small">
     Messwerte nur bei Verbindung
    </span>
+   <span class="m-chip gray" id="mBattery">🔋 --</span>
    <button aria-label="Über uns" class="m-iconbtn" id="mTeam">
     ⓘ
    </button>
@@ -4736,7 +4824,7 @@ body.force-mobile::before {
    <div class="m-grid2" id="mHomeStats">
    </div>
    <div class="m-canvasnote">
-    Die gespeicherten Einheiten sind Beispieldaten und mit „Demo“ gekennzeichnet.
+    Beispiele tragen „Demo“, reine Stoppuhr-Aufzeichnungen „Test“. Echte Messdaten werden noch nicht erfasst.
    </div>
   </section>
   <section class="m-screen" id="mLive">
@@ -4762,8 +4850,9 @@ body.force-mobile::before {
       Nicht verbunden
      </span>
     </div>
-    <p class="m-small" style="margin:8px 0 13px">
-     Start, Pause und Ende werden später direkt mit dem ESP32 synchronisiert.
+    <div class="m-trainingclock" id="mTrainingClock" aria-live="off">00:00:00</div>
+    <p class="m-trainingnote" id="mTrainingNote">
+     Testmodus: Die Stoppuhr funktioniert ohne ESP32. Es werden keine Sensorwerte erfasst.
     </p>
     <div class="m-actions">
      <button class="m-primary" id="mStart">
@@ -5146,9 +5235,7 @@ body.force-mobile::before {
   </div>
  </div>
 </div>
-<button id="mViewToggle" title="Ansicht wechseln" type="button">
- 📱 Handy-Ansicht
-</button>
+<!-- Der Ansichtswechsel befindet sich jetzt oben in beiden Kopfzeilen. -->
 
 <script>
 
@@ -7128,9 +7215,7 @@ body.force-mobile::before {
                     values +=
                         recordBox(
                             "Distanz",
-                            formatDistance(
-                                activity.distance
-                            )
+                            activity.testMode ? "--" : formatDistance(activity.distance)
                         );
 
                 }
@@ -7146,9 +7231,7 @@ body.force-mobile::before {
                 values +=
                     recordBox(
                         "Ø Geschwindigkeit",
-                        formatSpeed(
-                            activity.avgSpeed
-                        )
+                        activity.testMode ? "--" : formatSpeed(activity.avgSpeed)
                     );
 
 
@@ -7170,8 +7253,7 @@ body.force-mobile::before {
                 values +=
                     recordBox(
                         "Ø Puls",
-                        activity.avgPulse
-                        + " bpm"
+                        activity.testMode ? "--" : activity.avgPulse + " bpm"
                     );
 
 
@@ -7989,6 +8071,15 @@ body.force-mobile::before {
             ).length <= 1;
 
 
+        if (activity.testMode) {
+            // Keine nicht gemessenen Werte als Null oder echte Messung anzeigen.
+            ["detailDistance", "detailAvgSpeed", "detailMaxSpeed", "detailPace",
+             "detailElevation", "detailAvgPulse", "detailMaxPulse",
+             "detailAvgLoad", "detailMaxLoad"].forEach(id => {
+                document.getElementById(id).textContent = "--";
+            });
+        }
+
         openModal(
             "activityModal"
         );
@@ -8434,6 +8525,18 @@ body.force-mobile::before {
         color
     ) {
 
+        if (!Array.isArray(values) || values.length === 0) {
+            const c = document.getElementById(id);
+            const w = Math.max(240, c.parentElement.clientWidth - 36);
+            c.width = w;
+            c.height = 250;
+            const ctx = c.getContext("2d");
+            ctx.fillStyle = "#9ca8b7";
+            ctx.font = "14px Arial";
+            ctx.fillText("Keine Messwerte aufgezeichnet", 16, 125);
+            return;
+        }
+
         const canvas =
             document.getElementById(
                 id
@@ -8560,6 +8663,11 @@ body.force-mobile::before {
         a,
         b
     ) {
+
+        if (!a.length && !b.length) {
+            drawSingleChart(id, [], "#9ca8b7");
+            return;
+        }
 
         const canvas =
             document.getElementById(
@@ -8740,6 +8848,11 @@ body.force-mobile::before {
             document.getElementById(
                 "activityMap"
             );
+
+        if (activity.testMode) {
+            svg.innerHTML = '<text x="50" y="50" text-anchor="middle" fill="#aab7ca" font-size="5">Keine GPS-Daten aufgezeichnet</text>';
+            return;
+        }
 
 
         svg.innerHTML =
@@ -9036,30 +9149,50 @@ body.force-mobile::before {
     const fmt = n => Number(n || 0).toLocaleString('de-AT', { maximumFractionDigits: 1 });
     const visibleActs = () => Object.values(activities).filter(a => !trash[a.id] && !permanent.includes(a.id));
     const sportName = s => getSport(s)?.label || 'Nicht zugewiesen';
-    const viewToggle = $('mViewToggle');
+    /* =====================================================
+       ANSICHTSWAHL: AUTOMATISCH / HANDY / DESKTOP
+    ===================================================== */
     let viewPref = get('view', 'auto');
+
     function mobileMode()
     {
-        return viewPref === 'mobile' || (viewPref === 'auto' && window.innerWidth <= 800);
-
+        return viewPref === 'mobile'
+            || (viewPref === 'auto' && window.innerWidth <= 800);
     }
+
     function applyMode()
     {
         document.body.classList.toggle('force-mobile', viewPref === 'mobile');
         document.body.classList.toggle('force-desktop', viewPref === 'desktop');
-        const mobile = mobileMode();
-        viewToggle.textContent = mobile ? '▣ Desktop-Ansicht' : '📱 Handy-Ansicht';
-        viewToggle.setAttribute('aria-label', mobile ? 'Desktop-Ansicht einschalten' : 'Handy-Ansicht einschalten');
 
+        $('mobileViewChoice').value = viewPref;
+        $('desktopViewChoice').value = viewPref;
     }
-    viewToggle.onclick = () =>
+
+    function selectView(newMode)
     {
-        viewPref = mobileMode() ? 'desktop' : 'mobile';
+        if (!['auto', 'mobile', 'desktop'].includes(newMode))
+        {
+            return;
+        }
+
+        viewPref = newMode;
         put('view', viewPref);
         applyMode();
+    }
 
-    };
+    $('mobileViewChoice').addEventListener('change', event =>
+    {
+        selectView(event.target.value);
+    });
+
+    $('desktopViewChoice').addEventListener('change', event =>
+    {
+        selectView(event.target.value);
+    });
+
     window.addEventListener('resize', applyMode);
+
     let trash = get('trash', {}), permanent = get('permanent', []), titles = get('titles', {}), selectedSport = 'all', selectedRecord = null, compareIds = [], currentScreen = 'overview', toastTimer = null, dialogAction = null, selectedTab = 'metrics';
     Object.keys(trash).forEach(id =>
     {
@@ -9080,6 +9213,221 @@ body.force-mobile::before {
             a.title = titles[a.id];
 
     });
+    /* =====================================================
+       TEST-TRAINING: NUR ZEIT, KEINE SENSORMESSWERTE
+       Speicherung ausschließlich auf diesem Gerät.
+    ===================================================== */
+    let testSessions = get('testSessions', []);
+    let training = get('training', {
+        state: 'idle',
+        startedAt: null,
+        accumulatedMs: 0,
+        sessionStart: null
+    });
+
+    if (!['idle', 'running', 'paused'].includes(training.state))
+    {
+        training = {
+            state: 'idle',
+            startedAt: null,
+            accumulatedMs: 0,
+            sessionStart: null
+        };
+    }
+
+    function trainingSeconds()
+    {
+        const runningMs = training.state === 'running'
+            ? Math.max(0, Date.now() - training.startedAt)
+            : 0;
+
+        return Math.floor((training.accumulatedMs + runningMs) / 1000);
+    }
+
+    function durationText(totalSeconds)
+    {
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor(totalSeconds % 3600 / 60);
+        const seconds = totalSeconds % 60;
+
+        return [hours, minutes, seconds]
+            .map(value => String(value).padStart(2, '0'))
+            .join(':');
+    }
+
+    function saveTraining()
+    {
+        put('training', training);
+    }
+
+    function loadTestSessions()
+    {
+        testSessions.forEach(session =>
+        {
+            if (!session || !session.id || !session.date)
+            {
+                return;
+            }
+
+            activities[session.id] = {
+                ...session,
+                sport: getSport(savedAssignments[session.id])
+                    ? savedAssignments[session.id]
+                    : 'unassigned',
+                title: titles[session.id] || session.title,
+                demo: false,
+                testMode: true,
+                pulseHistory: [],
+                speedHistory: []
+            };
+        });
+
+        // Auch die bestehende Desktop-Aufzeichnungsliste aktualisieren.
+        if (typeof window.renderSports === 'function')
+        {
+            window.renderSports();
+        }
+        if (typeof window.renderRecords === 'function')
+        {
+            window.renderRecords();
+        }
+    }
+
+    function renderTraining()
+    {
+        const isRunning = training.state === 'running';
+        const isPaused = training.state === 'paused';
+        const isActive = isRunning || isPaused;
+        const time = durationText(trainingSeconds());
+
+        $('mTrainingClock').textContent = time;
+        $('mTrainingStatus').textContent = isRunning
+            ? '● Test läuft'
+            : isPaused ? 'Ⅱ Pausiert' : 'Testbereit';
+        $('mTrainingStatus').className = 'm-chip ' + (isRunning ? 'green' : isPaused ? '' : 'gray');
+
+        $('mStart').disabled = isRunning;
+        $('mPause').disabled = !isActive;
+        $('mStop').disabled = !isActive;
+        $('mStart').textContent = isPaused ? '▶ Fortsetzen' : '▶ Starten';
+        $('mPause').textContent = 'Ⅱ Pause';
+        $('mTrainingNote').textContent = isActive
+            ? 'Testaufzeichnung ohne ESP32: Nur die Zeit wird gemessen. Puls, Geschwindigkeit, Belastung und GPS bleiben leer.'
+            : 'Testmodus: Du kannst die Zeit starten, pausieren und beenden – auch ohne ESP32.';
+
+        $('mResume').style.display = isActive ? '' : 'none';
+        $('mResumeText').textContent = time + (isPaused ? ' · Pausiert' : ' · Test läuft');
+    }
+
+    function startTraining()
+    {
+        if (training.state === 'running')
+        {
+            return;
+        }
+
+        if (training.state === 'idle')
+        {
+            training.accumulatedMs = 0;
+            training.sessionStart = Date.now();
+        }
+
+        training.startedAt = Date.now();
+        training.state = 'running';
+        saveTraining();
+        renderTraining();
+        toast('Test-Training gestartet – nur die Zeit läuft');
+    }
+
+    function pauseTraining()
+    {
+        if (training.state !== 'running')
+        {
+            return;
+        }
+
+        training.accumulatedMs += Math.max(0, Date.now() - training.startedAt);
+        training.startedAt = null;
+        training.state = 'paused';
+        saveTraining();
+        renderTraining();
+        toast('Training pausiert');
+    }
+
+    function finishTraining()
+    {
+        if (training.state === 'idle')
+        {
+            return;
+        }
+
+        if (training.state === 'running')
+        {
+            training.accumulatedMs += Math.max(0, Date.now() - training.startedAt);
+        }
+
+        const seconds = Math.floor(training.accumulatedMs / 1000);
+        const timestamp = new Date(training.sessionStart || Date.now());
+        const date = [timestamp.getFullYear(),
+            String(timestamp.getMonth() + 1).padStart(2, '0'),
+            String(timestamp.getDate()).padStart(2, '0')].join('-');
+        const time = [timestamp.getHours(), timestamp.getMinutes()]
+            .map(v => String(v).padStart(2, '0')).join(':');
+
+        const session = {
+            id: 'test_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+            sport: 'unassigned',
+            date,
+            time,
+            title: 'Testtraining vom ' + formatGermanDate(date),
+            duration: durationText(seconds),
+            durationSeconds: seconds,
+            distance: 0,
+            avgSpeed: 0,
+            maxSpeed: 0,
+            elevation: 0,
+            avgPulse: null,
+            maxPulse: null,
+            avgLoad: null,
+            maxLoad: null,
+            pace: 0,
+            gps: null,
+            testMode: true,
+            demo: false,
+            pulseHistory: [],
+            speedHistory: []
+        };
+
+        testSessions.push(session);
+        put('testSessions', testSessions);
+        activities[session.id] = session;
+
+        training = {
+            state: 'idle',
+            startedAt: null,
+            accumulatedMs: 0,
+            sessionStart: null
+        };
+        saveTraining();
+
+        renderTraining();
+        renderRecords();
+        renderHome();
+        showScreen('records');
+        toast('Testtraining gespeichert – ohne Messwerte');
+
+        if (typeof window.renderSports === 'function')
+        {
+            window.renderSports();
+        }
+        if (typeof window.renderRecords === 'function')
+        {
+            window.renderRecords();
+        }
+    }
+
+    loadTestSessions();
+
     function toast(message)
     {
         const el = $('mToast');
@@ -9141,7 +9489,7 @@ body.force-mobile::before {
         monday.setDate(monday.getDate() - (monday.getDay() + 6) % 7);
         const week = list.filter(a => new Date(a.date + 'T' + a.time) >= monday).length;
         const stats = [['Trainingseinheiten', list.length], ['Gesamtzeit', formatTotalTime(total)], ['Gesamtdistanz', fmt(dist) + ' km'], ['Diese Woche', week]];
-        $('mHomeStats').innerHTML = stats.map(([n, v]) => `<div class="m-panel"><div class="m-cardname">${n}</div><div class="m-val" style="font-size:21px">${safe(v)}</div><span class="m-chip blue">Demo</span></div>`).join('');
+        $('mHomeStats').innerHTML = stats.map(([n, v]) => `<div class="m-panel"><div class="m-cardname">${n}</div><div class="m-val" style="font-size:21px">${safe(v)}</div><span class="m-chip blue">Demo + Test</span></div>`).join('');
 
     }
     function renderLive()
@@ -9197,8 +9545,38 @@ body.force-mobile::before {
         sorted(list);
         $('mSportTitle').textContent = selectedSport === 'all' ? 'Alle Sportarten' : sportName(selectedSport);
         $('mRecordCount').textContent = `${list.length} Einheiten`;
-        $('mRecordBadge').textContent = 'Demo';
-        $('mRecordList').innerHTML = list.length ? list.map(a => `<button class="m-record" data-record="${safe(a.id)}"><div class="m-flex"><span class="m-chip blue">${safe(sportName(a.sport))}</span><span class="m-chip gray">Demo</span></div><div class="m-record-title">${safe(a.title)}</div><div class="m-small">${formatGermanDate(a.date)} · ${safe(a.time)} Uhr</div><div class="m-recordgrid"><div><small>Distanz</small><strong>${fmt(a.distance)} km</strong></div><div><small>Dauer</small><strong>${safe(a.duration)}</strong></div><div><small>Ø Puls</small><strong>${safe(a.avgPulse)} bpm</strong></div></div><div style="color:#8dbaff;font-size:12px;font-weight:700;margin-top:13px">Details ansehen →</div></button>`).join('') : '<div class="m-empty">Keine Trainingseinheiten gefunden.</div>';
+        $('mRecordBadge').textContent = 'Demo / Test';
+
+        $('mRecordList').innerHTML = list.length
+            ? list.map(a =>
+            {
+                const isTest = !!a.testMode;
+                const badge = isTest ? 'Test · nur Zeit' : 'Demo';
+                const distance = isTest ? '--' : fmt(a.distance) + ' km';
+                const pulse = isTest ? '--' : a.avgPulse + ' bpm';
+
+                return `
+                    <button class="m-record" data-record="${safe(a.id)}">
+                        <div class="m-flex">
+                            <span class="m-chip blue">${safe(sportName(a.sport))}</span>
+                            <span class="m-chip ${isTest ? 'green' : 'gray'}">${badge}</span>
+                        </div>
+                        <div class="m-record-title">${safe(a.title)}</div>
+                        <div class="m-small">
+                            ${formatGermanDate(a.date)} · ${safe(a.time)} Uhr
+                        </div>
+                        <div class="m-recordgrid">
+                            <div><small>Distanz</small><strong>${distance}</strong></div>
+                            <div><small>Dauer</small><strong>${safe(a.duration)}</strong></div>
+                            <div><small>Ø Puls</small><strong>${pulse}</strong></div>
+                        </div>
+                        <div style="color:#8dbaff;font-size:12px;font-weight:700;margin-top:13px">
+                            Details ansehen →
+                        </div>
+                    </button>`;
+            }).join('')
+            : '<div class="m-empty">Keine Trainingseinheiten gefunden.</div>';
+
         $('mRecordList').querySelectorAll('[data-record]').forEach(b => b.onclick = () => openDetail(b.dataset.record));
 
     }
@@ -9280,10 +9658,16 @@ body.force-mobile::before {
         selectedTab = 'metrics';
         $('mDetailTitle').textContent = a.title;
         $('mDetailDate').textContent = formatGermanDate(a.date) + ' · ' + a.time + ' Uhr';
-        $('mDetailDemo').textContent = 'Demo';
+        $('mDetailDemo').textContent = a.testMode ? 'Test · nur Zeit' : 'Demo';
         $('mDetailSport').innerHTML = orderedSportForMobile().map(s => `<option value="${safe(s.id)}">${safe(s.label)}</option>`).join('');
         $('mDetailSport').value = a.sport;
-        const stat = [['Distanz', fmt(a.distance) + ' km', 'distance'], ['Dauer', a.duration], ['Ø Geschwindigkeit', fmt(a.avgSpeed) + ' km/h'], ['Max. Geschwindigkeit', fmt(a.maxSpeed) + ' km/h', 'maxSpeed'], ['Ø Pace', formatPace(a.pace), 'distance'], ['Höhenmeter', fmt(a.elevation) + ' m', 'elevation'], ['Ø Puls', a.avgPulse + ' bpm'], ['Max. Puls', a.maxPulse + ' bpm'], ['Ø Belastung', a.avgLoad + ' %'], ['Max. Belastung', a.maxLoad + ' %']];
+        const stat = a.testMode
+            ? [['Distanz', '--', 'distance'], ['Dauer', a.duration],
+                ['Ø Geschwindigkeit', '--'], ['Max. Geschwindigkeit', '--', 'maxSpeed'],
+                ['Ø Pace', '--', 'distance'], ['Höhenmeter', '--', 'elevation'],
+                ['Ø Puls', '--'], ['Max. Puls', '--'],
+                ['Ø Belastung', '--'], ['Max. Belastung', '--']]
+            : [['Distanz', fmt(a.distance) + ' km', 'distance'], ['Dauer', a.duration], ['Ø Geschwindigkeit', fmt(a.avgSpeed) + ' km/h'], ['Max. Geschwindigkeit', fmt(a.maxSpeed) + ' km/h', 'maxSpeed'], ['Ø Pace', formatPace(a.pace), 'distance'], ['Höhenmeter', fmt(a.elevation) + ' m', 'elevation'], ['Ø Puls', a.avgPulse + ' bpm'], ['Max. Puls', a.maxPulse + ' bpm'], ['Ø Belastung', a.avgLoad + ' %'], ['Max. Belastung', a.maxLoad + ' %']];
         const sm = getSport(a.sport)?.metrics || {};
         $('mDetailStats').innerHTML = stat.filter(x => !x[2] || sm[x[2]]).map(x => `<div class="m-stat"><small>${x[0]}</small><strong>${safe(x[1])}</strong></div>`).join('');
         $('mGpsContent').innerHTML = demoRouteHTML(a);
@@ -9375,7 +9759,7 @@ body.force-mobile::before {
     function renderTrash()
     {
         const ids = Object.keys(trash).filter(id => activities[id]);
-        $('mTrashList').innerHTML = ids.length ? ids.map(id => `<div class="m-panel"><strong>${safe(activities[id].title)}</strong><div class="m-small" style="margin:7px 0 12px">Gelöscht am ${new Date(trash[id]).toLocaleDateString('de-AT')} · Demo</div><div class="m-actions"><button class="m-secondary" data-restore="${safe(id)}">Wiederherstellen</button><button class="m-danger" data-perma="${safe(id)}">Endgültig löschen</button></div></div>`).join('') : '<div class="m-empty">Der Papierkorb ist leer.</div>';
+        $('mTrashList').innerHTML = ids.length ? ids.map(id => `<div class="m-panel"><strong>${safe(activities[id].title)}</strong><div class="m-small" style="margin:7px 0 12px">Gelöscht am ${new Date(trash[id]).toLocaleDateString('de-AT')} · ${activities[id].testMode ? 'Test' : 'Demo'}</div><div class="m-actions"><button class="m-secondary" data-restore="${safe(id)}">Wiederherstellen</button><button class="m-danger" data-perma="${safe(id)}">Endgültig löschen</button></div></div>`).join('') : '<div class="m-empty">Der Papierkorb ist leer.</div>';
         $('mTrashList').querySelectorAll('[data-restore]').forEach(b => b.onclick = () =>
         {
             delete trash[b.dataset.restore];
@@ -9520,7 +9904,7 @@ body.force-mobile::before {
         let a = activities[compareIds[0]];
         const colors = ['#5ba9ff', '#ffb04a', '#8ade89'];
         $('mCompareCaption').textContent = compareIds.length + ' von 3 Einheiten ausgewählt';
-        $('mCompareSelected').innerHTML = compareIds.map((id, i) => `<div class="m-panel m-flex"><div><span style="color:${colors[i]}">●</span> <strong>${safe(activities[id].title)}</strong><div class="m-small">${safe(sportName(activities[id].sport))} · Demo</div></div><button class="m-iconbtn" data-uncompare="${safe(id)}">×</button></div>`).join('');
+        $('mCompareSelected').innerHTML = compareIds.map((id, i) => `<div class="m-panel m-flex"><div><span style="color:${colors[i]}">●</span> <strong>${safe(activities[id].title)}</strong><div class="m-small">${safe(sportName(activities[id].sport))} · ${activities[id].testMode ? 'Test' : 'Demo'}</div></div><button class="m-iconbtn" data-uncompare="${safe(id)}">×</button></div>`).join('');
         $('mCompareSelected').querySelectorAll('[data-uncompare]').forEach(b => b.onclick = () =>
         {
             compareIds = compareIds.filter(id => id !== b.dataset.uncompare);
@@ -9565,7 +9949,24 @@ body.force-mobile::before {
         dialog('ESP32 verbinden', bleInfo, `<div class="m-info">${typeof navigator.bluetooth === 'undefined' ? 'Dieser Browser bietet aktuell keine Web-Bluetooth-Schnittstelle.' : 'Web Bluetooth ist vorhanden; die ESP32-Schnittstelle ist aber noch nicht eingerichtet.'}</div>`, 'Verstanden');
 
     };
-    ['mStart', 'mPause', 'mStop'].forEach(id => $(id).onclick = () => dialog('Trainingssteuerung', bleInfo, '', 'Verstanden'));
+    /* Test-Stoppuhr: unabhängig vom ESP32, ohne Messdaten. */
+    $('mStart').onclick = startTraining;
+    $('mPause').onclick = pauseTraining;
+    $('mStop').onclick = () =>
+    {
+        if (training.state === 'idle')
+        {
+            return;
+        }
+
+        dialog(
+            'Testtraining beenden?',
+            'Die bisherige Zeit wird als Testtraining gespeichert. Es werden keine Sensorwerte oder GPS-Daten hinzugefügt.',
+            '',
+            'Beenden und speichern',
+            finishTraining
+        );
+    };
     $('mSettings').onclick = () =>
     {
         dialog('Einstellungen', 'Die Ansicht wird automatisch nach Bildschirmbreite angepasst. Du kannst sie jederzeit manuell wechseln.', `<div class="m-info">Aktuell: ${viewPref === 'auto' ? 'Automatisch' : viewPref === 'mobile' ? 'Handy-Ansicht' : 'Desktop-Ansicht'}. Aufzeichnungen und Änderungen werden zunächst nur in diesem Browser gespeichert. Eine geräteübergreifende Cloud-Synchronisation ist noch nicht eingebunden.</div><div style="margin-top:12px"><select id="mViewChoice" class="m-field"><option value="auto">Automatisch</option><option value="mobile">Immer Handy</option><option value="desktop">Immer Desktop</option></select></div>`, 'Speichern', () =>
@@ -9583,6 +9984,12 @@ body.force-mobile::before {
     $('mLivePulse').addEventListener('click', () => toast('Noch keine Live-Messwerte'));
     renderHome();
     renderLive();
+    renderTraining();
+
+    // Die Zeit wird aus gespeicherten Zeitstempeln berechnet,
+    // damit ein Neuladen des Browsers die Stoppuhr nicht zurücksetzt.
+    setInterval(renderTraining, 1000);
+
     renderErrors();
     renderRecords();
     applyMode();
