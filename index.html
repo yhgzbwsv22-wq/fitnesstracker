@@ -1,0 +1,7715 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Fitnesstracker von Julian und Lukas</title>
+
+    <style>
+
+        /* =====================================================
+           ALLGEMEIN
+        ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #15181c;
+            color: white;
+            min-height: 100vh;
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        body::before {
+            content: "";
+
+            position: fixed;
+            inset: 0;
+
+            background-image:
+                url("Bilder/HTL_Pinkafeld_LOGO.png");
+
+            background-repeat: no-repeat;
+
+            background-position:
+                center 62%;
+
+            background-size:
+                min(850px, 65vw) auto;
+
+            opacity: 0.3;
+
+            filter:
+                grayscale(100%)
+                invert(1);
+
+            mix-blend-mode:
+                screen;
+
+            pointer-events: none;
+
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1400px;
+
+            margin: auto;
+
+            padding: 25px;
+
+            position: relative;
+
+            z-index: 1;
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        header {
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 30px;
+
+            padding:
+                8px 0 25px;
+
+            border-bottom:
+                1px solid #343a40;
+        }
+
+        .project-header {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 7px;
+        }
+
+        .project-label {
+            width: fit-content;
+
+            background: none;
+
+            border: none;
+
+            color: #7faee8;
+
+            font-size: 12px;
+            font-weight: bold;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1.5px;
+
+            cursor: pointer;
+        }
+
+        .project-title {
+            font-size: 27px;
+            font-weight: bold;
+        }
+
+        .project-subtitle {
+            color: #8993a1;
+
+            font-size: 13px;
+        }
+
+        .header-right {
+            display: flex;
+
+            align-items: center;
+
+            gap: 18px;
+        }
+
+        .system-status {
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            padding:
+                10px 14px;
+
+            background: #1d2126;
+
+            border:
+                1px solid #343a40;
+
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .photo-button {
+            background: none;
+
+            border: none;
+
+            cursor: pointer;
+        }
+
+        .team-photo {
+            width: 74px;
+            height: 74px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+            border:
+                2px solid #47505a;
+        }
+
+
+        /* =====================================================
+           STATUS
+        ===================================================== */
+
+        .dot {
+            width: 9px;
+            height: 9px;
+
+            display: inline-block;
+
+            border-radius: 50%;
+
+            margin-right: 6px;
+        }
+
+        .green {
+            background: #22c55e;
+        }
+
+        .orange {
+            background: #f59e0b;
+        }
+
+        .red {
+            background: #ef4444;
+        }
+
+
+        /* =====================================================
+           HAUPT TABS
+        ===================================================== */
+
+        .tabs {
+            display: flex;
+
+            gap: 5px;
+
+            margin-top: 25px;
+            margin-bottom: 35px;
+
+            border-bottom:
+                1px solid #343a40;
+
+            overflow-x: auto;
+        }
+
+        .tab-button {
+            background: none;
+
+            border: none;
+
+            color: #8993a1;
+
+            padding:
+                14px 22px;
+
+            font-size: 14px;
+
+            cursor: pointer;
+
+            border-bottom:
+                2px solid transparent;
+
+            white-space: nowrap;
+        }
+
+        .tab-button:hover {
+            color: white;
+        }
+
+        .tab-button.active {
+            color: white;
+
+            border-bottom-color:
+                #3b82f6;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+
+        /* =====================================================
+           ALLGEMEINE ELEMENTE
+        ===================================================== */
+
+        section {
+            margin-bottom: 45px;
+        }
+
+        .section-title {
+            font-size: 15px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.6px;
+
+            margin-bottom: 20px;
+        }
+
+        .section-description {
+            color: #8993a1;
+
+            font-size: 13px;
+
+            margin-top: -10px;
+            margin-bottom: 25px;
+        }
+
+        .cards {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(220px, 1fr)
+                );
+
+            gap: 15px;
+        }
+
+        .card {
+            background:
+                rgba(29, 33, 38, 0.96);
+
+            border:
+                1px solid #47505a;
+
+            padding: 20px;
+
+            min-height: 120px;
+        }
+
+        .card-title {
+            color: #9ca8b7;
+
+            font-size: 13px;
+
+            margin-bottom: 15px;
+        }
+
+        .card-value {
+            font-size: 24px;
+            font-weight: bold;
+
+            margin-bottom: 10px;
+        }
+
+        .card-info {
+            color: #d0d5dc;
+
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           ÜBERSICHT
+        ===================================================== */
+
+        .overview-title {
+            font-size: 20px;
+
+            margin-bottom: 7px;
+        }
+
+        .overview-text {
+            color: #8993a1;
+
+            font-size: 13px;
+
+            margin-bottom: 30px;
+        }
+
+        .overall-status {
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 20px;
+
+            background:
+                rgba(27, 36, 32, 0.96);
+
+            border:
+                1px solid #28623f;
+
+            padding:
+                22px 24px;
+
+            margin-bottom: 30px;
+        }
+
+        .overall-status-left {
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+        }
+
+        .overall-led {
+            width: 14px;
+            height: 14px;
+
+            border-radius: 50%;
+
+            background: #22c55e;
+        }
+
+        .overall-title {
+            font-size: 18px;
+            font-weight: bold;
+
+            margin-bottom: 4px;
+        }
+
+        .overall-description {
+            color: #a9b5ae;
+
+            font-size: 12px;
+        }
+
+        .overall-label {
+            color: #22c55e;
+
+            font-size: 12px;
+            font-weight: bold;
+
+            text-transform: uppercase;
+        }
+
+        .sensor-card {
+            width: 100%;
+
+            color: white;
+
+            text-align: left;
+
+            cursor: pointer;
+        }
+
+        .sensor-card:hover {
+            border-color: #3b82f6;
+        }
+
+        .sensor-bottom {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+        }
+
+        .sensor-details {
+            margin-left: auto;
+
+            color: #7faee8;
+
+            font-size: 12px;
+        }
+
+
+        /* =====================================================
+           LIVE DATEN
+        ===================================================== */
+
+        .data-section {
+            background:
+                rgba(29, 33, 38, 0.96);
+
+            border:
+                1px solid #47505a;
+
+            padding: 22px;
+
+            margin-bottom: 20px;
+        }
+
+        .data-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            padding-bottom: 18px;
+
+            margin-bottom: 20px;
+
+            border-bottom:
+                1px solid #343a40;
+        }
+
+        .data-title {
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .data-status {
+            color: #9ca8b7;
+
+            font-size: 12px;
+        }
+
+        .data-values {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(180px, 1fr)
+                );
+
+            gap: 20px;
+        }
+
+        .data-label {
+            color: #9ca8b7;
+
+            font-size: 12px;
+
+            margin-bottom: 8px;
+        }
+
+        .data-number {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .data-unit {
+            color: #9ca8b7;
+
+            font-size: 13px;
+
+            margin-left: 4px;
+        }
+
+
+        /* =====================================================
+           FEHLER
+        ===================================================== */
+
+        .error-summary {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 15px;
+
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            background:
+                rgba(29, 33, 38, 0.96);
+
+            border:
+                1px solid #47505a;
+
+            padding: 18px;
+        }
+
+        .summary-number {
+            font-size: 30px;
+            font-weight: bold;
+
+            margin-bottom: 7px;
+        }
+
+        .summary-label {
+            color: #8993a1;
+
+            font-size: 12px;
+        }
+
+        .info-box {
+            display: flex;
+
+            align-items: center;
+
+            background:
+                rgba(29, 33, 38, 0.96);
+
+            border:
+                1px solid #275c3d;
+
+            padding: 18px;
+
+            font-size: 14px;
+        }
+
+
+        /* =====================================================
+           SPORTARTEN DROPDOWN
+        ===================================================== */
+
+        .sports-dropdown {
+            width: 100%;
+
+            max-width: 430px;
+
+            position: relative;
+
+            margin-bottom: 30px;
+        }
+
+
+        .sports-dropdown-button {
+            width: 100%;
+
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            background:
+                rgba(29, 33, 38, 0.97);
+
+            border:
+                1px solid #47505a;
+
+            color: white;
+
+            padding:
+                15px 18px;
+
+            font-size: 14px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            text-align: left;
+
+            transition: 0.2s;
+        }
+
+
+        .sports-dropdown-button:hover {
+            border-color: #65809a;
+
+            background: #20252b;
+        }
+
+
+        .sports-dropdown.open
+        .sports-dropdown-button {
+            border-color: #3b82f6;
+        }
+
+
+        .sports-dropdown-arrow {
+            color: #7faee8;
+
+            font-size: 17px;
+
+            transition:
+                transform 0.2s ease;
+        }
+
+
+        .sports-dropdown.open
+        .sports-dropdown-arrow {
+            transform:
+                rotate(180deg);
+        }
+
+
+        .sports-dropdown-panel {
+            display: none;
+
+            position: absolute;
+
+            left: 0;
+            top:
+                calc(100% + 5px);
+
+            width: 100%;
+
+            background:
+                #1a1e23;
+
+            border:
+                1px solid #47505a;
+
+            box-shadow:
+                0 15px 35px
+                rgba(0, 0, 0, 0.45);
+
+            z-index: 200;
+        }
+
+
+        .sports-dropdown.open
+        .sports-dropdown-panel {
+            display: block;
+        }
+
+
+        /* =====================================================
+           SPORTART LISTE IM DROPDOWN
+        ===================================================== */
+
+        .sport-navigation {
+            display: flex;
+
+            flex-direction: column;
+
+            width: 100%;
+        }
+
+
+        .sport-tab-wrapper {
+            display: flex;
+
+            position: relative;
+
+            width: 100%;
+
+            border-bottom:
+                1px solid #343a40;
+        }
+
+
+        .sport-tab-wrapper:last-child {
+            border-bottom: none;
+        }
+
+
+        .sport-button {
+            flex: 1;
+
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            background: transparent;
+
+            border: none;
+
+            color: #aab3bf;
+
+            padding:
+                13px 15px;
+
+            font-size: 13px;
+
+            cursor: pointer;
+
+            text-align: left;
+        }
+
+
+        .sport-button:hover {
+            background: #22272e;
+
+            color: white;
+        }
+
+
+        .sport-button.active {
+            color: white;
+
+            background:
+                rgba(37, 56, 82, 0.9);
+
+            box-shadow:
+                inset 3px 0 0
+                #3b82f6;
+        }
+
+
+        .sport-button.unassigned {
+            border-top:
+                1px dashed #5e6874;
+
+            color: #a8b0ba;
+        }
+
+
+        .sport-button-count {
+            margin-left: auto;
+
+            margin-right: 10px;
+
+            color: #7faee8;
+
+            font-size: 11px;
+        }
+
+
+        /* =====================================================
+           DREI PUNKTE MENÜ
+        ===================================================== */
+
+        .sport-more-button {
+            width: 44px;
+
+            flex-shrink: 0;
+
+            background: transparent;
+
+            border: none;
+
+            border-left:
+                1px solid #343a40;
+
+            color: #8993a1;
+
+            cursor: pointer;
+
+            font-size: 19px;
+        }
+
+
+        .sport-more-button:hover {
+            background: #272d34;
+
+            color: white;
+        }
+
+
+        .sport-more-menu {
+            display: none;
+
+            position: absolute;
+
+            right: 5px;
+            top:
+                calc(100% - 4px);
+
+            width: 190px;
+
+            background: #20252b;
+
+            border:
+                1px solid #47505a;
+
+            box-shadow:
+                0 12px 30px
+                rgba(0, 0, 0, 0.5);
+
+            z-index: 500;
+        }
+
+
+        .sport-more-menu.active {
+            display: block;
+        }
+
+
+        .sport-menu-title {
+            color: #8993a1;
+
+            font-size: 10px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.7px;
+
+            padding:
+                10px 13px 7px;
+        }
+
+
+        .sport-delete-menu-button {
+            width: 100%;
+
+            background: none;
+
+            border: none;
+
+            color: #f87171;
+
+            text-align: left;
+
+            padding:
+                11px 13px;
+
+            cursor: pointer;
+        }
+
+
+        .sport-delete-menu-button:hover {
+            background:
+                rgba(127, 29, 29, 0.28);
+        }
+
+
+        /* =====================================================
+           NEUE SPORTART IM DROPDOWN
+        ===================================================== */
+
+        .new-sport-area {
+            padding: 12px;
+
+            border-top:
+                1px solid #47505a;
+
+            background: #181c21;
+        }
+
+
+        .new-sport-button {
+            width: 100%;
+
+            background: transparent;
+
+            border:
+                1px dashed #3b82f6;
+
+            color: #7faee8;
+
+            padding:
+                11px 14px;
+
+            font-size: 13px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            text-align: left;
+        }
+
+
+        .new-sport-button:hover {
+            background:
+                rgba(37, 56, 82, 0.55);
+
+            color: white;
+        }
+
+
+        /* =====================================================
+           AKTUELLE SPORTART
+        ===================================================== */
+
+        .sport-current-title {
+            font-size: 20px;
+            font-weight: bold;
+
+            margin-bottom: 5px;
+        }
+
+        .sport-current-description {
+            color: #8993a1;
+
+            font-size: 12px;
+
+            margin-bottom: 22px;
+        }
+
+
+        /* =====================================================
+           AUFZEICHNUNGEN
+        ===================================================== */
+
+        .record-summary {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 15px;
+
+            margin-bottom: 28px;
+        }
+
+        .record-list {
+            display: grid;
+
+            gap: 16px;
+        }
+
+        .record-card {
+            width: 100%;
+
+            background:
+                rgba(29, 33, 38, 0.96);
+
+            border:
+                1px solid #47505a;
+
+            color: white;
+
+            padding: 22px;
+
+            text-align: left;
+
+            cursor: pointer;
+        }
+
+        .record-card:hover {
+            border-color: #3b82f6;
+        }
+
+        .record-card.compare-source {
+            border:
+                2px solid #3b82f6;
+
+            background:
+                rgba(30, 43, 61, 0.95);
+        }
+
+        .record-card.compare-option:hover {
+            border-color: #22c55e;
+        }
+
+        .record-top {
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            margin-bottom: 18px;
+        }
+
+        .record-title {
+            font-size: 20px;
+            font-weight: bold;
+
+            margin-bottom: 6px;
+        }
+
+        .record-date {
+            color: #9ca8b7;
+
+            font-size: 13px;
+        }
+
+        .record-sport-badge {
+            color: #8bbcff;
+
+            border:
+                1px solid #3b82f6;
+
+            padding:
+                6px 10px;
+
+            font-size: 10px;
+
+            text-transform: uppercase;
+
+            height: fit-content;
+        }
+
+        .record-meta {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(150px, 1fr)
+                );
+
+            gap: 12px;
+        }
+
+        .record-meta-box {
+            background:
+                rgba(21, 24, 28, 0.9);
+
+            border:
+                1px solid #343a40;
+
+            padding: 14px;
+        }
+
+        .record-meta-label {
+            color: #8993a1;
+
+            font-size: 11px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 8px;
+        }
+
+        .record-meta-value {
+            font-size: 19px;
+            font-weight: bold;
+        }
+
+        .record-action {
+            color: #7faee8;
+
+            font-size: 13px;
+            font-weight: bold;
+
+            margin-top: 18px;
+        }
+
+        .empty-records {
+            padding: 35px;
+
+            border:
+                1px dashed #47505a;
+
+            color: #8993a1;
+
+            text-align: center;
+        }
+
+
+        /* =====================================================
+           VERGLEICH AUSWAHL
+        ===================================================== */
+
+        .compare-selection-banner {
+            display: none;
+
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 20px;
+
+            background:
+                rgba(29, 42, 59, 0.97);
+
+            border:
+                1px solid #3b82f6;
+
+            padding: 18px;
+
+            margin-bottom: 18px;
+        }
+
+        .compare-selection-banner.active {
+            display: flex;
+        }
+
+        .compare-selection-title {
+            font-weight: bold;
+
+            margin-bottom: 5px;
+        }
+
+        .compare-selection-text {
+            color: #9ca8b7;
+
+            font-size: 12px;
+        }
+
+        .compare-selection-cancel {
+            background: none;
+
+            border:
+                1px solid #64748b;
+
+            color: white;
+
+            padding:
+                10px 16px;
+
+            cursor: pointer;
+        }
+
+
+        /* =====================================================
+           MODALS
+        ===================================================== */
+
+        .modal {
+            display: none;
+
+            position: fixed;
+
+            inset: 0;
+
+            background:
+                rgba(0, 0, 0, 0.82);
+
+            z-index: 1000;
+
+            justify-content: center;
+            align-items: center;
+
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            position: relative;
+
+            width: 100%;
+            max-width: 680px;
+
+            max-height: 88vh;
+
+            overflow-y: auto;
+
+            background: #1d2126;
+
+            border:
+                1px solid #47505a;
+
+            padding: 35px;
+        }
+
+        .large-modal {
+            max-width: 1050px;
+        }
+
+        .modal-small-title {
+            color: #7faee8;
+
+            font-size: 12px;
+            font-weight: bold;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1.4px;
+
+            margin-bottom: 10px;
+        }
+
+        .modal-title {
+            font-size: 25px;
+
+            margin-bottom: 20px;
+        }
+
+        .modal-close {
+            position: absolute;
+
+            top: 13px;
+            right: 16px;
+
+            background: none;
+
+            border: none;
+
+            color: #aab2bd;
+
+            font-size: 27px;
+
+            cursor: pointer;
+        }
+
+        .modal-text {
+            color: #c8ced6;
+
+            line-height: 1.7;
+        }
+
+        .modal-text p {
+            margin-bottom: 16px;
+        }
+
+
+        /* =====================================================
+           SPORTART ERSTELLEN
+        ===================================================== */
+
+        .create-step {
+            display: none;
+        }
+
+        .create-step.active {
+            display: block;
+        }
+
+        .create-description {
+            color: #9ca8b7;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+
+            margin-bottom: 22px;
+        }
+
+        .sport-name-input {
+            width: 100%;
+
+            background: #171b20;
+
+            border:
+                1px solid #47505a;
+
+            color: white;
+
+            padding: 14px;
+
+            font-size: 15px;
+        }
+
+        .create-error {
+            color: #f87171;
+
+            font-size: 12px;
+
+            min-height: 18px;
+
+            margin-top: 8px;
+        }
+
+        .create-actions {
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 10px;
+
+            margin-top: 30px;
+        }
+
+        .create-actions-right {
+            display: flex;
+
+            gap: 10px;
+
+            margin-left: auto;
+        }
+
+        .secondary-button,
+        .primary-button,
+        .delete-button {
+            padding:
+                11px 18px;
+
+            cursor: pointer;
+        }
+
+        .secondary-button {
+            background: none;
+
+            border:
+                1px solid #47505a;
+
+            color: #aab4c0;
+        }
+
+        .primary-button {
+            background: #2563eb;
+
+            border:
+                1px solid #3b82f6;
+
+            color: white;
+        }
+
+        .delete-button {
+            background: #7f1d1d;
+
+            border:
+                1px solid #b91c1c;
+
+            color: white;
+        }
+
+        .metric-selection {
+            display: grid;
+
+            gap: 12px;
+        }
+
+        .metric-option {
+            display: flex;
+
+            gap: 15px;
+
+            align-items: center;
+
+            background: #171b20;
+
+            border:
+                1px solid #3b424a;
+
+            padding: 16px;
+
+            cursor: pointer;
+        }
+
+        .metric-option input {
+            width: 18px;
+            height: 18px;
+
+            accent-color: #3b82f6;
+        }
+
+        .metric-title {
+            font-weight: bold;
+
+            margin-bottom: 4px;
+        }
+
+        .metric-description {
+            color: #8993a1;
+
+            font-size: 11px;
+        }
+
+        .sport-preview {
+            color: #7faee8;
+
+            font-size: 20px;
+            font-weight: bold;
+
+            margin-bottom: 20px;
+        }
+
+
+        /* =====================================================
+           AKTIVITÄTSDETAIL
+        ===================================================== */
+
+        .activity-title-row {
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 20px;
+        }
+
+        .activity-date {
+            color: #9ca8b7;
+
+            margin-top: -10px;
+            margin-bottom: 20px;
+
+            font-size: 13px;
+        }
+
+        .compare-button {
+            background: #263244;
+
+            border:
+                1px solid #3b82f6;
+
+            color: #8bbcff;
+
+            padding:
+                10px 18px;
+
+            cursor: pointer;
+
+            height: fit-content;
+        }
+
+        .compare-button:disabled {
+            opacity: 0.35;
+        }
+
+        .sport-assignment {
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 15px;
+
+            background: #171b20;
+
+            border:
+                1px solid #343a40;
+
+            padding: 14px;
+
+            margin-bottom: 10px;
+        }
+
+        .sport-select {
+            background: #1d2126;
+
+            border:
+                1px solid #47505a;
+
+            color: white;
+
+            padding:
+                10px 12px;
+        }
+
+        .sport-save-button {
+            background: #263244;
+
+            border:
+                1px solid #3b82f6;
+
+            color: #8bbcff;
+
+            padding:
+                10px 14px;
+
+            cursor: pointer;
+        }
+
+        .activity-grid {
+            display: grid;
+
+            grid-template-columns:
+                1.1fr 0.9fr;
+
+            gap: 18px;
+        }
+
+        .activity-box {
+            background: #171b20;
+
+            border:
+                1px solid #343a40;
+
+            padding: 20px;
+        }
+
+        .activity-box-title {
+            color: #7faee8;
+
+            text-transform: uppercase;
+
+            font-size: 14px;
+
+            margin-bottom: 18px;
+        }
+
+        .activity-stats {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 14px;
+        }
+
+        .activity-stat {
+            background: #1d2126;
+
+            border:
+                1px solid #343a40;
+
+            padding: 15px;
+
+            min-height: 90px;
+        }
+
+        .activity-stat-label {
+            color: #9ca8b7;
+
+            font-size: 11px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 8px;
+        }
+
+        .activity-stat-value {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .metric-hidden {
+            display: none;
+        }
+
+        .chart-section {
+            background: #171b20;
+
+            border:
+                1px solid #343a40;
+
+            padding: 20px;
+
+            margin-top: 20px;
+        }
+
+        .chart-card {
+            background: #1d2126;
+
+            border:
+                1px solid #343a40;
+
+            padding: 18px;
+
+            margin-bottom: 18px;
+        }
+
+        canvas {
+            width: 100%;
+
+            height: 250px;
+        }
+
+        .map-frame {
+            margin-top: 15px;
+
+            border:
+                1px solid #343a40;
+
+            padding: 10px;
+        }
+
+        #activityMap {
+            width: 100%;
+
+            height: 350px;
+        }
+
+
+        /* =====================================================
+           VERGLEICH
+        ===================================================== */
+
+        .comparison-head {
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 14px;
+
+            margin-bottom: 20px;
+        }
+
+        .comparison-head-card {
+            background: #171b20;
+
+            border:
+                1px solid #47505a;
+
+            padding: 16px;
+        }
+
+        .comparison-head-card:first-child {
+            border-top:
+                3px solid #4ea1ff;
+        }
+
+        .comparison-head-card:last-child {
+            border-top:
+                3px solid #f59e0b;
+        }
+
+        .comparison-metric {
+            background: #171b20;
+
+            border:
+                1px solid #343a40;
+
+            padding: 14px;
+
+            margin-bottom: 10px;
+        }
+
+        .comparison-values {
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 10px;
+
+            margin-top: 10px;
+        }
+
+        .comparison-value {
+            padding: 12px;
+
+            border:
+                1px solid #3b424a;
+        }
+
+        .comparison-value.good {
+            background:
+                rgba(25, 65, 41, 0.3);
+
+            border-color: #2a7547;
+
+            color: #4ade80;
+        }
+
+        .comparison-value.bad {
+            background:
+                rgba(82, 31, 31, 0.3);
+
+            border-color: #7b3434;
+
+            color: #f87171;
+        }
+
+
+        /* =====================================================
+           SENSOR FENSTER
+        ===================================================== */
+
+        .component-list {
+            border:
+                1px solid #3b424a;
+
+            margin-bottom: 25px;
+        }
+
+        .component-row {
+            display: grid;
+
+            grid-template-columns:
+                1fr 120px;
+
+            gap: 15px;
+
+            padding: 16px;
+
+            border-bottom:
+                1px solid #343a40;
+        }
+
+        .component-row:last-child {
+            border-bottom: none;
+        }
+
+        .component-name {
+            font-weight: bold;
+        }
+
+        .component-description {
+            color: #8993a1;
+
+            font-size: 11px;
+
+            margin-top: 5px;
+        }
+
+        .component-state {
+            text-align: right;
+        }
+
+
+        /* =====================================================
+           FOTO
+        ===================================================== */
+
+        .photo-modal-inner {
+            display: flex;
+
+            justify-content: center;
+        }
+
+        .large-team-photo {
+            width:
+                min(420px, 80vw);
+
+            height:
+                min(420px, 80vw);
+
+            object-fit: cover;
+
+            border-radius: 50%;
+
+            border:
+                4px solid white;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media(max-width: 800px) {
+
+            header {
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+
+            .activity-grid,
+            .comparison-head,
+            .record-summary,
+            .error-summary {
+                grid-template-columns: 1fr;
+            }
+
+
+            .activity-stats,
+            .comparison-values {
+                grid-template-columns: 1fr;
+            }
+
+
+            .sport-assignment {
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+
+            .sports-dropdown {
+                max-width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header>
+
+        <div class="project-header">
+
+            <button
+                class="project-label"
+                id="projectButton">
+
+                Diplomarbeit
+
+            </button>
+
+
+            <div class="project-title">
+
+                Fitnesstracker von Julian und Lukas
+
+            </div>
+
+
+            <div class="project-subtitle">
+
+                Medizinisches Mess- und Analysesystem
+
+            </div>
+
+        </div>
+
+
+        <div class="header-right">
+
+            <div class="system-status">
+
+                <span class="dot green"></span>
+
+                SYSTEM ONLINE
+
+            </div>
+
+
+            <button
+                class="photo-button"
+                id="photoButton">
+
+                <img
+                    src="Bilder/Julian_Lukas.jpeg"
+                    class="team-photo"
+                    alt="Julian und Lukas">
+
+            </button>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         TABS
+    ====================================================== -->
+
+    <nav class="tabs">
+
+        <button
+            class="tab-button active"
+            data-tab="overview">
+
+            Übersicht
+
+        </button>
+
+
+        <button
+            class="tab-button"
+            data-tab="live">
+
+            Live Daten
+
+        </button>
+
+
+        <button
+            class="tab-button"
+            data-tab="errors">
+
+            Fehler
+
+        </button>
+
+
+        <button
+            class="tab-button"
+            data-tab="records">
+
+            Aufzeichnungen
+
+        </button>
+
+    </nav>
+
+
+
+    <!-- =====================================================
+         ÜBERSICHT
+    ====================================================== -->
+
+    <div
+        id="overview"
+        class="tab-content active">
+
+
+        <div class="overview-title">
+
+            Systemübersicht
+
+        </div>
+
+
+        <div class="overview-text">
+
+            Aktueller Verbindungs- und Systemstatus des Fitnesstrackers
+
+        </div>
+
+
+        <div class="overall-status">
+
+            <div class="overall-status-left">
+
+                <div class="overall-led"></div>
+
+
+                <div>
+
+                    <div class="overall-title">
+
+                        Alles in Ordnung
+
+                    </div>
+
+
+                    <div class="overall-description">
+
+                        Der Fitnesstracker ist betriebsbereit und alle wichtigen Komponenten funktionieren.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="overall-label">
+
+                System bereit
+
+            </div>
+
+        </div>
+
+
+        <section>
+
+            <h2 class="section-title">
+
+                Systemstatus
+
+            </h2>
+
+
+            <div class="cards">
+
+
+                <div class="card">
+
+                    <div class="card-title">
+                        ESP32
+                    </div>
+
+                    <div class="card-value">
+                        Online
+                    </div>
+
+                    <div class="card-info">
+                        <span class="dot green"></span>
+                        Verbindung aktiv
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-title">
+                        MQTT
+                    </div>
+
+                    <div class="card-value">
+                        Verbunden
+                    </div>
+
+                    <div class="card-info">
+                        <span class="dot green"></span>
+                        Broker erreichbar
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="card sensor-card"
+                    id="sensorButton">
+
+                    <div class="card-title">
+
+                        Sensoren & Module
+
+                    </div>
+
+                    <div class="card-value">
+
+                        Bereit
+
+                    </div>
+
+                    <div class="sensor-bottom">
+
+                        <span class="dot green"></span>
+
+                        Alle Komponenten OK
+
+                        <span class="sensor-details">
+
+                            Details →
+
+                        </span>
+
+                    </div>
+
+                </button>
+
+
+                <div class="card">
+
+                    <div class="card-title">
+
+                        Letzte Aktualisierung
+
+                    </div>
+
+                    <div class="card-value">
+
+                        15:04:32
+
+                    </div>
+
+                    <div class="card-info">
+
+                        Letzte empfangene Daten
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         LIVE DATEN
+    ====================================================== -->
+
+    <div
+        id="live"
+        class="tab-content">
+
+        <section>
+
+            <h2 class="section-title">
+
+                Live Daten
+
+            </h2>
+
+
+            <p class="section-description">
+
+                Aktuell erfasste und berechnete Messwerte
+
+            </p>
+
+
+            <div class="data-section">
+
+                <div class="data-header">
+
+                    <div class="data-title">
+
+                        Beschleunigung
+
+                    </div>
+
+                    <div class="data-status">
+
+                        <span class="dot green"></span>
+
+                        Sensor aktiv
+
+                    </div>
+
+                </div>
+
+
+                <div class="data-values">
+
+                    <div>
+
+                        <div class="data-label">
+
+                            Höchste Beschleunigung
+
+                        </div>
+
+                        <div class="data-number">
+
+                            3,8
+
+                            <span class="data-unit">
+
+                                m/s²
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="data-label">
+
+                            Letzte Beschleunigung
+
+                        </div>
+
+                        <div class="data-number">
+
+                            1,2
+
+                            <span class="data-unit">
+
+                                m/s²
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="data-section">
+
+                <div class="data-header">
+
+                    <div class="data-title">
+
+                        Sprunghöhe
+
+                    </div>
+
+                    <div class="data-status">
+
+                        <span class="dot green"></span>
+
+                        Messung aktiv
+
+                    </div>
+
+                </div>
+
+
+                <div class="data-values">
+
+                    <div>
+
+                        <div class="data-label">
+
+                            Höchster Sprung
+
+                        </div>
+
+                        <div class="data-number">
+
+                            42
+
+                            <span class="data-unit">
+                                cm
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="data-label">
+
+                            Letzter Sprung
+
+                        </div>
+
+                        <div class="data-number">
+
+                            31
+
+                            <span class="data-unit">
+                                cm
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="data-section">
+
+                <div class="data-header">
+
+                    <div class="data-title">
+
+                        Puls
+
+                    </div>
+
+                    <div class="data-status">
+
+                        <span class="dot green"></span>
+
+                        Puls wird empfangen
+
+                    </div>
+
+                </div>
+
+
+                <div class="data-values">
+
+                    <div>
+
+                        <div class="data-label">
+
+                            Aktueller Puls
+
+                        </div>
+
+                        <div class="data-number">
+
+                            142
+
+                            <span class="data-unit">
+                                bpm
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="data-label">
+
+                            Höchster Puls
+
+                        </div>
+
+                        <div class="data-number">
+
+                            168
+
+                            <span class="data-unit">
+                                bpm
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="data-label">
+
+                            Durchschnittspuls
+
+                        </div>
+
+                        <div class="data-number">
+
+                            131
+
+                            <span class="data-unit">
+                                bpm
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="data-section">
+
+                <div class="data-header">
+
+                    <div class="data-title">
+
+                        Belastung
+
+                    </div>
+
+                    <div class="data-status">
+
+                        <span class="dot green"></span>
+
+                        Berechnung aktiv
+
+                    </div>
+
+                </div>
+
+
+                <div class="data-values">
+
+                    <div>
+
+                        <div class="data-label">
+
+                            Aktuelle Belastung
+
+                        </div>
+
+                        <div class="data-number">
+
+                            62
+
+                            <span class="data-unit">
+                                %
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="data-label">
+
+                            Durchschnittliche Belastung
+
+                        </div>
+
+                        <div class="data-number">
+
+                            55
+
+                            <span class="data-unit">
+                                %
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="data-section">
+
+                <div class="data-header">
+
+                    <div class="data-title">
+
+                        Geschwindigkeit & Pace
+
+                    </div>
+
+                    <div class="data-status">
+
+                        <span class="dot green"></span>
+
+                        Messung aktiv
+
+                    </div>
+
+                </div>
+
+
+                <div class="data-values">
+
+                    <div>
+
+                        <div class="data-label">
+
+                            Aktuelle Geschwindigkeit
+
+                        </div>
+
+                        <div class="data-number">
+
+                            4,2
+
+                            <span class="data-unit">
+
+                                km/h
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="data-label">
+
+                            Aktuelle Pace
+
+                        </div>
+
+                        <div class="data-number">
+
+                            14:17
+
+                            <span class="data-unit">
+
+                                min/km
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="data-label">
+
+                            Höchstgeschwindigkeit
+
+                        </div>
+
+                        <div class="data-number">
+
+                            7,8
+
+                            <span class="data-unit">
+
+                                km/h
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="data-label">
+
+                            Durchschnittsgeschwindigkeit
+
+                        </div>
+
+                        <div class="data-number">
+
+                            3,9
+
+                            <span class="data-unit">
+
+                                km/h
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FEHLER
+    ====================================================== -->
+
+    <div
+        id="errors"
+        class="tab-content">
+
+        <section>
+
+            <h2 class="section-title">
+
+                Fehlerübersicht
+
+            </h2>
+
+
+            <div class="error-summary">
+
+                <div class="summary-card">
+
+                    <div class="summary-number">
+                        0
+                    </div>
+
+                    <div class="summary-label">
+                        Aktive Fehler
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="summary-number">
+                        0
+                    </div>
+
+                    <div class="summary-label">
+                        Aktive Warnungen
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="summary-number">
+                        0
+                    </div>
+
+                    <div class="summary-label">
+                        Fehler insgesamt
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <span class="dot green"></span>
+
+                Aktuell sind keine Fehler vorhanden.
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         AUFZEICHNUNGEN
+    ====================================================== -->
+
+    <div
+        id="records"
+        class="tab-content">
+
+        <section>
+
+            <h2 class="section-title">
+
+                Aufzeichnungen
+
+            </h2>
+
+
+            <p class="section-description">
+
+                Gespeicherte Einheiten nach Sportart
+
+            </p>
+
+
+
+            <!-- =============================================
+                 NEUES SPORTARTEN DROPDOWN
+            ============================================== -->
+
+            <div
+                class="sports-dropdown"
+                id="sportsDropdown">
+
+
+                <button
+                    class="sports-dropdown-button"
+                    id="sportsDropdownButton">
+
+                    <span>
+
+                        Sportarten
+
+                    </span>
+
+
+                    <span
+                        class="sports-dropdown-arrow"
+                        id="sportsDropdownArrow">
+
+                        ▼
+
+                    </span>
+
+                </button>
+
+
+                <div
+                    class="sports-dropdown-panel"
+                    id="sportsDropdownPanel">
+
+
+                    <!--
+                        Hier werden per JavaScript
+                        alle Sportarten eingefügt.
+                    -->
+
+                    <div
+                        class="sport-navigation"
+                        id="sportNavigation">
+                    </div>
+
+
+
+                    <!-- NEUE SPORTART DIREKT IM MENÜ -->
+
+                    <div class="new-sport-area">
+
+                        <button
+                            class="new-sport-button"
+                            id="newSportButton">
+
+                            + Neue Sportart erstellen
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- AKTUELL AUSGEWÄHLTE SPORTART -->
+
+            <div
+                class="sport-current-title"
+                id="sportCurrentTitle">
+            </div>
+
+
+            <div
+                class="sport-current-description"
+                id="sportCurrentDescription">
+            </div>
+
+
+
+            <!-- ZUSAMMENFASSUNG -->
+
+            <div class="record-summary">
+
+                <div class="summary-card">
+
+                    <div
+                        class="summary-number"
+                        id="sportActivityCount">
+                    </div>
+
+                    <div class="summary-label">
+
+                        Einheiten
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="summary-card"
+                    id="sportDistanceSummary">
+
+                    <div
+                        class="summary-number"
+                        id="sportTotalDistance">
+                    </div>
+
+                    <div class="summary-label">
+
+                        Gesamtdistanz
+
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div
+                        class="summary-number"
+                        id="sportTotalTime">
+                    </div>
+
+                    <div class="summary-label">
+
+                        Gesamtzeit
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- VERGLEICH AUSWAHL -->
+
+            <div
+                class="compare-selection-banner"
+                id="compareSelectionBanner">
+
+                <div>
+
+                    <div class="compare-selection-title">
+
+                        Vergleich auswählen
+
+                    </div>
+
+                    <div class="compare-selection-text">
+
+                        Ausgangseinheit:
+
+                        <strong id="compareSourceName"></strong>
+
+                        <br>
+
+                        Wähle eine andere Einheit dieser Sportart.
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="compare-selection-cancel"
+                    id="cancelCompareSelection">
+
+                    Abbrechen
+
+                </button>
+
+            </div>
+
+
+
+            <!-- EINHEITEN -->
+
+            <div
+                class="record-list"
+                id="recordList">
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     SPORTART ERSTELLEN
+========================================================= -->
+
+<div
+    class="modal"
+    id="createSportModal">
+
+    <div class="modal-content">
+
+        <button
+            class="modal-close"
+            data-close="createSportModal">
+
+            ×
+
+        </button>
+
+
+        <div
+            class="create-step active"
+            id="createStep1">
+
+            <div class="modal-small-title">
+
+                Neue Sportart
+
+            </div>
+
+
+            <div class="modal-title">
+
+                Sportart erstellen
+
+            </div>
+
+
+            <div class="create-description">
+
+                Gib zuerst einen Namen für die neue Sportart ein.
+
+            </div>
+
+
+            <input
+                class="sport-name-input"
+                id="newSportName"
+                placeholder="z. B. Tischtennis">
+
+
+            <div
+                class="create-error"
+                id="sportNameError">
+            </div>
+
+
+            <div class="create-actions">
+
+                <div></div>
+
+
+                <div class="create-actions-right">
+
+                    <button
+                        class="secondary-button"
+                        data-close="createSportModal">
+
+                        Abbrechen
+
+                    </button>
+
+
+                    <button
+                        class="primary-button"
+                        id="sportNext">
+
+                        Weiter →
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div
+            class="create-step"
+            id="createStep2">
+
+            <div class="modal-small-title">
+
+                Eigenschaften
+
+            </div>
+
+
+            <div class="modal-title">
+
+                Messwerte auswählen
+
+            </div>
+
+
+            <div
+                class="sport-preview"
+                id="sportPreview">
+            </div>
+
+
+            <div class="metric-selection">
+
+                <label class="metric-option">
+
+                    <input
+                        type="checkbox"
+                        id="metricDistance"
+                        checked>
+
+
+                    <div>
+
+                        <div class="metric-title">
+
+                            Distanz
+
+                        </div>
+
+                        <div class="metric-description">
+
+                            Distanz und Pace anzeigen
+
+                        </div>
+
+                    </div>
+
+                </label>
+
+
+                <label class="metric-option">
+
+                    <input
+                        type="checkbox"
+                        id="metricMaxSpeed"
+                        checked>
+
+
+                    <div>
+
+                        <div class="metric-title">
+
+                            Höchstgeschwindigkeit
+
+                        </div>
+
+                        <div class="metric-description">
+
+                            Maximale Geschwindigkeit anzeigen
+
+                        </div>
+
+                    </div>
+
+                </label>
+
+
+                <label class="metric-option">
+
+                    <input
+                        type="checkbox"
+                        id="metricElevation"
+                        checked>
+
+
+                    <div>
+
+                        <div class="metric-title">
+
+                            Höhenmeter
+
+                        </div>
+
+                        <div class="metric-description">
+
+                            Positive Höhenmeter anzeigen
+
+                        </div>
+
+                    </div>
+
+                </label>
+
+            </div>
+
+
+            <div class="create-actions">
+
+                <button
+                    class="secondary-button"
+                    id="sportBack">
+
+                    ← Zurück
+
+                </button>
+
+
+                <button
+                    class="primary-button"
+                    id="finishSport">
+
+                    Sportart erstellen
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     SPORTART LÖSCHEN
+========================================================= -->
+
+<div
+    class="modal"
+    id="deleteSportModal">
+
+    <div class="modal-content">
+
+        <button
+            class="modal-close"
+            data-close="deleteSportModal">
+
+            ×
+
+        </button>
+
+
+        <div class="modal-small-title">
+
+            Sportart löschen
+
+        </div>
+
+
+        <div class="modal-title">
+
+            Wirklich löschen?
+
+        </div>
+
+
+        <div class="create-description">
+
+            Möchtest du
+
+            <strong id="deleteSportName"></strong>
+
+            wirklich löschen?
+
+        </div>
+
+
+        <div
+            class="info-box"
+            style="
+                border-color:#7f1d1d;
+                margin-bottom:20px;
+            ">
+
+            Die Aktivitäten werden nicht gelöscht.
+            Sie werden automatisch zu
+            „Nicht zugewiesen“ verschoben.
+
+        </div>
+
+
+        <div class="create-actions">
+
+            <div></div>
+
+
+            <div class="create-actions-right">
+
+                <button
+                    class="secondary-button"
+                    data-close="deleteSportModal">
+
+                    Abbrechen
+
+                </button>
+
+
+                <button
+                    class="delete-button"
+                    id="confirmDeleteSport">
+
+                    Sportart löschen
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     AKTIVITÄTSDETAIL
+========================================================= -->
+
+<div
+    class="modal"
+    id="activityModal">
+
+    <div class="modal-content large-modal">
+
+        <button
+            class="modal-close"
+            data-close="activityModal">
+
+            ×
+
+        </button>
+
+
+        <div class="activity-title-row">
+
+            <div>
+
+                <div
+                    class="modal-title"
+                    id="activityTitle">
+                </div>
+
+                <div
+                    class="activity-date"
+                    id="activityDate">
+                </div>
+
+            </div>
+
+
+            <button
+                class="compare-button"
+                id="compareButton">
+
+                Vergleichen
+
+            </button>
+
+        </div>
+
+
+        <div class="sport-assignment">
+
+            <div>
+
+                <div class="activity-stat-label">
+
+                    Zugewiesene Sportart
+
+                </div>
+
+                <strong id="currentSportLabel"></strong>
+
+            </div>
+
+
+            <div>
+
+                <select
+                    class="sport-select"
+                    id="activitySportSelect">
+                </select>
+
+
+                <button
+                    class="sport-save-button"
+                    id="saveActivitySport">
+
+                    Sportart speichern
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="activity-grid">
+
+            <div class="activity-box">
+
+                <div class="activity-box-title">
+
+                    Zusammenfassung
+
+                </div>
+
+
+                <div class="activity-stats">
+
+                    <div
+                        class="activity-stat"
+                        id="detailDistanceBox">
+
+                        <div class="activity-stat-label">
+
+                            Distanz
+
+                        </div>
+
+                        <div
+                            class="activity-stat-value"
+                            id="detailDistance">
+                        </div>
+
+                    </div>
+
+
+                    <div class="activity-stat">
+
+                        <div class="activity-stat-label">
+
+                            Dauer
+
+                        </div>
+
+                        <div
+                            class="activity-stat-value"
+                            id="detailDuration">
+                        </div>
+
+                    </div>
+
+
+                    <div class="activity-stat">
+
+                        <div class="activity-stat-label">
+
+                            Ø Geschwindigkeit
+
+                        </div>
+
+                        <div
+                            class="activity-stat-value"
+                            id="detailAvgSpeed">
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="activity-stat"
+                        id="detailMaxSpeedBox">
+
+                        <div class="activity-stat-label">
+
+                            Max. Geschwindigkeit
+
+                        </div>
+
+                        <div
+                            class="activity-stat-value"
+                            id="detailMaxSpeed">
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="activity-stat"
+                        id="detailPaceBox">
+
+                        <div class="activity-stat-label">
+
+                            Ø Pace
+
+                        </div>
+
+                        <div
+                            class="activity-stat-value"
+                            id="detailPace">
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="activity-stat"
+                        id="detailElevationBox">
+
+                        <div class="activity-stat-label">
+
+                            Höhenmeter
+
+                        </div>
+
+                        <div
+                            class="activity-stat-value"
+                            id="detailElevation">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="activity-box">
+
+                <div class="activity-box-title">
+
+                    Belastung & Körperdaten
+
+                </div>
+
+
+                <div class="activity-stats">
+
+                    <div class="activity-stat">
+
+                        <div class="activity-stat-label">
+
+                            Ø Puls
+
+                        </div>
+
+                        <div
+                            class="activity-stat-value"
+                            id="detailAvgPulse">
+                        </div>
+
+                    </div>
+
+
+                    <div class="activity-stat">
+
+                        <div class="activity-stat-label">
+
+                            Max. Puls
+
+                        </div>
+
+                        <div
+                            class="activity-stat-value"
+                            id="detailMaxPulse">
+                        </div>
+
+                    </div>
+
+
+                    <div class="activity-stat">
+
+                        <div class="activity-stat-label">
+
+                            Ø Belastung
+
+                        </div>
+
+                        <div
+                            class="activity-stat-value"
+                            id="detailAvgLoad">
+                        </div>
+
+                    </div>
+
+
+                    <div class="activity-stat">
+
+                        <div class="activity-stat-label">
+
+                            Max. Belastung
+
+                        </div>
+
+                        <div
+                            class="activity-stat-value"
+                            id="detailMaxLoad">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="chart-section">
+
+            <div class="activity-box-title">
+
+                Verlauf der Einheit
+
+            </div>
+
+
+            <div class="chart-card">
+
+                <strong>
+
+                    Pulsverlauf
+
+                </strong>
+
+                <canvas id="pulseChart"></canvas>
+
+            </div>
+
+
+            <div class="chart-card">
+
+                <strong>
+
+                    Geschwindigkeitsverlauf
+
+                </strong>
+
+                <canvas id="speedChart"></canvas>
+
+            </div>
+
+        </div>
+
+
+        <div class="chart-section">
+
+            <div class="activity-box-title">
+
+                GPS-Route
+
+            </div>
+
+
+            <div class="map-frame">
+
+                <svg
+                    id="activityMap"
+                    viewBox="0 0 100 100">
+                </svg>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     VERGLEICH
+========================================================= -->
+
+<div
+    class="modal"
+    id="comparisonModal">
+
+    <div class="modal-content large-modal">
+
+        <button
+            class="modal-close"
+            data-close="comparisonModal">
+
+            ×
+
+        </button>
+
+
+        <div class="modal-small-title">
+
+            Vergleich
+
+        </div>
+
+
+        <div
+            class="modal-title"
+            id="comparisonTitle">
+        </div>
+
+
+        <div class="comparison-head">
+
+            <div
+                class="comparison-head-card"
+                id="comparisonA">
+            </div>
+
+
+            <div
+                class="comparison-head-card"
+                id="comparisonB">
+            </div>
+
+        </div>
+
+
+        <div id="comparisonValues"></div>
+
+
+        <div class="chart-section">
+
+            <div class="chart-card">
+
+                <strong>
+
+                    Pulsvergleich
+
+                </strong>
+
+                <canvas id="comparePulseChart"></canvas>
+
+            </div>
+
+
+            <div class="chart-card">
+
+                <strong>
+
+                    Geschwindigkeitsvergleich
+
+                </strong>
+
+                <canvas id="compareSpeedChart"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     SENSOR MODAL
+========================================================= -->
+
+<div
+    class="modal"
+    id="sensorModal">
+
+    <div class="modal-content">
+
+        <button
+            class="modal-close"
+            data-close="sensorModal">
+
+            ×
+
+        </button>
+
+
+        <div class="modal-small-title">
+
+            Systemkomponenten
+
+        </div>
+
+
+        <div class="modal-title">
+
+            Sensoren & Module
+
+        </div>
+
+
+        <div class="component-list">
+
+            <div class="component-row">
+
+                <div>
+
+                    <div class="component-name">
+                        Pulssensor
+                    </div>
+
+                    <div class="component-description">
+                        Erfassung der Herzfrequenz
+                    </div>
+
+                </div>
+
+                <div class="component-state">
+
+                    <span class="dot green"></span>
+
+                    OK
+
+                </div>
+
+            </div>
+
+
+            <div class="component-row">
+
+                <div>
+
+                    <div class="component-name">
+
+                        Beschleunigungssensor
+
+                    </div>
+
+                    <div class="component-description">
+
+                        Bewegung und Sprungerkennung
+
+                    </div>
+
+                </div>
+
+                <div class="component-state">
+
+                    <span class="dot green"></span>
+
+                    OK
+
+                </div>
+
+            </div>
+
+
+            <div class="component-row">
+
+                <div>
+
+                    <div class="component-name">
+
+                        GPS-Modul
+
+                    </div>
+
+                    <div class="component-description">
+
+                        Position und Geschwindigkeit
+
+                    </div>
+
+                </div>
+
+                <div class="component-state">
+
+                    <span class="dot green"></span>
+
+                    OK
+
+                </div>
+
+            </div>
+
+
+            <div class="component-row">
+
+                <div>
+
+                    <div class="component-name">
+
+                        Vibrationssensor
+
+                    </div>
+
+                    <div class="component-description">
+
+                        Erkennung von Vibrationen
+
+                    </div>
+
+                </div>
+
+                <div class="component-state">
+
+                    <span class="dot green"></span>
+
+                    OK
+
+                </div>
+
+            </div>
+
+
+            <div class="component-row">
+
+                <div>
+
+                    <div class="component-name">
+
+                        Vibrationsmotor
+
+                    </div>
+
+                    <div class="component-description">
+
+                        Haptische Rückmeldung
+
+                    </div>
+
+                </div>
+
+                <div class="component-state">
+
+                    <span class="dot green"></span>
+
+                    OK
+
+                </div>
+
+            </div>
+
+
+            <div class="component-row">
+
+                <div>
+
+                    <div class="component-name">
+
+                        Audioausgabe
+
+                    </div>
+
+                    <div class="component-description">
+
+                        Akustische Meldungen
+
+                    </div>
+
+                </div>
+
+                <div class="component-state">
+
+                    <span class="dot green"></span>
+
+                    OK
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     DIPLOMARBEIT
+========================================================= -->
+
+<div
+    class="modal"
+    id="projectModal">
+
+    <div class="modal-content">
+
+        <button
+            class="modal-close"
+            data-close="projectModal">
+
+            ×
+
+        </button>
+
+
+        <div class="modal-small-title">
+
+            Diplomarbeit
+
+        </div>
+
+
+        <div class="modal-title">
+
+            Fitnesstracker von Julian und Lukas
+
+        </div>
+
+
+        <div class="modal-text">
+
+            <p>
+                Im Rahmen unserer Diplomarbeit entwickeln wir einen eigenen
+                Fitnesstracker zur Erfassung und Auswertung sportlicher Daten.
+            </p>
+
+            <p>
+                Da wir beide selbst viel Sport betreiben, interessieren wir uns
+                besonders für die Erfassung von Bewegungs- und Leistungsdaten.
+            </p>
+
+            <p>
+                Dafür kombinieren wir Sensoren, einen ESP32,
+                drahtlose Datenübertragung und diese Weboberfläche.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     FOTO
+========================================================= -->
+
+<div
+    class="modal"
+    id="photoModal">
+
+    <div class="photo-modal-inner">
+
+        <button
+            class="modal-close"
+            data-close="photoModal">
+
+            ×
+
+        </button>
+
+
+        <img
+            src="Bilder/Julian_Lukas.jpeg"
+            class="large-team-photo"
+            alt="Julian und Lukas">
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+    /* =====================================================
+       SPORTARTEN
+    ===================================================== */
+
+    const standardSports = [
+
+        {
+            id: "running",
+            label: "Laufen",
+            description: "Gespeicherte Laufeinheiten",
+
+            metrics: {
+                distance: true,
+                maxSpeed: true,
+                elevation: true
+            },
+
+            custom: false
+        },
+
+        {
+            id: "cycling",
+            label: "Radfahren",
+            description: "Gespeicherte Radeinheiten",
+
+            metrics: {
+                distance: true,
+                maxSpeed: true,
+                elevation: true
+            },
+
+            custom: false
+        },
+
+        {
+            id: "hiking",
+            label: "Wandern",
+            description: "Gespeicherte Wandereinheiten",
+
+            metrics: {
+                distance: true,
+                maxSpeed: true,
+                elevation: true
+            },
+
+            custom: false
+        },
+
+        {
+            id: "football",
+            label: "Fußball",
+            description: "Gespeicherte Fußball-Einheiten",
+
+            metrics: {
+                distance: true,
+                maxSpeed: true,
+                elevation: false
+            },
+
+            custom: false
+        },
+
+        {
+            id: "tennis",
+            label: "Tennis",
+            description: "Gespeicherte Tennis-Einheiten",
+
+            metrics: {
+                distance: true,
+                maxSpeed: true,
+                elevation: false
+            },
+
+            custom: false
+        },
+
+        {
+            id: "unassigned",
+            label: "Nicht zugewiesen",
+            description:
+                "Aufzeichnungen ohne zugewiesene Sportart",
+
+            metrics: {
+                distance: true,
+                maxSpeed: true,
+                elevation: true
+            },
+
+            custom: false
+        }
+
+    ];
+
+
+
+    /* =====================================================
+       LOCAL STORAGE
+    ===================================================== */
+
+    function loadJSON(
+        key,
+        fallback
+    ) {
+
+        try {
+
+            const value =
+                localStorage.getItem(
+                    key
+                );
+
+
+            return value
+                ?
+                JSON.parse(value)
+                :
+                fallback;
+
+        }
+
+        catch {
+
+            return fallback;
+
+        }
+
+    }
+
+
+
+    function saveJSON(
+        key,
+        value
+    ) {
+
+        localStorage.setItem(
+            key,
+            JSON.stringify(value)
+        );
+
+    }
+
+
+
+    let deletedStandardSports =
+        loadJSON(
+            "deletedStandardSports",
+            []
+        );
+
+
+    let customSports =
+        loadJSON(
+            "customSports",
+            []
+        );
+
+
+    let sportTypes = [
+
+        ...standardSports.filter(
+            sport =>
+                sport.id === "unassigned"
+
+                ||
+
+                !deletedStandardSports.includes(
+                    sport.id
+                )
+        ),
+
+        ...customSports
+
+    ];
+
+
+
+    function saveSports() {
+
+        saveJSON(
+
+            "customSports",
+
+            sportTypes.filter(
+                sport =>
+                    sport.custom
+            )
+
+        );
+
+
+        saveJSON(
+            "deletedStandardSports",
+            deletedStandardSports
+        );
+
+    }
+
+
+
+    function getSport(
+        id
+    ) {
+
+        return sportTypes.find(
+            sport =>
+                sport.id === id
+        );
+
+    }
+
+
+
+    /* =====================================================
+       FORMATIERUNG
+    ===================================================== */
+
+    function parseDuration(
+        duration
+    ) {
+
+        const parts =
+            duration
+                .split(":")
+                .map(Number);
+
+
+        if (
+            parts.length === 3
+        ) {
+
+            return (
+                parts[0] * 3600 +
+                parts[1] * 60 +
+                parts[2]
+            );
+
+        }
+
+
+        return (
+            parts[0] * 60 +
+            parts[1]
+        );
+
+    }
+
+
+
+    function formatGermanDate(
+        iso
+    ) {
+
+        const parts =
+            iso.split("-");
+
+
+        return (
+            parts[2]
+            + "."
+            + parts[1]
+            + "."
+            + parts[0]
+        );
+
+    }
+
+
+
+    function number(
+        value
+    ) {
+
+        return value
+            .toFixed(1)
+            .replace(
+                ".",
+                ","
+            );
+
+    }
+
+
+
+    function formatDistance(
+        value
+    ) {
+
+        return (
+            number(value)
+            + " km"
+        );
+
+    }
+
+
+
+    function formatSpeed(
+        value
+    ) {
+
+        return (
+            number(value)
+            + " km/h"
+        );
+
+    }
+
+
+
+    function formatPace(
+        seconds
+    ) {
+
+        let min =
+            Math.floor(
+                seconds / 60
+            );
+
+
+        let sec =
+            Math.round(
+                seconds % 60
+            );
+
+
+        if (
+            sec === 60
+        ) {
+
+            min++;
+
+            sec = 0;
+
+        }
+
+
+        return (
+            min
+            + ":"
+            + String(sec)
+                .padStart(
+                    2,
+                    "0"
+                )
+            + " min/km"
+        );
+
+    }
+
+
+
+    function formatTotalTime(
+        seconds
+    ) {
+
+        const h =
+            Math.floor(
+                seconds / 3600
+            );
+
+
+        const m =
+            Math.floor(
+                (
+                    seconds % 3600
+                ) /
+                60
+            );
+
+
+        return (
+            h
+            + ":"
+            + String(m)
+                .padStart(
+                    2,
+                    "0"
+                )
+            + " h"
+        );
+
+    }
+
+
+
+    /* =====================================================
+       TESTDATEN
+    ===================================================== */
+
+    function history(
+        base,
+        variation,
+        seed
+    ) {
+
+        const result = [];
+
+
+        for (
+            let i = 0;
+            i < 12;
+            i++
+        ) {
+
+            result.push(
+
+                Number(
+                    (
+                        base +
+                        Math.sin(
+                            (
+                                i +
+                                seed
+                            ) *
+                            0.8
+                        ) *
+                        variation
+                    )
+                    .toFixed(1)
+                )
+
+            );
+
+        }
+
+
+        return result;
+
+    }
+
+
+
+    function createActivity(
+        id,
+        sport,
+        date,
+        time,
+        distance,
+        duration,
+        maxSpeed,
+        elevation,
+        avgPulse,
+        maxPulse,
+        avgLoad,
+        maxLoad,
+        seed
+    ) {
+
+        const durationSeconds =
+            parseDuration(
+                duration
+            );
+
+
+        const avgSpeed =
+            distance /
+            (
+                durationSeconds /
+                3600
+            );
+
+
+        return {
+
+            id,
+
+            sport,
+
+            date,
+
+            time,
+
+            title:
+                "Einheit vom "
+                + formatGermanDate(
+                    date
+                ),
+
+            distance,
+
+            duration,
+
+            durationSeconds,
+
+            avgSpeed,
+
+            maxSpeed,
+
+            elevation,
+
+            avgPulse,
+
+            maxPulse,
+
+            avgLoad,
+
+            maxLoad,
+
+            pace:
+                durationSeconds /
+                distance,
+
+            pulseHistory:
+                history(
+                    avgPulse,
+                    12,
+                    seed
+                ),
+
+            speedHistory:
+                history(
+                    avgSpeed,
+                    Math.max(
+                        0.8,
+                        avgSpeed * 0.18
+                    ),
+                    seed + 2
+                )
+
+        };
+
+    }
+
+
+
+    const activities = {};
+
+
+    function add(
+        activity
+    ) {
+
+        activities[
+            activity.id
+        ] =
+            activity;
+
+    }
+
+
+
+    /* =====================================================
+       LAUFEN
+    ===================================================== */
+
+    add(
+        createActivity(
+            "run1",
+            "running",
+            "2026-09-28",
+            "07:24",
+            7.4,
+            "41:02",
+            15.1,
+            96,
+            146,
+            174,
+            62,
+            84,
+            1
+        )
+    );
+
+
+    add(
+        createActivity(
+            "run2",
+            "running",
+            "2026-09-25",
+            "18:11",
+            5.3,
+            "28:44",
+            16.0,
+            52,
+            154,
+            178,
+            70,
+            88,
+            2
+        )
+    );
+
+
+    add(
+        createActivity(
+            "run3",
+            "running",
+            "2026-09-22",
+            "07:11",
+            8.2,
+            "59:06",
+            11.1,
+            126,
+            143,
+            162,
+            58,
+            74,
+            3
+        )
+    );
+
+
+    add(
+        createActivity(
+            "run4",
+            "running",
+            "2026-09-18",
+            "17:42",
+            6.4,
+            "36:18",
+            14.2,
+            84,
+            148,
+            171,
+            63,
+            82,
+            4
+        )
+    );
+
+
+
+    /* =====================================================
+       RADFAHREN
+    ===================================================== */
+
+    add(
+        createActivity(
+            "bike1",
+            "cycling",
+            "2026-09-27",
+            "15:05",
+            32.8,
+            "1:21:42",
+            42.5,
+            338,
+            137,
+            161,
+            55,
+            74,
+            5
+        )
+    );
+
+
+    add(
+        createActivity(
+            "bike2",
+            "cycling",
+            "2026-09-23",
+            "17:20",
+            24.4,
+            "1:03:18",
+            38.1,
+            212,
+            142,
+            168,
+            61,
+            79,
+            6
+        )
+    );
+
+
+    add(
+        createActivity(
+            "bike3",
+            "cycling",
+            "2026-09-16",
+            "16:11",
+            41.7,
+            "1:48:30",
+            45.2,
+            484,
+            145,
+            173,
+            66,
+            83,
+            7
+        )
+    );
+
+
+    add(
+        createActivity(
+            "bike4",
+            "cycling",
+            "2026-09-10",
+            "18:02",
+            18.9,
+            "48:20",
+            36.7,
+            145,
+            134,
+            157,
+            51,
+            69,
+            8
+        )
+    );
+
+
+
+    /* =====================================================
+       WANDERN
+    ===================================================== */
+
+    add(
+        createActivity(
+            "hike1",
+            "hiking",
+            "2026-09-26",
+            "09:14",
+            12.6,
+            "2:48:12",
+            8.3,
+            710,
+            121,
+            149,
+            45,
+            66,
+            9
+        )
+    );
+
+
+    add(
+        createActivity(
+            "hike2",
+            "hiking",
+            "2026-09-20",
+            "10:05",
+            9.3,
+            "2:04:44",
+            7.6,
+            522,
+            118,
+            143,
+            42,
+            62,
+            10
+        )
+    );
+
+
+    add(
+        createActivity(
+            "hike3",
+            "hiking",
+            "2026-09-13",
+            "08:42",
+            15.8,
+            "3:33:19",
+            8.9,
+            880,
+            126,
+            153,
+            49,
+            70,
+            11
+        )
+    );
+
+
+    add(
+        createActivity(
+            "hike4",
+            "hiking",
+            "2026-09-06",
+            "11:10",
+            7.1,
+            "1:34:40",
+            7.2,
+            284,
+            114,
+            139,
+            39,
+            57,
+            12
+        )
+    );
+
+
+
+    /* =====================================================
+       FUSSBALL
+    ===================================================== */
+
+    add(
+        createActivity(
+            "football1",
+            "football",
+            "2026-09-24",
+            "18:30",
+            8.7,
+            "1:31:08",
+            27.4,
+            34,
+            158,
+            188,
+            76,
+            94,
+            13
+        )
+    );
+
+
+    add(
+        createActivity(
+            "football2",
+            "football",
+            "2026-09-19",
+            "16:00",
+            7.9,
+            "1:26:24",
+            26.1,
+            28,
+            154,
+            183,
+            72,
+            91,
+            14
+        )
+    );
+
+
+    add(
+        createActivity(
+            "football3",
+            "football",
+            "2026-09-12",
+            "17:15",
+            9.2,
+            "1:35:18",
+            29.3,
+            31,
+            162,
+            191,
+            80,
+            96,
+            15
+        )
+    );
+
+
+    add(
+        createActivity(
+            "football4",
+            "football",
+            "2026-09-05",
+            "18:05",
+            6.8,
+            "1:14:50",
+            24.5,
+            25,
+            149,
+            177,
+            68,
+            87,
+            16
+        )
+    );
+
+
+
+    /* =====================================================
+       TENNIS
+    ===================================================== */
+
+    add(
+        createActivity(
+            "tennis1",
+            "tennis",
+            "2026-09-21",
+            "17:40",
+            4.6,
+            "1:18:30",
+            18.2,
+            22,
+            139,
+            169,
+            58,
+            78,
+            17
+        )
+    );
+
+
+    add(
+        createActivity(
+            "tennis2",
+            "tennis",
+            "2026-09-15",
+            "18:20",
+            5.1,
+            "1:29:14",
+            19.7,
+            18,
+            144,
+            174,
+            63,
+            82,
+            18
+        )
+    );
+
+
+    add(
+        createActivity(
+            "tennis3",
+            "tennis",
+            "2026-09-08",
+            "17:05",
+            3.8,
+            "1:03:44",
+            17.1,
+            16,
+            136,
+            163,
+            54,
+            74,
+            19
+        )
+    );
+
+
+    add(
+        createActivity(
+            "tennis4",
+            "tennis",
+            "2026-09-02",
+            "16:30",
+            4.2,
+            "1:12:10",
+            18.5,
+            19,
+            141,
+            170,
+            60,
+            79,
+            20
+        )
+    );
+
+
+
+    /* =====================================================
+       NICHT ZUGEWIESEN
+    ===================================================== */
+
+    add(
+        createActivity(
+            "unknown1",
+            "unassigned",
+            "2026-09-17",
+            "15:44",
+            6.1,
+            "52:12",
+            13.8,
+            72,
+            136,
+            166,
+            57,
+            77,
+            21
+        )
+    );
+
+
+    add(
+        createActivity(
+            "unknown2",
+            "unassigned",
+            "2026-09-14",
+            "18:22",
+            12.3,
+            "1:05:40",
+            24.1,
+            109,
+            144,
+            172,
+            63,
+            81,
+            22
+        )
+    );
+
+
+    add(
+        createActivity(
+            "unknown3",
+            "unassigned",
+            "2026-09-11",
+            "16:08",
+            4.8,
+            "38:14",
+            16.4,
+            51,
+            151,
+            181,
+            69,
+            89,
+            23
+        )
+    );
+
+
+    add(
+        createActivity(
+            "unknown4",
+            "unassigned",
+            "2026-09-04",
+            "17:31",
+            9.4,
+            "1:47:50",
+            12.2,
+            398,
+            125,
+            154,
+            47,
+            68,
+            24
+        )
+    );
+
+
+
+    /* =====================================================
+       GESPEICHERTE ZUORDNUNGEN
+    ===================================================== */
+
+    const savedAssignments =
+        loadJSON(
+            "activityAssignments",
+            {}
+        );
+
+
+    Object
+        .values(
+            activities
+        )
+        .forEach(
+            activity => {
+
+                const saved =
+                    savedAssignments[
+                        activity.id
+                    ];
+
+
+                if (
+                    saved &&
+                    getSport(saved)
+                ) {
+
+                    activity.sport =
+                        saved;
+
+                }
+
+                else if (
+                    !getSport(
+                        activity.sport
+                    )
+                ) {
+
+                    activity.sport =
+                        "unassigned";
+
+                }
+
+            }
+        );
+
+
+
+    function saveAssignments() {
+
+        const result = {};
+
+
+        Object
+            .values(
+                activities
+            )
+            .forEach(
+                activity => {
+
+                    result[
+                        activity.id
+                    ] =
+                        activity.sport;
+
+                }
+            );
+
+
+        saveJSON(
+            "activityAssignments",
+            result
+        );
+
+    }
+
+
+
+    /* =====================================================
+       SORTIERUNG
+    ===================================================== */
+
+    function getActivities(
+        sportId
+    ) {
+
+        return Object
+            .values(
+                activities
+            )
+            .filter(
+                activity =>
+                    activity.sport ===
+                    sportId
+            )
+            .sort(
+                (
+                    a,
+                    b
+                ) => {
+
+                    return (
+
+                        new Date(
+                            b.date
+                            + "T"
+                            + b.time
+                        )
+
+                        -
+
+                        new Date(
+                            a.date
+                            + "T"
+                            + a.time
+                        )
+
+                    );
+
+                }
+            );
+
+    }
+
+
+
+    function latestTimestamp(
+        sportId
+    ) {
+
+        const list =
+            getActivities(
+                sportId
+            );
+
+
+        if (
+            list.length === 0
+        ) {
+
+            return -1;
+
+        }
+
+
+        return new Date(
+
+            list[0].date
+            + "T"
+            + list[0].time
+
+        ).getTime();
+
+    }
+
+
+
+    function orderedSports() {
+
+        const unassigned =
+            sportTypes.find(
+                sport =>
+                    sport.id ===
+                    "unassigned"
+            );
+
+
+        const normal =
+            sportTypes.filter(
+                sport =>
+                    sport.id !==
+                    "unassigned"
+            );
+
+
+        normal.sort(
+            (
+                a,
+                b
+            ) => {
+
+                const ta =
+                    latestTimestamp(
+                        a.id
+                    );
+
+
+                const tb =
+                    latestTimestamp(
+                        b.id
+                    );
+
+
+                if (
+                    ta !== tb
+                ) {
+
+                    return (
+                        tb - ta
+                    );
+
+                }
+
+
+                return a.label.localeCompare(
+                    b.label,
+                    "de"
+                );
+
+            }
+        );
+
+
+        /*
+           NICHT ZUGEWIESEN
+           IMMER ALS LETZTES
+        */
+
+        if (
+            unassigned
+        ) {
+
+            normal.push(
+                unassigned
+            );
+
+        }
+
+
+        return normal;
+
+    }
+
+
+
+    /* =====================================================
+       HAUPT TABS
+    ===================================================== */
+
+    document
+        .querySelectorAll(
+            ".tab-button"
+        )
+        .forEach(
+            button => {
+
+                button.onclick =
+                    function () {
+
+                        document
+                            .querySelectorAll(
+                                ".tab-button"
+                            )
+                            .forEach(
+                                item =>
+                                    item.classList.remove(
+                                        "active"
+                                    )
+                            );
+
+
+                        document
+                            .querySelectorAll(
+                                ".tab-content"
+                            )
+                            .forEach(
+                                item =>
+                                    item.classList.remove(
+                                        "active"
+                                    )
+                            );
+
+
+                        button.classList.add(
+                            "active"
+                        );
+
+
+                        document
+                            .getElementById(
+                                button.dataset.tab
+                            )
+                            .classList.add(
+                                "active"
+                            );
+
+
+                        closeSportsDropdown();
+
+                    };
+
+            }
+        );
+
+
+
+    /* =====================================================
+       MODALS
+    ===================================================== */
+
+    function openModal(
+        id
+    ) {
+
+        document
+            .getElementById(
+                id
+            )
+            .classList.add(
+                "active"
+            );
+
+
+        document.body
+            .classList.add(
+                "modal-open"
+            );
+
+    }
+
+
+
+    function closeModal(
+        id
+    ) {
+
+        document
+            .getElementById(
+                id
+            )
+            .classList.remove(
+                "active"
+            );
+
+
+        if (
+            !document.querySelector(
+                ".modal.active"
+            )
+        ) {
+
+            document.body
+                .classList.remove(
+                    "modal-open"
+                );
+
+        }
+
+    }
+
+
+
+    document
+        .querySelectorAll(
+            "[data-close]"
+        )
+        .forEach(
+            button => {
+
+                button.onclick =
+                    function () {
+
+                        closeModal(
+                            button.dataset.close
+                        );
+
+                    };
+
+            }
+        );
+
+
+
+    /* =====================================================
+       SPORTARTEN DROPDOWN
+    ===================================================== */
+
+    const sportsDropdown =
+        document.getElementById(
+            "sportsDropdown"
+        );
+
+
+    const sportsDropdownButton =
+        document.getElementById(
+            "sportsDropdownButton"
+        );
+
+
+
+    function toggleSportsDropdown() {
+
+        sportsDropdown
+            .classList
+            .toggle(
+                "open"
+            );
+
+
+        closeSportMenus();
+
+    }
+
+
+
+    function closeSportsDropdown() {
+
+        sportsDropdown
+            .classList
+            .remove(
+                "open"
+            );
+
+
+        closeSportMenus();
+
+    }
+
+
+
+    sportsDropdownButton.onclick =
+        function (
+            event
+        ) {
+
+            event.stopPropagation();
+
+
+            toggleSportsDropdown();
+
+        };
+
+
+
+    /* =====================================================
+       SPORTARTEN
+    ===================================================== */
+
+    let currentSport =
+        orderedSports().length > 0
+        ?
+        orderedSports()[0].id
+        :
+        "unassigned";
+
+
+    let compareMode =
+        false;
+
+
+    let compareSource =
+        null;
+
+
+
+    function closeSportMenus() {
+
+        document
+            .querySelectorAll(
+                ".sport-more-menu"
+            )
+            .forEach(
+                menu =>
+                    menu.classList.remove(
+                        "active"
+                    )
+            );
+
+    }
+
+
+
+    function renderSports() {
+
+        const container =
+            document.getElementById(
+                "sportNavigation"
+            );
+
+
+        container.innerHTML =
+            "";
+
+
+        orderedSports()
+            .forEach(
+                sport => {
+
+                    const wrapper =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    wrapper.className =
+                        "sport-tab-wrapper";
+
+
+                    const canDelete =
+                        sport.id !==
+                        "unassigned";
+
+
+                    const button =
+                        document.createElement(
+                            "button"
+                        );
+
+
+                    button.className =
+                        "sport-button";
+
+
+                    if (
+                        sport.id ===
+                        currentSport
+                    ) {
+
+                        button.classList.add(
+                            "active"
+                        );
+
+                    }
+
+
+                    if (
+                        sport.id ===
+                        "unassigned"
+                    ) {
+
+                        button.classList.add(
+                            "unassigned"
+                        );
+
+                    }
+
+
+                    button.innerHTML =
+
+                        `<span>${sport.label}</span>`
+
+                        +
+
+                        `<span class="sport-button-count">`
+
+                        + getActivities(
+                            sport.id
+                        ).length
+
+                        + `</span>`;
+
+
+                    button.onclick =
+                        function (
+                            event
+                        ) {
+
+                            event.stopPropagation();
+
+
+                            compareMode =
+                                false;
+
+
+                            currentSport =
+                                sport.id;
+
+
+                            document
+                                .getElementById(
+                                    "compareSelectionBanner"
+                                )
+                                .classList.remove(
+                                    "active"
+                                );
+
+
+                            closeSportsDropdown();
+
+
+                            renderSports();
+
+                            renderRecords();
+
+                        };
+
+
+                    wrapper.appendChild(
+                        button
+                    );
+
+
+                    /*
+                       ALLE SPORTARTEN AUSSER
+                       "NICHT ZUGEWIESEN"
+                       KÖNNEN GELÖSCHT WERDEN
+                    */
+
+                    if (
+                        canDelete
+                    ) {
+
+                        const more =
+                            document.createElement(
+                                "button"
+                            );
+
+
+                        more.className =
+                            "sport-more-button";
+
+
+                        more.textContent =
+                            "⋮";
+
+
+                        const menu =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        menu.className =
+                            "sport-more-menu";
+
+
+                        menu.innerHTML =
+                            `
+
+                            <div class="sport-menu-title">
+
+                                Sportart verwalten
+
+                            </div>
+
+                            <button class="sport-delete-menu-button">
+
+                                ✕ Sportart löschen
+
+                            </button>
+
+                            `;
+
+
+                        more.onclick =
+                            function (
+                                event
+                            ) {
+
+                                event.stopPropagation();
+
+
+                                const open =
+                                    menu
+                                        .classList
+                                        .contains(
+                                            "active"
+                                        );
+
+
+                                closeSportMenus();
+
+
+                                if (
+                                    !open
+                                ) {
+
+                                    menu
+                                        .classList
+                                        .add(
+                                            "active"
+                                        );
+
+                                }
+
+                            };
+
+
+                        menu
+                            .querySelector(
+                                ".sport-delete-menu-button"
+                            )
+                            .onclick =
+                            function (
+                                event
+                            ) {
+
+                                event.stopPropagation();
+
+
+                                askDeleteSport(
+                                    sport.id
+                                );
+
+                            };
+
+
+                        wrapper.appendChild(
+                            more
+                        );
+
+
+                        wrapper.appendChild(
+                            menu
+                        );
+
+                    }
+
+
+                    container.appendChild(
+                        wrapper
+                    );
+
+                }
+            );
+
+    }
+
+
+
+    /* =====================================================
+       AUFZEICHNUNGEN
+    ===================================================== */
+
+    function recordBox(
+        label,
+        value
+    ) {
+
+        return `
+
+        <div class="record-meta-box">
+
+            <div class="record-meta-label">
+
+                ${label}
+
+            </div>
+
+            <div class="record-meta-value">
+
+                ${value}
+
+            </div>
+
+        </div>
+
+        `;
+
+    }
+
+
+
+    function renderRecords() {
+
+        let sport =
+            getSport(
+                currentSport
+            );
+
+
+        if (
+            !sport
+        ) {
+
+            currentSport =
+                "unassigned";
+
+
+            sport =
+                getSport(
+                    currentSport
+                );
+
+        }
+
+
+        const list =
+            getActivities(
+                currentSport
+            );
+
+
+        document
+            .getElementById(
+                "sportCurrentTitle"
+            )
+            .textContent =
+            sport.label;
+
+
+        document
+            .getElementById(
+                "sportCurrentDescription"
+            )
+            .textContent =
+            sport.description;
+
+
+        document
+            .getElementById(
+                "sportActivityCount"
+            )
+            .textContent =
+            list.length;
+
+
+        const distance =
+            list.reduce(
+                (
+                    sum,
+                    activity
+                ) =>
+                    sum +
+                    activity.distance,
+
+                0
+            );
+
+
+        const seconds =
+            list.reduce(
+                (
+                    sum,
+                    activity
+                ) =>
+                    sum +
+                    activity.durationSeconds,
+
+                0
+            );
+
+
+        document
+            .getElementById(
+                "sportTotalDistance"
+            )
+            .textContent =
+            formatDistance(
+                distance
+            );
+
+
+        document
+            .getElementById(
+                "sportTotalTime"
+            )
+            .textContent =
+            formatTotalTime(
+                seconds
+            );
+
+
+        document
+            .getElementById(
+                "sportDistanceSummary"
+            )
+            .classList
+            .toggle(
+                "metric-hidden",
+                !sport.metrics.distance
+            );
+
+
+        const container =
+            document.getElementById(
+                "recordList"
+            );
+
+
+        container.innerHTML =
+            "";
+
+
+        if (
+            list.length === 0
+        ) {
+
+            container.innerHTML =
+                `
+
+                <div class="empty-records">
+
+                    In dieser Sportart sind noch keine Einheiten gespeichert.
+
+                </div>
+
+                `;
+
+
+            return;
+
+        }
+
+
+
+        list.forEach(
+            activity => {
+
+                const card =
+                    document.createElement(
+                        "button"
+                    );
+
+
+                card.className =
+                    "record-card";
+
+
+                if (
+                    compareMode
+                ) {
+
+                    if (
+                        activity.id ===
+                        compareSource
+                    ) {
+
+                        card.classList.add(
+                            "compare-source"
+                        );
+
+                    }
+
+                    else {
+
+                        card.classList.add(
+                            "compare-option"
+                        );
+
+                    }
+
+                }
+
+
+                let values =
+                    "";
+
+
+                if (
+                    sport.metrics.distance
+                ) {
+
+                    values +=
+                        recordBox(
+                            "Distanz",
+                            formatDistance(
+                                activity.distance
+                            )
+                        );
+
+                }
+
+
+                values +=
+                    recordBox(
+                        "Dauer",
+                        activity.duration
+                    );
+
+
+                values +=
+                    recordBox(
+                        "Ø Geschwindigkeit",
+                        formatSpeed(
+                            activity.avgSpeed
+                        )
+                    );
+
+
+                if (
+                    sport.metrics.distance
+                ) {
+
+                    values +=
+                        recordBox(
+                            "Ø Pace",
+                            formatPace(
+                                activity.pace
+                            )
+                        );
+
+                }
+
+
+                values +=
+                    recordBox(
+                        "Ø Puls",
+                        activity.avgPulse
+                        + " bpm"
+                    );
+
+
+                card.innerHTML =
+                    `
+
+                    <div class="record-top">
+
+                        <div>
+
+                            <div class="record-title">
+
+                                ${activity.title}
+
+                            </div>
+
+                            <div class="record-date">
+
+                                ${activity.time} Uhr
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="record-sport-badge">
+
+                            ${sport.label}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="record-meta">
+
+                        ${values}
+
+                    </div>
+
+
+                    <div class="record-action">
+
+                        ${
+                            compareMode
+
+                            ?
+
+                            (
+                                activity.id ===
+                                compareSource
+
+                                ?
+
+                                "Ausgangseinheit"
+
+                                :
+
+                                "Für Vergleich auswählen →"
+                            )
+
+                            :
+
+                            "Details ansehen →"
+                        }
+
+                    </div>
+
+                    `;
+
+
+                card.onclick =
+                    function () {
+
+                        if (
+                            compareMode
+                        ) {
+
+                            if (
+                                activity.id !==
+                                compareSource
+                            ) {
+
+                                openComparison(
+                                    activities[
+                                        compareSource
+                                    ],
+                                    activity
+                                );
+
+                            }
+
+
+                            return;
+
+                        }
+
+
+                        openActivity(
+                            activity
+                        );
+
+                    };
+
+
+                container.appendChild(
+                    card
+                );
+
+            }
+        );
+
+    }
+
+
+
+    /* =====================================================
+       SPORTART ERSTELLEN
+    ===================================================== */
+
+    document
+        .getElementById(
+            "newSportButton"
+        )
+        .onclick =
+        function (
+            event
+        ) {
+
+            event.stopPropagation();
+
+
+            closeSportsDropdown();
+
+
+            document
+                .getElementById(
+                    "newSportName"
+                )
+                .value =
+                "";
+
+
+            document
+                .getElementById(
+                    "sportNameError"
+                )
+                .textContent =
+                "";
+
+
+            document
+                .getElementById(
+                    "createStep1"
+                )
+                .classList.add(
+                    "active"
+                );
+
+
+            document
+                .getElementById(
+                    "createStep2"
+                )
+                .classList.remove(
+                    "active"
+                );
+
+
+            openModal(
+                "createSportModal"
+            );
+
+        };
+
+
+
+    document
+        .getElementById(
+            "sportNext"
+        )
+        .onclick =
+        function () {
+
+            const name =
+                document
+                    .getElementById(
+                        "newSportName"
+                    )
+                    .value
+                    .trim();
+
+
+            if (
+                name.length < 2
+            ) {
+
+                document
+                    .getElementById(
+                        "sportNameError"
+                    )
+                    .textContent =
+                    "Bitte einen Namen eingeben.";
+
+
+                return;
+
+            }
+
+
+            if (
+                sportTypes.some(
+                    sport =>
+                        sport.label
+                            .toLowerCase() ===
+                        name.toLowerCase()
+                )
+            ) {
+
+                document
+                    .getElementById(
+                        "sportNameError"
+                    )
+                    .textContent =
+                    "Diese Sportart existiert bereits.";
+
+
+                return;
+
+            }
+
+
+            document
+                .getElementById(
+                    "sportPreview"
+                )
+                .textContent =
+                name;
+
+
+            document
+                .getElementById(
+                    "createStep1"
+                )
+                .classList.remove(
+                    "active"
+                );
+
+
+            document
+                .getElementById(
+                    "createStep2"
+                )
+                .classList.add(
+                    "active"
+                );
+
+        };
+
+
+
+    document
+        .getElementById(
+            "sportBack"
+        )
+        .onclick =
+        function () {
+
+            document
+                .getElementById(
+                    "createStep2"
+                )
+                .classList.remove(
+                    "active"
+                );
+
+
+            document
+                .getElementById(
+                    "createStep1"
+                )
+                .classList.add(
+                    "active"
+                );
+
+        };
+
+
+
+    document
+        .getElementById(
+            "finishSport"
+        )
+        .onclick =
+        function () {
+
+            const name =
+                document
+                    .getElementById(
+                        "newSportName"
+                    )
+                    .value
+                    .trim();
+
+
+            const newSport = {
+
+                id:
+                    "custom_"
+                    + Date.now(),
+
+                label:
+                    name,
+
+                description:
+                    "Benutzerdefinierte Sportart",
+
+                custom:
+                    true,
+
+                metrics: {
+
+                    distance:
+                        document
+                            .getElementById(
+                                "metricDistance"
+                            )
+                            .checked,
+
+                    maxSpeed:
+                        document
+                            .getElementById(
+                                "metricMaxSpeed"
+                            )
+                            .checked,
+
+                    elevation:
+                        document
+                            .getElementById(
+                                "metricElevation"
+                            )
+                            .checked
+
+                }
+
+            };
+
+
+            sportTypes.push(
+                newSport
+            );
+
+
+            saveSports();
+
+
+            currentSport =
+                newSport.id;
+
+
+            closeModal(
+                "createSportModal"
+            );
+
+
+            renderSports();
+
+            renderRecords();
+
+            fillSportSelect();
+
+        };
+
+
+
+    /* =====================================================
+       SPORTART LÖSCHEN
+    ===================================================== */
+
+    let sportToDelete =
+        null;
+
+
+
+    function askDeleteSport(
+        sportId
+    ) {
+
+        const sport =
+            getSport(
+                sportId
+            );
+
+
+        if (
+            !sport ||
+            sport.id ===
+            "unassigned"
+        ) {
+
+            return;
+
+        }
+
+
+        sportToDelete =
+            sportId;
+
+
+        document
+            .getElementById(
+                "deleteSportName"
+            )
+            .textContent =
+            "„"
+            + sport.label
+            + "“";
+
+
+        closeSportsDropdown();
+
+
+        openModal(
+            "deleteSportModal"
+        );
+
+    }
+
+
+
+    document
+        .getElementById(
+            "confirmDeleteSport"
+        )
+        .onclick =
+        function () {
+
+            if (
+                !sportToDelete
+            ) {
+
+                return;
+
+            }
+
+
+            const sport =
+                getSport(
+                    sportToDelete
+                );
+
+
+            if (
+                !sport ||
+                sport.id ===
+                "unassigned"
+            ) {
+
+                return;
+
+            }
+
+
+
+            /*
+               AKTIVITÄTEN BLEIBEN ERHALTEN
+               UND WERDEN NICHT ZUGEWIESEN
+            */
+
+            Object
+                .values(
+                    activities
+                )
+                .forEach(
+                    activity => {
+
+                        if (
+                            activity.sport ===
+                            sportToDelete
+                        ) {
+
+                            activity.sport =
+                                "unassigned";
+
+                        }
+
+                    }
+                );
+
+
+
+            /*
+               STANDARD SPORTART LÖSCHEN
+            */
+
+            if (
+                !sport.custom
+            ) {
+
+                if (
+                    !deletedStandardSports
+                        .includes(
+                            sport.id
+                        )
+                ) {
+
+                    deletedStandardSports
+                        .push(
+                            sport.id
+                        );
+
+                }
+
+            }
+
+
+
+            /*
+               AUS SPORTLISTE LÖSCHEN
+            */
+
+            sportTypes =
+                sportTypes.filter(
+                    item =>
+                        item.id !==
+                        sportToDelete
+                );
+
+
+            saveSports();
+
+            saveAssignments();
+
+
+
+            if (
+                currentSport ===
+                sportToDelete
+            ) {
+
+                currentSport =
+                    "unassigned";
+
+            }
+
+
+            sportToDelete =
+                null;
+
+
+            closeModal(
+                "deleteSportModal"
+            );
+
+
+            renderSports();
+
+            renderRecords();
+
+            fillSportSelect();
+
+        };
+
+
+
+    /* =====================================================
+       SPORTART SELECT
+    ===================================================== */
+
+    let currentActivity =
+        null;
+
+
+
+    function fillSportSelect() {
+
+        const select =
+            document.getElementById(
+                "activitySportSelect"
+            );
+
+
+        select.innerHTML =
+            "";
+
+
+        orderedSports()
+            .forEach(
+                sport => {
+
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
+
+
+                    option.value =
+                        sport.id;
+
+
+                    option.textContent =
+                        sport.label;
+
+
+                    select.appendChild(
+                        option
+                    );
+
+                }
+            );
+
+    }
+
+
+
+    /* =====================================================
+       AKTIVITÄTSDETAIL
+    ===================================================== */
+
+    function openActivity(
+        activity
+    ) {
+
+        currentActivity =
+            activity;
+
+
+        const sport =
+            getSport(
+                activity.sport
+            );
+
+
+        document
+            .getElementById(
+                "activityTitle"
+            )
+            .textContent =
+            activity.title;
+
+
+        document
+            .getElementById(
+                "activityDate"
+            )
+            .textContent =
+            "Start: "
+            + activity.time
+            + " Uhr";
+
+
+        document
+            .getElementById(
+                "currentSportLabel"
+            )
+            .textContent =
+            sport.label;
+
+
+        fillSportSelect();
+
+
+        document
+            .getElementById(
+                "activitySportSelect"
+            )
+            .value =
+            activity.sport;
+
+
+        document
+            .getElementById(
+                "detailDistance"
+            )
+            .textContent =
+            formatDistance(
+                activity.distance
+            );
+
+
+        document
+            .getElementById(
+                "detailDuration"
+            )
+            .textContent =
+            activity.duration;
+
+
+        document
+            .getElementById(
+                "detailAvgSpeed"
+            )
+            .textContent =
+            formatSpeed(
+                activity.avgSpeed
+            );
+
+
+        document
+            .getElementById(
+                "detailMaxSpeed"
+            )
+            .textContent =
+            formatSpeed(
+                activity.maxSpeed
+            );
+
+
+        document
+            .getElementById(
+                "detailPace"
+            )
+            .textContent =
+            formatPace(
+                activity.pace
+            );
+
+
+        document
+            .getElementById(
+                "detailElevation"
+            )
+            .textContent =
+            activity.elevation
+            + " m";
+
+
+        document
+            .getElementById(
+                "detailAvgPulse"
+            )
+            .textContent =
+            activity.avgPulse
+            + " bpm";
+
+
+        document
+            .getElementById(
+                "detailMaxPulse"
+            )
+            .textContent =
+            activity.maxPulse
+            + " bpm";
+
+
+        document
+            .getElementById(
+                "detailAvgLoad"
+            )
+            .textContent =
+            activity.avgLoad
+            + " %";
+
+
+        document
+            .getElementById(
+                "detailMaxLoad"
+            )
+            .textContent =
+            activity.maxLoad
+            + " %";
+
+
+        document
+            .getElementById(
+                "detailDistanceBox"
+            )
+            .classList
+            .toggle(
+                "metric-hidden",
+                !sport.metrics.distance
+            );
+
+
+        document
+            .getElementById(
+                "detailPaceBox"
+            )
+            .classList
+            .toggle(
+                "metric-hidden",
+                !sport.metrics.distance
+            );
+
+
+        document
+            .getElementById(
+                "detailMaxSpeedBox"
+            )
+            .classList
+            .toggle(
+                "metric-hidden",
+                !sport.metrics.maxSpeed
+            );
+
+
+        document
+            .getElementById(
+                "detailElevationBox"
+            )
+            .classList
+            .toggle(
+                "metric-hidden",
+                !sport.metrics.elevation
+            );
+
+
+        document
+            .getElementById(
+                "compareButton"
+            )
+            .disabled =
+            getActivities(
+                activity.sport
+            ).length <= 1;
+
+
+        openModal(
+            "activityModal"
+        );
+
+
+        setTimeout(
+            function () {
+
+                drawSingleChart(
+                    "pulseChart",
+                    activity.pulseHistory,
+                    "#ef6464"
+                );
+
+
+                drawSingleChart(
+                    "speedChart",
+                    activity.speedHistory,
+                    "#4ea1ff"
+                );
+
+
+                drawMap(
+                    activity
+                );
+
+            },
+            50
+        );
+
+    }
+
+
+
+    /* =====================================================
+       SPORTART EINER EINHEIT ÄNDERN
+    ===================================================== */
+
+    document
+        .getElementById(
+            "saveActivitySport"
+        )
+        .onclick =
+        function () {
+
+            if (
+                !currentActivity
+            ) {
+
+                return;
+
+            }
+
+
+            currentActivity.sport =
+                document
+                    .getElementById(
+                        "activitySportSelect"
+                    )
+                    .value;
+
+
+            saveAssignments();
+
+
+            document
+                .getElementById(
+                    "currentSportLabel"
+                )
+                .textContent =
+                getSport(
+                    currentActivity.sport
+                ).label;
+
+
+            renderSports();
+
+            renderRecords();
+
+        };
+
+
+
+    /* =====================================================
+       VERGLEICH AUSWAHL
+    ===================================================== */
+
+    document
+        .getElementById(
+            "compareButton"
+        )
+        .onclick =
+        function () {
+
+            compareMode =
+                true;
+
+
+            compareSource =
+                currentActivity.id;
+
+
+            currentSport =
+                currentActivity.sport;
+
+
+            document
+                .getElementById(
+                    "compareSourceName"
+                )
+                .textContent =
+                currentActivity.title;
+
+
+            document
+                .getElementById(
+                    "compareSelectionBanner"
+                )
+                .classList
+                .add(
+                    "active"
+                );
+
+
+            closeModal(
+                "activityModal"
+            );
+
+
+            renderSports();
+
+            renderRecords();
+
+        };
+
+
+
+    document
+        .getElementById(
+            "cancelCompareSelection"
+        )
+        .onclick =
+        function () {
+
+            compareMode =
+                false;
+
+
+            compareSource =
+                null;
+
+
+            document
+                .getElementById(
+                    "compareSelectionBanner"
+                )
+                .classList
+                .remove(
+                    "active"
+                );
+
+
+            renderRecords();
+
+        };
+
+
+
+    /* =====================================================
+       VERGLEICH
+    ===================================================== */
+
+    function openComparison(
+        a,
+        b
+    ) {
+
+        compareMode =
+            false;
+
+
+        compareSource =
+            null;
+
+
+        document
+            .getElementById(
+                "compareSelectionBanner"
+            )
+            .classList
+            .remove(
+                "active"
+            );
+
+
+        document
+            .getElementById(
+                "comparisonTitle"
+            )
+            .textContent =
+            a.title
+            + " ↔ "
+            + b.title;
+
+
+        document
+            .getElementById(
+                "comparisonA"
+            )
+            .textContent =
+            a.title;
+
+
+        document
+            .getElementById(
+                "comparisonB"
+            )
+            .textContent =
+            b.title;
+
+
+        const metrics = [
+
+            [
+                "Distanz",
+                a.distance,
+                b.distance,
+                formatDistance,
+                "neutral"
+            ],
+
+            [
+                "Ø Geschwindigkeit",
+                a.avgSpeed,
+                b.avgSpeed,
+                formatSpeed,
+                "higher"
+            ],
+
+            [
+                "Höchstgeschwindigkeit",
+                a.maxSpeed,
+                b.maxSpeed,
+                formatSpeed,
+                "higher"
+            ],
+
+            [
+                "Pace",
+                a.pace,
+                b.pace,
+                formatPace,
+                "lower"
+            ],
+
+            [
+                "Ø Puls",
+                a.avgPulse,
+                b.avgPulse,
+                value =>
+                    value + " bpm",
+                "lower"
+            ],
+
+            [
+                "Max. Puls",
+                a.maxPulse,
+                b.maxPulse,
+                value =>
+                    value + " bpm",
+                "lower"
+            ],
+
+            [
+                "Ø Belastung",
+                a.avgLoad,
+                b.avgLoad,
+                value =>
+                    value + " %",
+                "lower"
+            ]
+
+        ];
+
+
+        const container =
+            document.getElementById(
+                "comparisonValues"
+            );
+
+
+        container.innerHTML =
+            "";
+
+
+        metrics.forEach(
+            metric => {
+
+                const [
+                    label,
+                    valueA,
+                    valueB,
+                    formatter,
+                    direction
+                ] =
+                    metric;
+
+
+                let classA =
+                    "";
+
+
+                let classB =
+                    "";
+
+
+                if (
+                    direction !==
+                    "neutral"
+
+                    &&
+
+                    valueA !==
+                    valueB
+                ) {
+
+                    const betterA =
+
+                        direction ===
+                        "higher"
+
+                        ?
+
+                        valueA > valueB
+
+                        :
+
+                        valueA < valueB;
+
+
+                    classA =
+                        betterA
+                        ?
+                        "good"
+                        :
+                        "bad";
+
+
+                    classB =
+                        betterA
+                        ?
+                        "bad"
+                        :
+                        "good";
+
+                }
+
+
+                const box =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                box.className =
+                    "comparison-metric";
+
+
+                box.innerHTML =
+                    `
+
+                    <strong>
+
+                        ${label}
+
+                    </strong>
+
+
+                    <div class="comparison-values">
+
+                        <div class="comparison-value ${classA}">
+
+                            ${formatter(valueA)}
+
+                        </div>
+
+
+                        <div class="comparison-value ${classB}">
+
+                            ${formatter(valueB)}
+
+                        </div>
+
+                    </div>
+
+                    `;
+
+
+                container.appendChild(
+                    box
+                );
+
+            }
+        );
+
+
+        openModal(
+            "comparisonModal"
+        );
+
+
+        setTimeout(
+            function () {
+
+                drawDoubleChart(
+                    "comparePulseChart",
+                    a.pulseHistory,
+                    b.pulseHistory
+                );
+
+
+                drawDoubleChart(
+                    "compareSpeedChart",
+                    a.speedHistory,
+                    b.speedHistory
+                );
+
+            },
+            50
+        );
+
+    }
+
+
+
+    /* =====================================================
+       DIAGRAMME
+    ===================================================== */
+
+    function drawSingleChart(
+        id,
+        values,
+        color
+    ) {
+
+        const canvas =
+            document.getElementById(
+                id
+            );
+
+
+        const width =
+            canvas
+                .parentElement
+                .clientWidth -
+            36;
+
+
+        const height =
+            250;
+
+
+        canvas.width =
+            width;
+
+
+        canvas.height =
+            height;
+
+
+        const ctx =
+            canvas.getContext(
+                "2d"
+            );
+
+
+        const min =
+            Math.min(
+                ...values
+            );
+
+
+        const max =
+            Math.max(
+                ...values
+            );
+
+
+        const range =
+            max - min || 1;
+
+
+        ctx.beginPath();
+
+
+        values.forEach(
+            (
+                value,
+                index
+            ) => {
+
+                const x =
+                    30 +
+                    index /
+                    (
+                        values.length -
+                        1
+                    ) *
+                    (
+                        width -
+                        60
+                    );
+
+
+                const y =
+                    height -
+                    30 -
+                    (
+                        value -
+                        min
+                    ) /
+                    range *
+                    (
+                        height -
+                        60
+                    );
+
+
+                if (
+                    index === 0
+                ) {
+
+                    ctx.moveTo(
+                        x,
+                        y
+                    );
+
+                }
+
+                else {
+
+                    ctx.lineTo(
+                        x,
+                        y
+                    );
+
+                }
+
+            }
+        );
+
+
+        ctx.strokeStyle =
+            color;
+
+
+        ctx.lineWidth =
+            2.5;
+
+
+        ctx.stroke();
+
+    }
+
+
+
+    function drawDoubleChart(
+        id,
+        a,
+        b
+    ) {
+
+        const canvas =
+            document.getElementById(
+                id
+            );
+
+
+        const width =
+            canvas
+                .parentElement
+                .clientWidth -
+            36;
+
+
+        const height =
+            250;
+
+
+        canvas.width =
+            width;
+
+
+        canvas.height =
+            height;
+
+
+        const ctx =
+            canvas.getContext(
+                "2d"
+            );
+
+
+        const all =
+            [
+                ...a,
+                ...b
+            ];
+
+
+        const min =
+            Math.min(
+                ...all
+            );
+
+
+        const max =
+            Math.max(
+                ...all
+            );
+
+
+        const range =
+            max - min || 1;
+
+
+
+        function draw(
+            values,
+            color
+        ) {
+
+            ctx.beginPath();
+
+
+            values.forEach(
+                (
+                    value,
+                    index
+                ) => {
+
+                    const x =
+                        30 +
+                        index /
+                        (
+                            values.length -
+                            1
+                        ) *
+                        (
+                            width -
+                            60
+                        );
+
+
+                    const y =
+                        height -
+                        30 -
+                        (
+                            value -
+                            min
+                        ) /
+                        range *
+                        (
+                            height -
+                            60
+                        );
+
+
+                    if (
+                        index === 0
+                    ) {
+
+                        ctx.moveTo(
+                            x,
+                            y
+                        );
+
+                    }
+
+                    else {
+
+                        ctx.lineTo(
+                            x,
+                            y
+                        );
+
+                    }
+
+                }
+            );
+
+
+            ctx.strokeStyle =
+                color;
+
+
+            ctx.lineWidth =
+                2.5;
+
+
+            ctx.stroke();
+
+        }
+
+
+        draw(
+            a,
+            "#4ea1ff"
+        );
+
+
+        draw(
+            b,
+            "#f59e0b"
+        );
+
+    }
+
+
+
+    /* =====================================================
+       GPS ROUTE
+    ===================================================== */
+
+    const routePoints = [
+
+        {x:15,y:78},
+        {x:22,y:67},
+        {x:33,y:58},
+        {x:42,y:45},
+        {x:52,y:34},
+        {x:64,y:29},
+        {x:75,y:36},
+        {x:80,y:49},
+        {x:72,y:63},
+        {x:60,y:72},
+        {x:46,y:75},
+        {x:30,y:69}
+
+    ];
+
+
+
+    function drawMap(
+        activity
+    ) {
+
+        const svg =
+            document.getElementById(
+                "activityMap"
+            );
+
+
+        svg.innerHTML =
+            "";
+
+
+        const ns =
+            "http://www.w3.org/2000/svg";
+
+
+        const min =
+            Math.min(
+                ...activity.speedHistory
+            );
+
+
+        const max =
+            Math.max(
+                ...activity.speedHistory
+            );
+
+
+        for (
+            let i = 0;
+            i <
+            routePoints.length -
+            1;
+            i++
+        ) {
+
+            const speed =
+                activity.speedHistory[
+                    i %
+                    activity.speedHistory.length
+                ];
+
+
+            const ratio =
+                (
+                    speed -
+                    min
+                ) /
+                (
+                    max -
+                    min ||
+                    1
+                );
+
+
+            let color;
+
+
+            if (
+                ratio < 0.33
+            ) {
+
+                color =
+                    "#ef4444";
+
+            }
+
+            else if (
+                ratio < 0.66
+            ) {
+
+                color =
+                    "#f59e0b";
+
+            }
+
+            else {
+
+                color =
+                    "#22c55e";
+
+            }
+
+
+            const line =
+                document.createElementNS(
+                    ns,
+                    "line"
+                );
+
+
+            line.setAttribute(
+                "x1",
+                routePoints[i].x
+            );
+
+
+            line.setAttribute(
+                "y1",
+                routePoints[i].y
+            );
+
+
+            line.setAttribute(
+                "x2",
+                routePoints[i + 1].x
+            );
+
+
+            line.setAttribute(
+                "y2",
+                routePoints[i + 1].y
+            );
+
+
+            line.setAttribute(
+                "stroke",
+                color
+            );
+
+
+            line.setAttribute(
+                "stroke-width",
+                "5"
+            );
+
+
+            line.setAttribute(
+                "stroke-linecap",
+                "round"
+            );
+
+
+            svg.appendChild(
+                line
+            );
+
+        }
+
+    }
+
+
+
+    /* =====================================================
+       SONSTIGE FENSTER
+    ===================================================== */
+
+    document
+        .getElementById(
+            "sensorButton"
+        )
+        .onclick =
+        function () {
+
+            openModal(
+                "sensorModal"
+            );
+
+        };
+
+
+    document
+        .getElementById(
+            "photoButton"
+        )
+        .onclick =
+        function () {
+
+            openModal(
+                "photoModal"
+            );
+
+        };
+
+
+    document
+        .getElementById(
+            "projectButton"
+        )
+        .onclick =
+        function () {
+
+            openModal(
+                "projectModal"
+            );
+
+        };
+
+
+
+    /* =====================================================
+       AUSSERHALB DROPDOWN KLICKEN
+    ===================================================== */
+
+    document.addEventListener(
+        "click",
+        function (
+            event
+        ) {
+
+            if (
+                !event.target.closest(
+                    ".sports-dropdown"
+                )
+            ) {
+
+                closeSportsDropdown();
+
+            }
+
+        }
+    );
+
+
+
+    /* =====================================================
+       ESC
+    ===================================================== */
+
+    document.addEventListener(
+        "keydown",
+        function (
+            event
+        ) {
+
+            if (
+                event.key ===
+                "Escape"
+            ) {
+
+                closeSportsDropdown();
+
+
+                document
+                    .querySelectorAll(
+                        ".modal.active"
+                    )
+                    .forEach(
+                        modal =>
+                            closeModal(
+                                modal.id
+                            )
+                    );
+
+            }
+
+        }
+    );
+
+
+
+    /* =====================================================
+       START
+    ===================================================== */
+
+    renderSports();
+
+    renderRecords();
+
+    fillSportSelect();
+
+</script>
+
+
+</body>
+</html>
