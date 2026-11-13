@@ -3918,6 +3918,111 @@ header {
     }
 }
 
+
+/* ================================================================
+   UPDATE: SPORT-SYMBOLE, LESBARKEIT UND DIAGRAMM-VERGLEICH
+   Gemeinsame Darstellung für Laptop und Handy
+================================================================ */
+:root {
+    --sport-green: #4ee2a4;
+}
+.sport-identity {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+}
+.sport-icon {
+    width: 23px;
+    height: 23px;
+    flex: 0 0 23px;
+    stroke: var(--sport-green);
+    color: var(--sport-green);
+    stroke-width: 1.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+    vertical-align: middle;
+}
+.sport-icon-small { width: 19px; height: 19px; flex-basis: 19px; }
+.sport-button .sport-identity, #mobileApp .m-sportrow .sport-identity {
+    font-weight: 750;
+}
+.sport-button { font-size: 15px; }
+#mobileApp .m-sportrow button { font-size: 15px; }
+#mobileApp .m-sportrow .sport-identity { gap: 10px; }
+.desktop-record-chip .sport-icon,
+#mobileApp .m-chip .sport-icon { width: 18px; height: 18px; flex-basis: 18px; }
+.desktop-record-chip, #mobileApp .m-chip.blue {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+/* Nur Schriftgrößen: bestehende Kartenabmessungen beibehalten */
+body:not(.force-mobile) .summary-card .summary-number { font-size: clamp(32px, 2.5vw, 39px); }
+body:not(.force-mobile) .summary-card .summary-label { font-size: 15px; font-weight: 650; }
+body:not(.force-mobile) .record-title { font-size: clamp(20px, 1.6vw, 24px); line-height: 1.25; }
+body:not(.force-mobile) .record-meta-label { font-size: 13px; }
+body:not(.force-mobile) .record-meta-value { font-size: 20px; }
+body:not(.force-mobile) .desktop-record-date { font-size: 14px; }
+body:not(.force-mobile) .record-action { font-size: 15px; }
+body:not(.force-mobile) .section-title { font-size: 17px; }
+#mobileApp .m-cardname { font-size: 14px; line-height: 1.3; }
+#mobileApp .m-val { font-size: clamp(25px, 6vw, 32px); }
+#mobileApp .m-record-title { font-size: 20px; line-height: 1.28; }
+#mobileApp .m-recordgrid small { font-size: 13px; }
+#mobileApp .m-recordgrid strong { font-size: 17px; }
+#mobileApp .m-small { font-size: 13px; line-height: 1.45; }
+.compare-axis-panel {
+    background: #192a37;
+    border: 1px solid #365468;
+    border-radius: 14px;
+    padding: 14px 17px;
+    margin: 12px 0 16px;
+}
+.compare-axis-title { display: block; color: #d9e7f2; font-weight: 750; font-size: 15px; margin-bottom: 9px; }
+.compare-axis-controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: end; }
+.compare-axis-controls label { display: flex; flex-direction: column; gap: 6px; color: #a7bfd2; font-size: 13px; font-weight: 650; }
+.compare-axis-controls select, .compare-axis-controls input {
+    appearance: auto;
+    min-height: 41px;
+    border: 1px solid #4a6477;
+    border-radius: 9px;
+    color: #f5fbff;
+    background: #202f40;
+    padding: 8px 11px;
+    font: inherit;
+    font-size: 14px;
+}
+.compare-axis-controls input { width: 125px; }
+.compare-split-results { margin-top: 13px; color: #d5e6f1; font-size: 14px; line-height: 1.65; }
+.compare-split-results strong { color: #5ce3b0; }
+.compare-split-results .estimate-note { color: #9db1bf; font-size: 12px; }
+.compare-split-results .split-line { display:flex; gap:12px; flex-wrap:wrap; margin-top:4px; }
+.compare-split-results .split-tag { padding: 5px 9px; border-radius:8px; background: #263a49; }
+.action-symbol { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.action-symbol .sport-icon { width: 17px; height: 17px; flex-basis: 17px; }
+@media(max-width: 620px) {
+    .compare-axis-panel { padding: 12px; }
+    .compare-axis-controls select { max-width: 100%; }
+    #mobileApp .m-sportrow button { min-height: 45px; }
+    #mobileApp .m-recordgrid { gap: 8px; }
+    #mobileApp .m-record-title { overflow-wrap: anywhere; }
+}
+
+
+/* STATISTIKEN: NUR SCHRIFT VERGRÖSSERN, NICHT DIE KARTEN */
+body:not(.force-mobile) .desktop-stat-label { font-size: 16px !important; line-height: 1.28; font-weight: 680; }
+body:not(.force-mobile) .desktop-stat-number { font-size: clamp(34px, 2.7vw, 43px) !important; line-height: 1.08; }
+body:not(.force-mobile) .desktop-record-chip { font-size: 13px !important; }
+body:not(.force-mobile) .sport-current-title { font-size: 23px; }
+#mobileApp #mHomeStats .m-cardname { font-size: 14px !important; font-weight: 650; }
+#mobileApp #mHomeStats .m-val { font-size: clamp(28px, 6.8vw, 34px) !important; }
+#mobileApp .m-record .m-chip { font-size: 13px; }
+#mobileApp .m-record [style*="color:#8dbaff"] { font-size: 14px !important; }
+.action-icon { width:17px;height:17px;flex:none;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round; }
+button.with-action-icon { display:inline-flex; align-items:center; justify-content:center; gap:8px; }
+
 </style>
 
 </head>
@@ -5228,7 +5333,7 @@ header {
                     class="secondary-button"
                     id="sportBack">
 
-                    ← Zurück
+                    ↩ Zurück
 
                 </button>
 
@@ -5442,7 +5547,7 @@ header {
             <div class="desktop-rename-error" id="desktopRenameError"></div>
             <div class="desktop-rename-actions">
                 <button type="button" class="primary-button" id="desktopRenameSave">
-                    Namen speichern
+                    ▣ Namen speichern
                 </button>
                 <button type="button" class="secondary-button" id="desktopRenameCancel">
                     Abbrechen
@@ -5477,7 +5582,7 @@ header {
                     class="sport-save-button"
                     id="saveActivitySport">
 
-                    Sportart speichern
+                    ▣ Sportart speichern
 
                 </button>
 
@@ -5802,6 +5907,22 @@ header {
         <div id="comparisonValues"></div>
 
 
+
+        <div class="compare-axis-panel">
+            <span class="compare-axis-title">Vergleichsachse auswählen</span>
+            <div class="compare-axis-controls">
+                <label>Diagramm nach
+                    <select id="desktopCompareAxis" aria-label="Vergleichsachse">
+                        <option value="time">Zeit (Minuten)</option>
+                        <option value="distance">Strecke (Meter)</option>
+                    </select>
+                </label>
+                <label>Zwischenzeit bei (Meter)
+                    <input id="desktopSplitMeters" type="number" min="100" step="100" value="2000" />
+                </label>
+            </div>
+            <div id="desktopCompareSplits" class="compare-split-results" aria-live="polite"></div>
+        </div>
         <div class="chart-section">
 
             <div class="chart-card">
@@ -6448,7 +6569,7 @@ header {
   <div class="m-inner">
    <div class="m-flex" style="margin-bottom:18px">
     <button class="m-secondary" id="mDetailBack">
-     ← Zurück
+     ↩ Zurück
     </button>
     <span class="m-chip blue" id="mDetailDemo">
      Demo
@@ -6539,7 +6660,7 @@ header {
   <div class="m-inner">
    <div class="m-flex" style="margin-bottom:15px">
     <button class="m-secondary" id="mCompareBack">
-     ← Zurück
+     ↩ Zurück
     </button>
     <span class="m-chip blue">
      Vergleich
@@ -6567,6 +6688,18 @@ header {
     </button>
    </div>
    <div id="mCompareNumbers">
+   </div>
+   <div class="compare-axis-panel">
+    <span class="compare-axis-title">Vergleichsachse auswählen</span>
+    <div class="compare-axis-controls">
+     <label>Diagramm nach
+      <select id="mCompareAxis"><option value="time">Zeit (Minuten)</option><option value="distance">Strecke (Meter)</option></select>
+     </label>
+     <label>Zwischenzeit bei (Meter)
+      <input id="mCompareSplitMeters" type="number" min="100" step="100" value="2000">
+     </label>
+    </div>
+    <div id="mCompareSplits" class="compare-split-results" aria-live="polite"></div>
    </div>
    <div class="m-panel">
     <h3>
@@ -6603,7 +6736,7 @@ header {
   <div class="m-inner">
    <div class="m-flex" style="margin-bottom:15px">
     <button class="m-secondary" id="mTrashBack">
-     ← Zurück
+     ↩ Zurück
     </button>
     <span class="m-chip gray">
      30 Tage
@@ -6641,6 +6774,162 @@ header {
  </div>
 </div>
 <!-- Der Ansichtswechsel befindet sich jetzt oben in beiden Kopfzeilen. -->
+
+
+<script>
+/* ================================================================
+   GEMEINSAME SPORT-SYMBOLE UND VERGLEICHS-AUSWERTUNG
+   Kein API-Schlüssel nötig: lokale Erkennung anhand von Sportnamen.
+================================================================ */
+(function () {
+    'use strict';
+    const paths = {
+        running: '<circle cx="13" cy="4" r="2"/><path d="m7 21 4-6-2-4-5 3-2-2 6-5 4 1 4 4 4 1"/><path d="m11 15 5 3 2 4"/>',
+        cycling: '<circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="m5.5 17.5 5-9 4 9h-9M11 8.5h3.5l4 9M9 6h3"/>',
+        hiking: '<circle cx="12" cy="4" r="2"/><path d="m10 9-3 5-3 2m6-7 4 4 4 1m-7-1 2 3-3 6m3-6 5 6m4-14v14m-3-12h6"/>',
+        football: '<circle cx="12" cy="12" r="9"/><path d="m9 9 3-2 3 2-1 4h-4Zm-3-6 3 6m6 0 3-6M4 15l6-2m4 0 6 2m-8 2v4"/>',
+        tennis: '<circle cx="8" cy="8" r="5"/><path d="m11 12 9 9M7 4c4 1 5 5 4 8M4 8l8-1"/><circle cx="19" cy="5" r="2"/>',
+        swimming: '<path d="M2 18c2 2 4 2 6 0 2 2 4 2 6 0 2 2 4 2 6 0M2 22c2 2 4 2 6 0 2 2 4 2 6 0 2 2 4 2 6 0"/><circle cx="16" cy="6" r="2"/><path d="m5 14 6-4 5 3 3 1"/>',
+        basketball: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c4 5 4 13 0 18M12 3c-4 5-4 13 0 18"/>',
+        volleyball: '<circle cx="12" cy="12" r="9"/><path d="M12 3c6 3 7 8 6 14M3 9c5-3 11-2 16 1M6 19c1-5 6-8 13-8"/>',
+        skiing: '<circle cx="10" cy="4" r="2"/><path d="m7 9 4 1 3 4-4 3-4-3m6-4 4-3m-2 8 4 4M2 21l20-5M2 18l20 4"/>',
+        gym: '<path d="M3 10v4m3-7v10m3-9v8m6-8v8m3-9v10m3-7v4M3 12h18"/>',
+        boxing: '<path d="M5 12 4 8l3-5h6l4 4v5l-4 7H7L5 15Z"/><path d="M5 12h10M10 4v5"/>',
+        rowing: '<path d="M2 20q5-3 10 0t10 0M6 14h12l-3 4H9zM4 7l15 9M13 4l-5 9"/>',
+        climbing: '<path d="M3 22 11 3l4 9 4-4 3 14Z"/><circle cx="12" cy="12" r="1"/>',
+        dance: '<circle cx="13" cy="4" r="2"/><path d="m12 7-3 5-5 2m8-7 4 5 5 1m-12 0 4 4-2 5m2-5 4 5"/>',
+        generic: '<path d="M3 10v4m3-7v10m3-8v6m6-6v6m3-8v10m3-7v4M3 12h18"/>'
+    };
+    function sportCategory(id, name) {
+        const t = (String(id) + ' ' + String(name)).toLocaleLowerCase('de')
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        const groups = [
+            ['running', /lauf|jogg|sprint|marathon|running|track|leichtathlet/],
+            ['cycling', /rad|bike|fahrrad|cycling|mountainbike|mtb|bmx/],
+            ['hiking', /wander|hiking|trekking|spazier|walking|nordic/],
+            ['football', /fußball|fussball|football|soccer|futsal/],
+            ['tennis', /tennis|badminton|squash|tischtennis|pingpong/],
+            ['swimming', /schwimm|swim|tauchen|wasserball/],
+            ['basketball', /basketball|basket/],
+            ['volleyball', /volleyball|beachvolley|handball/],
+            ['skiing', /ski|snowboard|langlauf|rodel/],
+            ['boxing', /boxen|boxing|kickbox|karate|judo|taekwondo|kampfsport/],
+            ['rowing', /rudern|rowing|kajak|kanu|paddel|segel/],
+            ['climbing', /klettern|boulder|climb|bergsteigen/],
+            ['dance', /tanz|dance|ballett|yoga|pilates/],
+            ['gym', /fitness|kraft|studio|workout|gewicht|crossfit|heben|gym|training/]
+        ];
+        return (groups.find(([, pattern]) => pattern.test(t)) || ['generic'])[0];
+    }
+    window.sportIconMarkup = function (id, name, small = false) {
+        const category = sportCategory(id, name);
+        return '<svg class="sport-icon' + (small ? ' sport-icon-small' : '') + '" viewBox="0 0 24 24" aria-hidden="true">' + paths[category] + '</svg>';
+    };
+    window.sportIdentityMarkup = function (id, name, small = false) {
+        const safe = String(name || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        return '<span class="sport-identity">' + window.sportIconMarkup(id, name, small) + '<span>' + safe + '</span></span>';
+    };
+    /*
+       Messpunkte der bestehenden Demo sind zeitlich gleichmäßig verteilt.
+       Für den Streckenmodus wird aus den Geschwindigkeitswerten eine
+       angenäherte Wegverteilung errechnet und auf die gespeicherte
+       Gesamtdistanz kalibriert. Exakte Splits erfordern echte GPS- oder
+       Distanz-Zeit-Messpunkte vom ESP32.
+    */
+    function pointsFor(activity, key) {
+        if (!activity || activity.testMode) return [];
+        const values = activity[key] || [];
+        const duration = Number(activity.durationSeconds) || 0;
+        const distance = Number(activity.distance) || 0;
+        if (values.length < 2 || duration <= 0) return [];
+        const dt = duration / (values.length - 1);
+        const speeds = Array.isArray(activity.speedHistory) && activity.speedHistory.length === values.length
+            ? activity.speedHistory : Array(values.length).fill(Number(activity.avgSpeed) || 0);
+        const raw = [0];
+        for (let i = 1; i < values.length; i++) {
+            const averageSpeed = Math.max(0, (Number(speeds[i-1]) + Number(speeds[i])) / 2);
+            raw.push(raw[i-1] + averageSpeed * dt / 3.6);
+        }
+        const total = raw[raw.length - 1];
+        return values.map((v, i) => ({
+            seconds: i * dt,
+            meters: total > 0 ? raw[i] / total * distance * 1000 : i / (values.length-1) * distance * 1000,
+            value: Number(v)
+        })).filter(p => Number.isFinite(p.value));
+    }
+    function arrivalTime(activity, meters) {
+        const data = pointsFor(activity, 'speedHistory');
+        if (data.length < 2 || data[data.length-1].meters + 0.01 < meters) return null;
+        if (meters === 0) return 0;
+        for (let i = 1; i < data.length; i++) {
+            if (data[i].meters >= meters) {
+                const span = data[i].meters - data[i-1].meters;
+                const fraction = span > 0 ? (meters - data[i-1].meters) / span : 0;
+                return data[i-1].seconds + fraction * (data[i].seconds - data[i-1].seconds);
+            }
+        }
+        return null;
+    }
+    function formatClock(seconds) {
+        if (seconds === null) return 'nicht erreicht';
+        const t = Math.round(seconds);
+        return (Math.floor(t/3600) ? Math.floor(t/3600)+':' + String(Math.floor(t%3600/60)).padStart(2,'0') : Math.floor(t/60).toString())
+            + ':' + String(t%60).padStart(2,'0');
+    }
+    window.trainingComparisonTimes = function (items, targetMeters, colors) {
+        const meters = Math.max(100, Number(targetMeters) || 2000);
+        const times = items.map(a => arrivalTime(a, meters));
+        const valid = times.filter(t => t !== null);
+        const best = valid.length ? Math.min(...valid) : null;
+        const distance = (meters / 1000).toLocaleString('de-AT', {maximumFractionDigits:2});
+        let html = '<strong>Zwischenzeit bei ' + distance + ' km</strong>';
+        html += '<div class="split-line">' + items.map((a, i) => {
+            const color = colors[i % colors.length];
+            const escaped = String(a.title).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+            const delta = times[i] !== null && best !== null && times[i] > best
+                ? ' (+' + formatClock(times[i] - best) + ')' : '';
+            return '<span class="split-tag" style="border-left:3px solid ' + color + '">' + escaped + ': ' + formatClock(times[i]) + delta + '</span>';
+        }).join('') + '</div>';
+        html += '<div class="estimate-note">Geschätzte Zwischenzeiten aus Demo-Geschwindigkeitswerten; keine echten GPS-Splits.</div>';
+        return html;
+    };
+    window.trainingComparePlot = function (id, items, key, axis = 'time', colors = ['#58abff','#ffa84a','#5ce3a3']) {
+        const canvas = document.getElementById(id);
+        if (!canvas || !canvas.getClientRects().length) return;
+        const w = Math.max(250, Math.round(canvas.getBoundingClientRect().width || 500));
+        const h = Math.max(235, Math.round(canvas.getBoundingClientRect().height || 250));
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr);
+        const ctx = canvas.getContext('2d');
+        ctx.scale(dpr,dpr); ctx.clearRect(0,0,w,h);
+        const left = 48, right = 15, top = 22, bottom = 37, iw = w-left-right, ih = h-top-bottom;
+        const series = items.map(a => pointsFor(a,key));
+        const values = series.flatMap(s => s.map(p => p.value));
+        if (!values.length) { ctx.fillStyle='#b1c1d1';ctx.font='13px Arial';ctx.fillText('Keine Sensorwerte vorhanden',left,h/2);return; }
+        const min = Math.floor((Math.min(...values)-2)/5)*5;
+        const max = Math.ceil((Math.max(...values)+2)/5)*5;
+        const extent = Math.max(1, max-min);
+        const xMax = Math.max(1,...series.flatMap(s => s.map(p => axis==='distance' ? p.meters : p.seconds)));
+        ctx.font = '12px Arial';ctx.lineWidth=1;ctx.textBaseline='middle';
+        for (let j=0;j<=4;j++) {
+            const y=top+ih*j/4;
+            ctx.strokeStyle='#33485a';ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(w-right,y);ctx.stroke();
+            ctx.fillStyle='#aec1d2';ctx.textAlign='right';ctx.fillText((max-j*extent/4).toLocaleString('de-AT',{maximumFractionDigits:1}),left-7,y);
+            const x=left+iw*j/4;const v=xMax*j/4;
+            ctx.textAlign='center';ctx.fillText(axis==='distance' ? Math.round(v)+' m' : Math.round(v/60)+' min',x,h-14);
+        }
+        series.forEach((points,i)=>{
+            if (!points.length) return;
+            ctx.beginPath();ctx.strokeStyle=colors[i%colors.length];ctx.lineWidth=2.7;
+            points.forEach((p,j)=>{
+                const x=left+(axis==='distance'?p.meters:p.seconds)/xMax*iw;
+                const y=top+(max-p.value)/extent*ih;
+                j ? ctx.lineTo(x,y):ctx.moveTo(x,y);
+            });ctx.stroke();
+        });
+    };
+})();
+</script>
 
 <script>
 
@@ -6794,6 +7083,13 @@ header {
             []
         );
 
+
+    /* Diese drei Grundsportarten bleiben immer vorhanden. */
+    const protectedSportIds = ['running', 'cycling', 'hiking'];
+    deletedStandardSports = deletedStandardSports.filter(
+        id => !protectedSportIds.includes(id)
+    );
+    saveJSON('deletedStandardSports', deletedStandardSports);
 
     let customSports =
         loadJSON(
@@ -8179,8 +8475,7 @@ header {
 
 
                     const canDelete =
-                        sport.id !==
-                        "unassigned";
+                        !['unassigned', 'running', 'cycling', 'hiking'].includes(sport.id);
 
 
                     const button =
@@ -8219,7 +8514,7 @@ header {
 
                     button.innerHTML =
 
-                        `<span>${sport.label}</span>`
+                        `<span>${window.sportIdentityMarkup(sport.id, sport.label)}</span>`
 
                         +
 
@@ -9061,8 +9356,7 @@ header {
 
         if (
             !sport ||
-            sport.id ===
-            "unassigned"
+            ['unassigned', 'running', 'cycling', 'hiking'].includes(sport.id)
         ) {
 
             return;
@@ -9119,8 +9413,7 @@ header {
 
             if (
                 !sport ||
-                sport.id ===
-                "unassigned"
+                ['unassigned', 'running', 'cycling', 'hiking'].includes(sport.id)
             ) {
 
                 return;
@@ -9750,6 +10043,7 @@ header {
         a,
         b
     ) {
+        window.desktopCompareCurrent = [a, b];
 
         compareMode =
             false;
@@ -9988,18 +10282,7 @@ header {
         setTimeout(
             function () {
 
-                drawDoubleChart(
-                    "comparePulseChart",
-                    a.pulseHistory,
-                    b.pulseHistory
-                );
-
-
-                drawDoubleChart(
-                    "compareSpeedChart",
-                    a.speedHistory,
-                    b.speedHistory
-                );
+                window.refreshDesktopComparison();
 
             },
             50
@@ -11015,7 +11298,7 @@ header {
         let html = `<div class="m-sportrow ${selectedSport === 'all' ? 'selected' : ''}"><button data-sport="all">Alle Sportarten <span class="m-muted">(${visibleActs().length})</span></button></div>`;
         arr.forEach(s =>
         {
-            html += `<div class="m-sportrow ${selectedSport === s.id ? 'selected' : ''}"><button data-sport="${safe(s.id)}">${safe(s.label)} <span class="m-muted">(${visibleActs().filter(a => a.sport === s.id).length})</span></button>${s.id === 'unassigned' ? '' : `<button class="m-sportdelete" data-sportdelete="${safe(s.id)}" title="Sportart löschen">🗑</button>`}</div>`;
+            html += `<div class="m-sportrow ${selectedSport === s.id ? 'selected' : ''}"><button data-sport="${safe(s.id)}">${window.sportIdentityMarkup(s.id, s.label)} <span class="m-muted">(${visibleActs().filter(a => a.sport === s.id).length})</span></button>${['unassigned','running','cycling','hiking'].includes(s.id) ? '' : `<button class="m-sportdelete" data-sportdelete="${safe(s.id)}" title="Sportart löschen">🗑</button>`}</div>`;
 
         });
         html += `<div class="m-sportrow"><button id="mAddSport">＋ Neue Sportart erstellen</button></div>`;
@@ -11052,7 +11335,7 @@ header {
                 return `
                     <button class="m-record" data-record="${safe(a.id)}">
                         <div class="m-flex">
-                            <span class="m-chip blue">${safe(sportName(a.sport))}</span>
+                            <span class="m-chip blue">${window.sportIdentityMarkup(a.sport, sportName(a.sport), true)}</span>
                             <span class="m-chip ${isTest ? 'green' : 'gray'}">${badge}</span>
                         </div>
                         <div class="m-record-title">${safe(a.title)}</div>
@@ -11098,7 +11381,7 @@ header {
     function deleteSportMobile(id)
     {
         const s = getSport(id);
-        if (!s || id === 'unassigned')
+        if (!s || ['unassigned','running','cycling','hiking'].includes(id))
             return;
         dialog('Sportart löschen', `„${s.label}“ wirklich löschen? Alle zugehörigen Trainingseinheiten bleiben erhalten und werden „Nicht zugewiesen“ zugeordnet.`, '', 'Sportart löschen', () =>
         {
@@ -11438,10 +11721,14 @@ header {
                 return;
 
             } const duration = Math.max(...chosen.map(x => x.durationSeconds));
-            chart('mComparePulse', chosen.map((x, i) => ({ values: x.pulseHistory, duration: x.durationSeconds, color: colors[i] })), duration);
-            chart('mCompareSpeed', chosen.map((x, i) => ({ values: x.speedHistory, duration: x.durationSeconds, color: colors[i] })), duration);
+            const axis = $('mCompareAxis').value;
+            window.trainingComparePlot('mComparePulse', chosen, 'pulseHistory', axis, colors);
+            window.trainingComparePlot('mCompareSpeed', chosen, 'speedHistory', axis, colors);
 
         });
+        $('mCompareSplits').innerHTML = chosen.length
+            ? window.trainingComparisonTimes(chosen, $('mCompareSplitMeters').value, colors)
+            : '';
         const mode = $('mMapMode').value;
         $('mCompareMaps').innerHTML = chosen.length ? (mode === 'single' ? chosen.map((x, i) => `<div style="margin-bottom:15px"><strong style="color:${colors[i]}">${safe(x.title)}</strong><div style="margin-top:10px">${demoRouteHTML(x)}</div></div>`).join('') : `<div class="m-info">Schematische Demo-Strecken; die vorhandenen Daten enthalten keine echten GPS-Koordinaten. Ein geografisch korrekter Routenvergleich ist daher noch nicht möglich.</div><div style="margin-top:12px">${chosen.map((x, i) => `<span class="m-chip gray" style="margin:0 4px 6px 0;color:${colors[i]}">● ${safe(x.title)}</span>`).join('')}</div>`) : '<div class="m-empty">Noch keine Einheiten ausgewählt.</div>';
 
@@ -11456,6 +11743,8 @@ header {
     };
     $('mCrossSport').onchange = renderCompare;
     $('mMapMode').onchange = renderCompare;
+    $('mCompareAxis').onchange = renderCompare;
+    $('mCompareSplitMeters').oninput = renderCompare;
     $('mConnect').onclick = () =>
     {
         dialog(
@@ -11955,7 +12244,7 @@ header {
 
             card.innerHTML = `
                 <div class="desktop-record-badges">
-                    <span class="desktop-record-chip">${escapeHtml(sportName)}</span>
+                    <span class="desktop-record-chip">${window.sportIdentityMarkup(activity.sport, sportName, true)}</span>
                     <span class="desktop-record-chip ${isTest ? 'test' : 'demo'}">
                         ${isTest ? 'Test · nur Zeit' : 'Demo'}
                     </span>
@@ -12041,7 +12330,7 @@ header {
             const restore = document.createElement('button');
             restore.type = 'button';
             restore.className = 'secondary-button';
-            restore.textContent = 'Wiederherstellen';
+            restore.textContent = '↶ Wiederherstellen';
             restore.onclick = () => {
                 store.restore(entry.id);
                 showDesktopTrash();
@@ -12050,7 +12339,7 @@ header {
             const purge = document.createElement('button');
             purge.type = 'button';
             purge.className = 'delete-button';
-            purge.textContent = 'Endgültig löschen';
+            purge.textContent = '🗑 Endgültig löschen';
             purge.onclick = () => {
                 if (window.confirm(`„${entry.title}“ endgültig löschen?`)) {
                     store.purge(entry.id);
@@ -12084,6 +12373,71 @@ header {
     currentSport = 'all';
     renderSports();
     renderRecords();
+})();
+</script>
+
+
+<script>
+/* ================================================================
+   DESKTOP: UMSCHALTBARE VERGLEICHSDIAGRAMME UND ZWISCHENZEITEN
+================================================================ */
+(function () {
+    'use strict';
+    const colors = ['#58abff', '#ffa84a'];
+    window.refreshDesktopComparison = function () {
+        const items = window.desktopCompareCurrent || [];
+        const axis = document.getElementById('desktopCompareAxis').value;
+        const meters = document.getElementById('desktopSplitMeters').value;
+        window.trainingComparePlot('comparePulseChart', items, 'pulseHistory', axis, colors);
+        window.trainingComparePlot('compareSpeedChart', items, 'speedHistory', axis, colors);
+        document.getElementById('desktopCompareSplits').innerHTML =
+            window.trainingComparisonTimes(items, meters, colors);
+    };
+    document.getElementById('desktopCompareAxis').addEventListener('change', window.refreshDesktopComparison);
+    document.getElementById('desktopSplitMeters').addEventListener('input', window.refreshDesktopComparison);
+})();
+</script>
+
+
+<script>
+/* ================================================================
+   KLARE AKTIONSSYMBOLE AUF HANDY UND LAPTOP
+================================================================ */
+(function () {
+    'use strict';
+    const icons = {
+        back: '<path d="m12 19-7-7 7-7"/><path d="M5 12h14"/>',
+        save: '<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8M7 3v5h8"/>',
+        delete: '<path d="M3 6h18m-2 0-1 14H6L5 6m3 0V4h8v2m-6 4v7m4-7v7"/>',
+        edit: '<path d="m4 20 4-1 12-12-3-3L5 16zM15 6l3 3"/>',
+        compare: '<path d="M4 5v14m6-10v10m6-14v14m5-12h-8m4-4 4 4-4 4"/>',
+        plus: '<path d="M12 5v14M5 12h14"/>',
+        restore: '<path d="M3 11a9 9 0 1 1 3 7M3 4v7h7"/>',
+        connect: '<path d="M7 7 17 17l-5 4V3l5 4L7 17"/>',
+        play: '<path d="m7 4 13 8-13 8z"/>',
+        pause: '<path d="M8 4v16m8-16v16"/>',
+        stop: '<rect x="5" y="5" width="14" height="14" rx="2"/>'
+    };
+    const labels = {
+        desktopRenameButton: 'edit', desktopDeleteTraining: 'delete',
+        desktopOpenTrash: 'delete', mDetailBack: 'back', mCompareBack: 'back',
+        mTrashBack: 'back', mRename: 'edit', mAddCompare: 'compare',
+        mTrash: 'delete', newSportButton: 'plus', finishSport: 'save',
+        saveActivitySport: 'save', mConnect: 'connect', mStart: 'play',
+        mPause: 'pause', mStop: 'stop', desktopStart: 'play',
+        desktopPause: 'pause', desktopStop: 'stop'
+    };
+    Object.entries(labels).forEach(([id, icon]) => {
+        const button = document.getElementById(id);
+        if (!button) return;
+        const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+        svg.setAttribute('viewBox','0 0 24 24');
+        svg.setAttribute('class','action-icon');
+        svg.setAttribute('aria-hidden','true');
+        svg.innerHTML = icons[icon];
+        button.classList.add('with-action-icon');
+        button.prepend(svg);
+    });
 })();
 </script>
 
