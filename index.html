@@ -1411,6 +1411,28 @@
             font-size: 13px;
         }
 
+
+        .icon-action-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 56px;
+            min-width: 56px;
+            height: 44px;
+            padding: 0;
+            font-size: 22px;
+            line-height: 1;
+            font-weight: 800;
+        }
+
+        .icon-action-button.small-mobile {
+            width: 52px;
+            min-width: 52px;
+            height: 42px;
+            font-size: 21px;
+            border-radius: 12px;
+        }
+
         .compare-button {
             background: #263244;
 
@@ -4023,6 +4045,76 @@ body:not(.force-mobile) .sport-current-title { font-size: 23px; }
 .action-icon { width:17px;height:17px;flex:none;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round; }
 button.with-action-icon { display:inline-flex; align-items:center; justify-content:center; gap:8px; }
 
+
+
+/* ================================================================
+   LAPTOP: HINWEISFELDER ZU SYMBOL-BUTTONS (NUR DESKTOP)
+   Das Feld wird durch JavaScript am sichtbaren Button positioniert.
+   Kein Hinweisfeld in der Handy-Oberfläche.
+================================================================ */
+
+.icon-action-button .action-icon {
+    width: 24px;
+    height: 24px;
+    stroke-width: 2.15;
+}
+
+#mobileApp .icon-action-button .action-icon {
+    width: 22px;
+    height: 22px;
+}
+
+body:not(.force-mobile) #desktopOpenTrash.icon-action-button {
+    width: 50px;
+    min-width: 50px;
+    height: 44px;
+    padding: 0;
+}
+
+.desktop-icon-tooltip {
+    position: fixed;
+    display: block;
+    z-index: 20000;
+    max-width: min(240px, calc(100vw - 24px));
+    padding: 9px 12px;
+    border: 1px solid #4b627b;
+    border-radius: 9px;
+    background: #101b2a;
+    color: #f2f7ff;
+    box-shadow: 0 9px 28px rgba(0, 0, 0, .48);
+    font: 600 13px/1.35 Arial, sans-serif;
+    letter-spacing: .1px;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.desktop-icon-tooltip[hidden] {
+    display: none;
+}
+
+.desktop-icon-tooltip::after {
+    content: '';
+    position: absolute;
+    left: var(--tooltip-arrow-x, 50%);
+    width: 9px;
+    height: 9px;
+    background: #101b2a;
+    border: 1px solid #4b627b;
+    transform: translateX(-50%) rotate(45deg);
+}
+
+.desktop-icon-tooltip[data-position="above"]::after {
+    bottom: -6px;
+    border-top: none;
+    border-left: none;
+}
+
+.desktop-icon-tooltip[data-position="below"]::after {
+    top: -6px;
+    border-bottom: none;
+    border-right: none;
+}
+
 </style>
 
 </head>
@@ -4929,8 +5021,10 @@ button.with-action-icon { display:inline-flex; align-items:center; justify-conte
                 <button
                     id="desktopOpenTrash"
                     type="button"
-                    class="desktop-trash-open">
-                    ♻ Papierkorb
+                    class="desktop-trash-open icon-action-button"
+                    aria-label="Papierkorb öffnen"
+                    data-desktop-tooltip="Papierkorb öffnen">
+                    🗑
                 </button>
             </div>
 
@@ -5513,22 +5607,28 @@ button.with-action-icon { display:inline-flex; align-items:center; justify-conte
 
                 <button
                     type="button"
-                    class="desktop-rename-button"
-                    id="desktopRenameButton">
-                    ✎ Umbenennen
+                    class="desktop-rename-button icon-action-button"
+                    id="desktopRenameButton"
+                    data-desktop-tooltip="Umbenennen"
+                    aria-label="Umbenennen">
+                    ✎
                 </button>
 
                 <button
                     type="button"
-                    class="desktop-delete-button"
-                    id="desktopDeleteTraining">
-                    🗑 Löschen
+                    class="desktop-delete-button icon-action-button"
+                    id="desktopDeleteTraining"
+                    data-desktop-tooltip="Löschen"
+                    aria-label="Löschen">
+                    🗑
                 </button>
 
                 <button
-                    class="compare-button"
-                    id="compareButton">
-                    Vergleichen
+                    class="compare-button icon-action-button"
+                    id="compareButton"
+                    data-desktop-tooltip="Vergleichen"
+                    aria-label="Vergleichen">
+                    ⇄
                 </button>
 
             </div>
@@ -6568,8 +6668,8 @@ button.with-action-icon { display:inline-flex; align-items:center; justify-conte
  <div class="m-detail" id="mDetail">
   <div class="m-inner">
    <div class="m-flex" style="margin-bottom:18px">
-    <button class="m-secondary" id="mDetailBack">
-     ↩ Zurück
+    <button class="m-secondary icon-action-button small-mobile" id="mDetailBack" aria-label="Zurück">
+     ←
     </button>
     <span class="m-chip blue" id="mDetailDemo">
      Demo
@@ -6583,13 +6683,13 @@ button.with-action-icon { display:inline-flex; align-items:center; justify-conte
    <div class="m-small" id="mDetailDate" style="margin:8px 0 12px">
    </div>
    <div class="m-actions" style="margin-bottom:13px">
-    <button class="m-secondary" id="mRename">
-     ✎ Umbenennen
+    <button class="m-secondary icon-action-button small-mobile" id="mRename" aria-label="Umbenennen">
+     ✎
     </button>
-    <button class="m-secondary" id="mAddCompare">
-     ＋ Vergleichen
+    <button class="m-secondary icon-action-button small-mobile" id="mAddCompare" aria-label="Vergleichen">
+     ⇄
     </button>
-    <button class="m-danger" id="mTrash">
+    <button class="m-danger icon-action-button small-mobile" id="mTrash" aria-label="Löschen">
      🗑
     </button>
    </div>
@@ -6659,8 +6759,8 @@ button.with-action-icon { display:inline-flex; align-items:center; justify-conte
  <div class="m-detail" id="mCompare">
   <div class="m-inner">
    <div class="m-flex" style="margin-bottom:15px">
-    <button class="m-secondary" id="mCompareBack">
-     ↩ Zurück
+    <button class="m-secondary icon-action-button small-mobile" id="mCompareBack" aria-label="Zurück">
+     ←
     </button>
     <span class="m-chip blue">
      Vergleich
@@ -6735,8 +6835,8 @@ button.with-action-icon { display:inline-flex; align-items:center; justify-conte
  <div class="m-detail" id="mTrashView">
   <div class="m-inner">
    <div class="m-flex" style="margin-bottom:15px">
-    <button class="m-secondary" id="mTrashBack">
-     ↩ Zurück
+    <button class="m-secondary icon-action-button small-mobile" id="mTrashBack" aria-label="Zurück">
+     ←
     </button>
     <span class="m-chip gray">
      30 Tage
@@ -8586,6 +8686,15 @@ button.with-action-icon { display:inline-flex; align-items:center; justify-conte
                         more.className =
                             "sport-more-button";
 
+                        more.setAttribute(
+                            "aria-label",
+                            "Sportart verwalten"
+                        );
+
+                        more.setAttribute(
+                            "data-desktop-tooltip",
+                            "Sportart verwalten"
+                        );
 
                         more.textContent =
                             "⋮";
@@ -12419,7 +12528,7 @@ button.with-action-icon { display:inline-flex; align-items:center; justify-conte
         stop: '<rect x="5" y="5" width="14" height="14" rx="2"/>'
     };
     const labels = {
-        desktopRenameButton: 'edit', desktopDeleteTraining: 'delete',
+        desktopRenameButton: 'edit', desktopDeleteTraining: 'delete', compareButton: 'compare',
         desktopOpenTrash: 'delete', mDetailBack: 'back', mCompareBack: 'back',
         mTrashBack: 'back', mRename: 'edit', mAddCompare: 'compare',
         mTrash: 'delete', newSportButton: 'plus', finishSport: 'save',
@@ -12437,6 +12546,182 @@ button.with-action-icon { display:inline-flex; align-items:center; justify-conte
         svg.innerHTML = icons[icon];
         button.classList.add('with-action-icon');
         button.prepend(svg);
+
+        // Rein ikonische Buttons: kein zweites Unicode-Symbol neben dem SVG.
+        if (button.classList.contains('icon-action-button')) {
+            Array.from(button.childNodes).forEach(node => {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    node.textContent = '';
+                }
+            });
+        } else {
+            // Bei Buttons mit Text das alte Zeichen entfernen:
+            // ein SVG + der Aktionsname genügt.
+            const oldSymbolIds = [
+                'desktopStart', 'desktopPause', 'desktopStop',
+                'mConnect', 'mStart', 'mPause', 'mStop',
+                'newSportButton', 'saveActivitySport'
+            ];
+
+            if (oldSymbolIds.includes(id)) {
+                Array.from(button.childNodes).forEach(node => {
+                    if (node.nodeType === Node.TEXT_NODE) {
+                        node.textContent = node.textContent.replace(
+                            /^(\s*)[▶Ⅱ■⌁+▣]\s*/,
+                            '$1'
+                        );
+                    }
+                });
+            }
+        }
+    });
+})();
+</script>
+
+
+<script>
+/* ================================================================
+   LAPTOP: TOOLTIP BEIM HOVER ODER TASTATUR-FOKUS
+
+   Nur sichtbar, wenn die Desktop-Ansicht aktiv und ein Mauszeiger
+   vorhanden ist. Das Feld bleibt auch in scrollbaren Fenstern sichtbar.
+   Die Handy-Oberfläche und ihre Funktionen werden nicht verändert.
+================================================================ */
+(function () {
+    'use strict';
+
+    const tooltip = document.createElement('div');
+    tooltip.className = 'desktop-icon-tooltip';
+    tooltip.setAttribute('role', 'tooltip');
+    tooltip.id = 'desktopActionTooltip';
+    tooltip.hidden = true;
+    document.body.appendChild(tooltip);
+
+    // Zusätzliche Icon-Buttons im Desktopbereich beschriften.
+    document.querySelectorAll('.modal-close').forEach(button => {
+        if (!button.hasAttribute('aria-label')) {
+            button.setAttribute('aria-label', 'Fenster schließen');
+        }
+
+        button.setAttribute(
+            'data-desktop-tooltip',
+            button.getAttribute('aria-label')
+        );
+    });
+
+    const photoButton = document.getElementById('photoButton');
+    if (photoButton) {
+        photoButton.setAttribute('aria-label', 'Teamfoto ansehen');
+        photoButton.setAttribute('data-desktop-tooltip', 'Teamfoto ansehen');
+    }
+
+    let activeButton = null;
+
+    function desktopWithMouse() {
+        const desktop = document.querySelector('.container');
+        const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+
+        return (
+            finePointer.matches &&
+            desktop &&
+            window.getComputedStyle(desktop).display !== 'none' &&
+            !document.body.classList.contains('force-mobile')
+        );
+    }
+
+    function positionTooltip(button) {
+        if (!button || tooltip.hidden) {
+            return;
+        }
+
+        const target = button.getBoundingClientRect();
+        const box = tooltip.getBoundingClientRect();
+        const margin = 12;
+        const gap = 12;
+
+        // Nach Möglichkeit oberhalb des Symbols, sonst darunter.
+        const above = target.top >= box.height + gap + margin;
+        const desiredTop = above
+            ? target.top - box.height - gap
+            : target.bottom + gap;
+
+        const desiredLeft = target.left + target.width / 2 - box.width / 2;
+        const left = Math.min(
+            Math.max(margin, desiredLeft),
+            Math.max(margin, window.innerWidth - box.width - margin)
+        );
+        const top = Math.min(
+            Math.max(margin, desiredTop),
+            Math.max(margin, window.innerHeight - box.height - margin)
+        );
+
+        const arrow = Math.max(
+            12,
+            Math.min(box.width - 12, target.left + target.width / 2 - left)
+        );
+
+        tooltip.style.left = left + 'px';
+        tooltip.style.top = top + 'px';
+        tooltip.style.setProperty('--tooltip-arrow-x', arrow + 'px');
+        tooltip.dataset.position = above ? 'above' : 'below';
+    }
+
+    function showTooltip(button) {
+        if (!button || !desktopWithMouse() || button.closest('#mobileApp')) {
+            return;
+        }
+
+        const label = button.getAttribute('data-desktop-tooltip');
+        if (!label) {
+            return;
+        }
+
+        activeButton = button;
+        tooltip.textContent = label;
+        tooltip.hidden = false;
+        positionTooltip(button);
+    }
+
+    function hideTooltip() {
+        activeButton = null;
+        tooltip.hidden = true;
+    }
+
+    document.addEventListener('pointerover', event => {
+        const button = event.target.closest('[data-desktop-tooltip]');
+        if (button && button !== activeButton) {
+            showTooltip(button);
+        }
+    });
+
+    document.addEventListener('pointerout', event => {
+        if (activeButton &&
+            event.target.closest('[data-desktop-tooltip]') === activeButton &&
+            !activeButton.contains(event.relatedTarget)) {
+            hideTooltip();
+        }
+    });
+
+    document.addEventListener('focusin', event => {
+        const button = event.target.closest('[data-desktop-tooltip]');
+        if (button) {
+            showTooltip(button);
+        }
+    });
+
+    document.addEventListener('focusout', event => {
+        if (activeButton && event.target === activeButton) {
+            hideTooltip();
+        }
+    });
+
+    document.addEventListener('pointerdown', hideTooltip);
+    window.addEventListener('scroll', hideTooltip, true);
+    window.addEventListener('resize', hideTooltip);
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') {
+            hideTooltip();
+        }
     });
 })();
 </script>
