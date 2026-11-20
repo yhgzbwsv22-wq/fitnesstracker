@@ -4236,7 +4236,9 @@ body:not(.force-mobile) #live .data-status {
   min-height:24px;cursor:pointer;accent-color:#ff865f;
 }
 .geo-explorer-controls {
-  display:flex;flex-wrap:wrap;align-items:center;gap:9px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
   padding:0 17px 12px;
 }
 .geo-button {
