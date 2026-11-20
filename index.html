@@ -4115,6 +4115,57 @@ body:not(.force-mobile) #desktopOpenTrash.icon-action-button {
     border-right: none;
 }
 
+
+/* ============================================================
+   BESSERE LESBARKEIT – LIVE-WERTE UND DIAGRAMM-ACHSE
+   Die Kartenbreiten und das responsive Layout bleiben erhalten.
+============================================================ */
+
+body:not(.force-mobile) #live .data-title {
+    font-size: 19px;
+}
+
+body:not(.force-mobile) #live .data-label {
+    font-size: 15px;
+    line-height: 1.3;
+}
+
+body:not(.force-mobile) #live .data-number {
+    font-size: 37px;
+    line-height: 1.2;
+}
+
+body:not(.force-mobile) #live .data-unit {
+    font-size: 16px;
+}
+
+body:not(.force-mobile) #live .data-status {
+    font-size: 14px;
+}
+
+#mobileApp #mLiveGrid .m-cardname {
+    font-size: 16px;
+    line-height: 1.25;
+    font-weight: 600;
+}
+
+#mobileApp #mLiveGrid .m-val {
+    font-size: 36px;
+    line-height: 1.18;
+}
+
+#mobileApp #mLiveGrid .m-unit {
+    font-size: 14px;
+}
+
+#mobileApp .m-chart {
+    height: 235px;
+}
+
+#mobileApp #mBigChart {
+    height: 285px;
+}
+
 </style>
 
 </head>
@@ -6451,9 +6502,7 @@ body:not(.force-mobile) #desktopOpenTrash.icon-action-button {
    </div>
    <div class="m-grid2" id="mHomeStats">
    </div>
-   <div class="m-canvasnote">
-    Die Statistik enthält bisherige Beispiel- und Stoppuhr-Aufzeichnungen. Sensorwerte werden erst nach der ESP32-Anbindung erfasst.
-   </div>
+   
   </section>
   <section class="m-screen" id="mLive">
    <div class="m-pagehead">
@@ -7002,7 +7051,7 @@ body:not(.force-mobile) #desktopOpenTrash.icon-action-button {
         canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr);
         const ctx = canvas.getContext('2d');
         ctx.scale(dpr,dpr); ctx.clearRect(0,0,w,h);
-        const left = 48, right = 15, top = 22, bottom = 37, iw = w-left-right, ih = h-top-bottom;
+        const left = 63, right = 18, top = 22, bottom = 47, iw = w-left-right, ih = h-top-bottom;
         const series = items.map(a => pointsFor(a,key));
         const values = series.flatMap(s => s.map(p => p.value));
         if (!values.length) { ctx.fillStyle='#b1c1d1';ctx.font='13px Arial';ctx.fillText('Keine Sensorwerte vorhanden',left,h/2);return; }
@@ -7010,12 +7059,13 @@ body:not(.force-mobile) #desktopOpenTrash.icon-action-button {
         const max = Math.ceil((Math.max(...values)+2)/5)*5;
         const extent = Math.max(1, max-min);
         const xMax = Math.max(1,...series.flatMap(s => s.map(p => axis==='distance' ? p.meters : p.seconds)));
-        ctx.font = '12px Arial';ctx.lineWidth=1;ctx.textBaseline='middle';
-        for (let j=0;j<=4;j++) {
-            const y=top+ih*j/4;
+        ctx.font = '600 15px Arial';ctx.lineWidth=1;ctx.textBaseline='middle';
+        const ticks = w < 430 ? 3 : 4;
+        for (let j=0;j<=ticks;j++) {
+            const y=top+ih*j/ticks;
             ctx.strokeStyle='#33485a';ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(w-right,y);ctx.stroke();
-            ctx.fillStyle='#aec1d2';ctx.textAlign='right';ctx.fillText((max-j*extent/4).toLocaleString('de-AT',{maximumFractionDigits:1}),left-7,y);
-            const x=left+iw*j/4;const v=xMax*j/4;
+            ctx.fillStyle='#aec1d2';ctx.textAlign='right';ctx.fillText((max-j*extent/ticks).toLocaleString('de-AT',{maximumFractionDigits:1}),left-7,y);
+            const x=left+iw*j/ticks;const v=xMax*j/ticks;
             ctx.textAlign='center';ctx.fillText(axis==='distance' ? Math.round(v)+' m' : Math.round(v/60)+' min',x,h-14);
         }
         series.forEach((points,i)=>{
@@ -7477,6 +7527,51 @@ body:not(.force-mobile) #desktopOpenTrash.icon-action-button {
 
 
 
+    /* =====================================================
+       AUTOMATISCHE TRAININGSNAMEN NACH SPORTART
+       Selbst umbenannte Trainings bleiben unverändert.
+    ===================================================== */
+
+    function automaticTrainingTitle(sportId, date, isTest = false) {
+        const names = {
+            running: "Laufeinheit",
+            cycling: "Radfahreinheit",
+            hiking: "Wandereinheit",
+            football: "Fußballeinheit",
+            tennis: "Tenniseinheit",
+            basketball: "Basketballeinheit",
+            volleyball: "Volleyball-Einheit",
+            swimming: "Schwimmeinheit",
+            gym: "Fitnesseinheit",
+            fitness: "Fitnesseinheit",
+            unassigned: isTest ? "Testtraining" : "Trainingseinheit"
+        };
+
+        const sportLabel = getSport(sportId)?.label || "Training";
+        const cleanLabel = String(sportLabel).trim();
+        const prefix = names[sportId] ||
+            (cleanLabel ? cleanLabel + "einheit" : "Trainingseinheit");
+
+        return prefix + " vom " + formatGermanDate(date);
+    }
+
+    function refreshAutomaticTitles() {
+        const manuallyNamed = loadJSON("ft_m_titles", {});
+
+        Object.values(activities).forEach(activity => {
+            if (typeof manuallyNamed[activity.id] === "string" &&
+                manuallyNamed[activity.id].trim()) {
+                activity.title = manuallyNamed[activity.id];
+                return;
+            }
+            activity.title = automaticTrainingTitle(
+                activity.sport,
+                activity.date,
+                !!activity.testMode
+            );
+        });
+    }
+
     function createActivity(
         id,
         sport,
@@ -7517,11 +7612,7 @@ body:not(.force-mobile) #desktopOpenTrash.icon-action-button {
 
             time,
 
-            title:
-                "Einheit vom "
-                + formatGermanDate(
-                    date
-                ),
+            title: automaticTrainingTitle(sport, date),
 
             distance,
 
@@ -8122,7 +8213,11 @@ body:not(.force-mobile) #desktopOpenTrash.icon-action-button {
 
 
 
+    refreshAutomaticTitles();
+
     function saveAssignments() {
+
+        refreshAutomaticTitles();
 
         const result = {};
 
@@ -10040,6 +10135,8 @@ body:not(.force-mobile) #desktopOpenTrash.icon-action-button {
 
             saveAssignments();
 
+            document.getElementById("activityTitle").textContent = currentActivity.title;
+
 
             document
                 .getElementById(
@@ -10405,303 +10502,124 @@ body:not(.force-mobile) #desktopOpenTrash.icon-action-button {
        DIAGRAMME
     ===================================================== */
 
-    function drawSingleChart(
-        id,
-        values,
-        color
-    ) {
+    /* =====================================================
+       DIAGRAMME MIT GROSSEN ACHSENBESCHRIFTUNGEN (LAPTOP)
+       Beschriftungen: Y = Messwert, X = Trainingsminuten
+    ===================================================== */
 
-        if (!Array.isArray(values) || values.length === 0) {
-            const c = document.getElementById(id);
-            const w = Math.max(240, c.parentElement.clientWidth - 36);
-            c.width = w;
-            c.height = 250;
-            const ctx = c.getContext("2d");
-            ctx.fillStyle = "#9ca8b7";
-            ctx.font = "14px Arial";
-            ctx.fillText("Keine Messwerte aufgezeichnet", 16, 125);
-            return;
-        }
+    function drawNumberedChart(id, series, durationSeconds) {
+        const canvas = document.getElementById(id);
+        if (!canvas) return;
 
-        const canvas =
-            document.getElementById(
-                id
-            );
-
-
-        const width =
-            canvas
-                .parentElement
-                .clientWidth -
-            36;
-
-
-        const height =
-            250;
-
-
-        canvas.width =
-            width;
-
-
-        canvas.height =
-            height;
-
-
-        const ctx =
-            canvas.getContext(
-                "2d"
-            );
-
-
-        const min =
-            Math.min(
-                ...values
-            );
-
-
-        const max =
-            Math.max(
-                ...values
-            );
-
-
-        const range =
-            max - min || 1;
-
-
-        ctx.beginPath();
-
-
-        values.forEach(
-            (
-                value,
-                index
-            ) => {
-
-                const x =
-                    30 +
-                    index /
-                    (
-                        values.length -
-                        1
-                    ) *
-                    (
-                        width -
-                        60
-                    );
-
-
-                const y =
-                    height -
-                    30 -
-                    (
-                        value -
-                        min
-                    ) /
-                    range *
-                    (
-                        height -
-                        60
-                    );
-
-
-                if (
-                    index === 0
-                ) {
-
-                    ctx.moveTo(
-                        x,
-                        y
-                    );
-
-                }
-
-                else {
-
-                    ctx.lineTo(
-                        x,
-                        y
-                    );
-
-                }
-
-            }
+        const width = Math.max(
+            280,
+            Math.floor(canvas.parentElement.getBoundingClientRect().width - 36)
         );
+        const height = 275;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
 
-        ctx.strokeStyle =
-            color;
+        const ctx = canvas.getContext("2d");
+        ctx.scale(dpr, dpr);
+        ctx.clearRect(0, 0, width, height);
 
+        const left = 65;
+        const right = 16;
+        const top = 18;
+        const bottom = 51;
+        const plotWidth = width - left - right;
+        const plotHeight = height - top - bottom;
 
-        ctx.lineWidth =
-            2.5;
+        const all = series
+            .flatMap(line => line.values || [])
+            .map(Number)
+            .filter(Number.isFinite);
 
-
-        ctx.stroke();
-
-    }
-
-
-
-    function drawDoubleChart(
-        id,
-        a,
-        b
-    ) {
-
-        if (!a.length && !b.length) {
-            drawSingleChart(id, [], "#9ca8b7");
+        if (!all.length) {
+            ctx.font = "600 16px Arial, sans-serif";
+            ctx.fillStyle = "#c1d0e0";
+            ctx.textAlign = "center";
+            ctx.fillText(
+                "Keine Messwerte aufgezeichnet",
+                width / 2,
+                height / 2
+            );
             return;
         }
 
-        const canvas =
-            document.getElementById(
-                id
-            );
+        let min = Math.floor((Math.min(...all) - 2) / 5) * 5;
+        let max = Math.ceil((Math.max(...all) + 2) / 5) * 5;
+        const range = Math.max(1, max - min);
+        const ticks = width < 390 ? 3 : 4;
+        const duration = Math.max(60, Number(durationSeconds) || 60);
 
+        ctx.font = "600 15px Arial, sans-serif";
+        ctx.fillStyle = "#c5d5e6";
+        ctx.textBaseline = "middle";
 
-        const width =
-            canvas
-                .parentElement
-                .clientWidth -
-            36;
-
-
-        const height =
-            250;
-
-
-        canvas.width =
-            width;
-
-
-        canvas.height =
-            height;
-
-
-        const ctx =
-            canvas.getContext(
-                "2d"
-            );
-
-
-        const all =
-            [
-                ...a,
-                ...b
-            ];
-
-
-        const min =
-            Math.min(
-                ...all
-            );
-
-
-        const max =
-            Math.max(
-                ...all
-            );
-
-
-        const range =
-            max - min || 1;
-
-
-
-        function draw(
-            values,
-            color
-        ) {
-
+        for (let i = 0; i <= 4; i++) {
+            const y = top + plotHeight * i / 4;
             ctx.beginPath();
-
-
-            values.forEach(
-                (
-                    value,
-                    index
-                ) => {
-
-                    const x =
-                        30 +
-                        index /
-                        (
-                            values.length -
-                            1
-                        ) *
-                        (
-                            width -
-                            60
-                        );
-
-
-                    const y =
-                        height -
-                        30 -
-                        (
-                            value -
-                            min
-                        ) /
-                        range *
-                        (
-                            height -
-                            60
-                        );
-
-
-                    if (
-                        index === 0
-                    ) {
-
-                        ctx.moveTo(
-                            x,
-                            y
-                        );
-
-                    }
-
-                    else {
-
-                        ctx.lineTo(
-                            x,
-                            y
-                        );
-
-                    }
-
-                }
-            );
-
-
-            ctx.strokeStyle =
-                color;
-
-
-            ctx.lineWidth =
-                2.5;
-
-
+            ctx.strokeStyle = "#394c60";
+            ctx.lineWidth = 1;
+            ctx.moveTo(left, y);
+            ctx.lineTo(width - right, y);
             ctx.stroke();
 
+            const value = max - range * i / 4;
+            ctx.textAlign = "right";
+            ctx.fillText(
+                value.toLocaleString("de-AT", {maximumFractionDigits: 1}),
+                left - 9,
+                y
+            );
         }
 
+        ctx.textBaseline = "alphabetic";
+        ctx.textAlign = "center";
+        for (let i = 0; i <= ticks; i++) {
+            const x = left + plotWidth * i / ticks;
+            const minutes = Math.round(duration * i / ticks / 60);
+            ctx.fillText(minutes + "m", x, height - 15);
+        }
 
-        draw(
-            a,
-            "#4ea1ff"
-        );
+        series.forEach(line => {
+            const values = line.values || [];
+            if (!values.length) return;
 
+            ctx.beginPath();
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = line.color;
+            values.forEach((value, i) => {
+                const x = left + i / Math.max(1, values.length - 1) * plotWidth;
+                const y = top + (max - Number(value)) / range * plotHeight;
 
-        draw(
-            b,
-            "#f59e0b"
-        );
-
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+        });
     }
 
+    function drawSingleChart(id, values, color) {
+        const seconds = currentActivity
+            ? currentActivity.durationSeconds
+            : Math.max(1, (values || []).length - 1) * 60;
+        drawNumberedChart(id, [{values, color}], seconds);
+    }
 
+    function drawDoubleChart(id, a, b) {
+        const seconds = currentActivity
+            ? currentActivity.durationSeconds
+            : Math.max((a || []).length, (b || []).length, 2) * 60;
+
+        drawNumberedChart(id, [
+            {values: a, color: "#4ea1ff"},
+            {values: b, color: "#f59e0b"}
+        ], seconds);
+    }
 
     /* =====================================================
        GPS ROUTE
@@ -11167,6 +11085,8 @@ body:not(.force-mobile) #desktopOpenTrash.icon-action-button {
                 speedHistory: []
             };
         });
+
+        refreshAutomaticTitles();
 
         // Auch die bestehende Desktop-Aufzeichnungsliste aktualisieren.
         if (typeof window.renderSports === 'function')
@@ -11695,66 +11615,104 @@ body:not(.force-mobile) #desktopOpenTrash.icon-action-button {
 
     }
     $('mTrashBack').onclick = () => $('mTrashView').classList.remove('active');
-    function chart(id, series, duration)
-    {
-        const c = $(id);
-        if (!c || !c.getClientRects().length)
+    /* Gut lesbare Zahlen für kleine und vergrößerte Handy-Diagramme. */
+    function chart(id, series, duration) {
+        const canvas = $(id);
+        if (!canvas || !canvas.getClientRects().length) {
             return;
-        const w = Math.max(200, c.clientWidth || 320), h = 215, dpr = Math.min(window.devicePixelRatio || 1, 2);
-        c.width = Math.floor(w * dpr);
-        c.height = h * dpr;
-        const ctx = c.getContext('2d');
-        ctx.scale(dpr, dpr);
-        ctx.clearRect(0, 0, w, h);
-        const left = 37, right = 13, top = 18, bottom = 34, iw = w - left - right, ih = h - top - bottom;
-        ctx.strokeStyle = '#324458';
-        ctx.fillStyle = '#aabed4';
-        ctx.lineWidth = 1;
-        ctx.font = '10px Arial';
-        const all = series.flatMap(s => s.values || []).filter(x => Number.isFinite(x));
-        if (!all.length)
-        {
-            ctx.fillText('Noch keine Messwerte vorhanden', 45, h / 2);
-            return;
-
-        } let min = Math.min(...all), max = Math.max(...all);
-        min = Math.floor((min - 2) / 5) * 5;
-        max = Math.ceil((max + 2) / 5) * 5;
-        const range = Math.max(max - min, 1);
-        for (let i = 0; i <= 4; i++)
-        {
-            const yy = top + ih * i / 4;
-            ctx.beginPath();
-            ctx.moveTo(left, yy);
-            ctx.lineTo(w - right, yy);
-            ctx.stroke();
-            ctx.fillText(fmt(max - range * i / 4), 3, yy + 3);
-
-        } for (let i = 0; i <= 4; i++)
-        {
-            const xx = left + iw * i / 4;
-            ctx.fillText(Math.round(duration * i / 240) + 'm', Math.max(0, xx - 7), h - 8);
-
-        } for (const s of series)
-        {
-            const vals = s.values || [];
-            if (!vals.length)
-                continue;
-            const maxT = s.duration || duration;
-            ctx.strokeStyle = s.color;
-            ctx.lineWidth = 2.5;
-            ctx.beginPath();
-            vals.forEach((v, i) =>
-            {
-                const x = left + (i / Math.max(1, vals.length - 1)) * maxT / duration * iw;
-                const y = top + (max - v) / range * ih;
-                i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
-
-            });
-            ctx.stroke();
-
         }
+
+        const width = Math.max(200, Math.round(canvas.clientWidth || 320));
+        const height = Math.max(
+            235,
+            Math.round(canvas.getBoundingClientRect().height) || 235
+        );
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+
+        const ctx = canvas.getContext("2d");
+        ctx.scale(dpr, dpr);
+        ctx.clearRect(0, 0, width, height);
+
+        const left = 57;
+        const right = 15;
+        const top = 20;
+        const bottom = 43;
+        const plotWidth = width - left - right;
+        const plotHeight = height - top - bottom;
+        const all = series
+            .flatMap(s => s.values || [])
+            .map(Number)
+            .filter(Number.isFinite);
+
+        if (!all.length) {
+            ctx.font = "600 15px Arial, sans-serif";
+            ctx.fillStyle = "#b4c4d7";
+            ctx.textAlign = "center";
+            ctx.fillText("Noch keine Messwerte vorhanden", width / 2, height / 2);
+            return;
+        }
+
+        const min = Math.floor((Math.min(...all) - 2) / 5) * 5;
+        const max = Math.ceil((Math.max(...all) + 2) / 5) * 5;
+        const range = Math.max(max - min, 1);
+        const ticks = width < 400 ? 3 : 4;
+        const maxDuration = Math.max(60, Number(duration) || 60);
+
+        ctx.font = "600 15px Arial, sans-serif";
+        ctx.fillStyle = "#c8d7e8";
+        ctx.textBaseline = "middle";
+
+        for (let i = 0; i <= 4; i++) {
+            const y = top + plotHeight * i / 4;
+            ctx.beginPath();
+            ctx.strokeStyle = "#394d61";
+            ctx.lineWidth = 1;
+            ctx.moveTo(left, y);
+            ctx.lineTo(width - right, y);
+            ctx.stroke();
+
+            ctx.textAlign = "right";
+            ctx.fillText(
+                fmt(max - range * i / 4),
+                left - 9,
+                y
+            );
+        }
+
+        ctx.textAlign = "center";
+        ctx.textBaseline = "alphabetic";
+        for (let i = 0; i <= ticks; i++) {
+            const x = left + plotWidth * i / ticks;
+            const minutes = Math.round(maxDuration * i / ticks / 60);
+            ctx.fillText(minutes + "m", x, height - 12);
+        }
+
+        series.forEach(line => {
+            const values = line.values || [];
+            if (!values.length) return;
+
+            const endTime = Math.max(0, Number(line.duration) || maxDuration);
+            ctx.strokeStyle = line.color;
+            ctx.lineWidth = 2.8;
+            ctx.beginPath();
+
+            values.forEach((value, i) => {
+                const x = left +
+                    i / Math.max(1, values.length - 1) *
+                    endTime / maxDuration * plotWidth;
+                const y = top + (max - Number(value)) / range * plotHeight;
+
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+
+            ctx.stroke();
+        });
     }
+
     function drawDetailCharts()
     {
         const a = activities[selectedRecord];
@@ -11769,7 +11727,7 @@ body:not(.force-mobile) #desktopOpenTrash.icon-action-button {
         const a = activities[selectedRecord];
         if (!a)
             return;
-        dialog(kind === 'pulse' ? 'Pulsverlauf' : 'Geschwindigkeitsverlauf', 'Verlauf über die gesamte Trainingsdauer. Für größere Ansicht das Handy quer halten.', `<div style="width:100%;overflow:hidden"><canvas id="mBigChart" class="m-chart" style="height:240px"></canvas></div>`, 'Schließen', () =>
+        dialog(kind === 'pulse' ? 'Pulsverlauf' : 'Geschwindigkeitsverlauf', 'Verlauf über die gesamte Trainingsdauer. Für größere Ansicht das Handy quer halten.', `<div style="width:100%;overflow:hidden"><canvas id="mBigChart" class="m-chart" style="height:285px"></canvas></div>`, 'Schließen', () =>
         {
 
         });
