@@ -4321,6 +4321,16 @@ body:not(.force-mobile) #live .data-status {
     #mobileApp .geo-map-error { min-height: 275px; }
 }
 
+
+/* Ohne Höhenprofil nur eine große interaktive Karte. */
+.geo-map-only .geo-explorer { grid-template-columns: minmax(0, 1fr) !important; }
+.geo-map-only .geo-explorer > .geo-pane:first-child { display: none !important; }
+.geo-map-only .geo-explorer > .geo-pane:last-child { min-width: 0; width: 100%; }
+.geo-map-only .geo-mapbox { height: 470px; }
+#mobileApp .geo-map-only .geo-mapbox { height: 320px; }
+@media(max-width:390px) {
+    #mobileApp .geo-map-only .geo-mapbox {height:270px;}
+}
 </style>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -5624,6 +5634,14 @@ body:not(.force-mobile) #live .data-status {
                     </div>
 
                 </label>
+                <label class="metric-option">
+                    <input type="checkbox" id="metricGpsRoute">
+                    <div>
+                        <div class="metric-title">GPS-Route anzeigen</div>
+                        <div class="metric-description">Echte Karte für die Aufzeichnungen dieser Sportart</div>
+                    </div>
+                </label>
+
 
             </div>
 
@@ -7213,41 +7231,6 @@ body:not(.force-mobile) #live .data-status {
         };
     }
 
-    function parseGPX(rawXML) {
-        if (rawXML.length > 6 * 1024 * 1024) {
-            throw new Error('Die GPX-Datei darf höchstens 6 MB groß sein.');
-        }
-        const xml = new DOMParser().parseFromString(rawXML, 'application/xml');
-        if (xml.getElementsByTagName('parsererror').length) {
-            throw new Error('Ungültige GPX-Datei.');
-        }
-
-        const nodes = [...xml.getElementsByTagNameNS('*', 'trkpt')];
-        if (!nodes.length) nodes.push(...xml.getElementsByTagNameNS('*', 'rtept'));
-
-        const stride = Math.max(1, Math.ceil(nodes.length / 2800));
-        const points = [];
-        function parseNode(node) {
-            const ele = [...node.children].find(child => child.localName === 'ele');
-            return normalizePoint({
-                lat: node.getAttribute('lat'),
-                lon: node.getAttribute('lon'),
-                ele: ele?.textContent ?? null
-            });
-        }
-
-        for (let i = 0; i < nodes.length; i += stride) {
-            const p = parseNode(nodes[i]);
-            if (p) points.push(p);
-        }
-        if (nodes.length > 1 && (nodes.length - 1) % stride) {
-            const last = parseNode(nodes[nodes.length - 1]);
-            if (last) points.push(last);
-        }
-        if (points.length < 2) throw new Error('Mindestens zwei GPS-Punkte erforderlich.');
-        return points;
-    }
-
     function destroy(container) {
         if (!container) return;
         const instance = instances.get(container);
@@ -7299,11 +7282,9 @@ body:not(.force-mobile) #live .data-status {
                     <div class="geo-explorer-controls">
                         <button class="geo-button" type="button" data-geo-play>▶ Route abspielen</button>
                         <button class="geo-button" type="button" data-geo-reset>↶ Zum Start</button>
-                        <button class="geo-button" type="button" data-geo-import>⇪ GPX laden</button>
-                        <input class="geo-file-input" data-geo-file type="file"
-                            accept=".gpx,application/gpx+xml,application/xml,text/xml">
+
                     </div>
-                    <p class="geo-import-status" data-geo-message role="status" aria-live="polite"></p>
+
                 </section>
                 <section class="geo-pane">
                     <div class="geo-pane-head">
@@ -7320,9 +7301,6 @@ body:not(.force-mobile) #live .data-status {
         const slider = $('[data-geo-slider]');
         const play = $('[data-geo-play]');
         const reset = $('[data-geo-reset]');
-        const upload = $('[data-geo-import]');
-        const input = $('[data-geo-file]');
-        const message = $('[data-geo-message]');
         const distanceLabel = $('[data-geo-distance]');
         const heightLabel = $('[data-geo-height]');
         const positionLabel = $('[data-geo-position]');
@@ -7521,34 +7499,6 @@ body:not(.force-mobile) #live .data-status {
             state.animation=requestAnimationFrame(step);
         });
         reset.addEventListener('click',()=>{stopAnimation();move(0);});
-        upload.addEventListener('click',()=>input.click());
-
-        input.addEventListener('change',async()=>{
-            const localFile=input.files?.[0];
-            if(!localFile)return;
-            message.textContent='GPX-Datei wird eingelesen …';
-            try {
-                const gpsPoints=parseGPX(await localFile.text());
-                const id=String(activity.id);
-                sessionTracks[id]=gpsPoints;
-                let persistent=false;
-                try {
-                    savedTracks[id]=gpsPoints;
-                    localStorage.setItem(storageKey,JSON.stringify(savedTracks));
-                    persistent=true;
-                } catch(error) {
-                    delete savedTracks[id];
-                }
-                render(container,activity);
-                const element=container.querySelector('[data-geo-message]');
-                if(element) element.textContent=persistent ?
-                    '✓ GPX-Strecke wurde lokal gespeichert.' :
-                    '✓ GPX geladen, aber Browser-Speicher voll: nur bis zum Neuladen verfügbar.';
-            } catch(error) {
-                message.textContent='Import fehlgeschlagen: '+error.message;
-            }
-        });
-
         if(typeof ResizeObserver!=='undefined'){
             state.observer=new ResizeObserver(()=>{
                 if(state.destroyed)return;
@@ -7954,6 +7904,19 @@ body:not(.force-mobile) #live .data-status {
     }
 
 
+
+
+    /* =====================================================
+       GPS unabhängig von Höhenmeter auswählen.
+       Bestehende Sportarten: Laufen, Radfahren, Wandern.
+    ===================================================== */
+    function sportHasGps(sportOrId) {
+        const sport = typeof sportOrId === 'string'
+            ? getSport(sportOrId) : sportOrId;
+        if (!sport) return false;
+        if (typeof sport.gpsRoute === 'boolean') return sport.gpsRoute;
+        return ['running', 'cycling', 'hiking'].includes(sport.id);
+    }
 
     /* =====================================================
        FORMATIERUNG
@@ -10136,6 +10099,8 @@ body:not(.force-mobile) #live .data-status {
                 custom:
                     true,
 
+                gpsRoute: document.getElementById("metricGpsRoute").checked,
+
                 metrics: {
 
                     distance:
@@ -11297,163 +11262,24 @@ body:not(.force-mobile) #live .data-status {
 
 
     function drawMap(activity) {
-    const frame = document.querySelector("#activityModal .map-frame");
-    if (!frame) return;
-
-    const showAltitude = !!getSport(activity.sport)?.metrics?.elevation;
-    const label = frame.closest(".chart-section")?.querySelector(".activity-box-title");
-    if (label) label.textContent = showAltitude ? "GPS-Karte & Höhenprofil" : "GPS-Route";
-
-    if (showAltitude) {
-        frame.classList.add("geo-map-active");
-        window.geoElevationExplorer.render(frame, activity);
-        return;
-    }
-
-    window.geoElevationExplorer.destroy(frame);
-    frame.classList.remove("geo-map-active");
-    frame.innerHTML = '<svg id="activityMap" viewBox="0 0 100 100"></svg>';
-    const svg = document.getElementById("activityMap");
-
-        if (activity.testMode) {
-            svg.innerHTML = '<text x="50" y="50" text-anchor="middle" fill="#aab7ca" font-size="5">Keine GPS-Daten aufgezeichnet</text>';
+        const frame = document.querySelector("#activityModal .map-frame");
+        if (!frame) return;
+        const section = frame.closest(".chart-section");
+        const sport = getSport(activity.sport);
+        const enabled = sportHasGps(sport);
+        const elevation = !!sport?.metrics?.elevation;
+        if (section) section.style.display = enabled ? "" : "none";
+        if (!enabled) {
+            window.geoElevationExplorer.destroy(frame);
+            frame.classList.remove("geo-map-active", "geo-map-only");
             return;
         }
-
-
-        svg.innerHTML =
-            "";
-
-
-        const ns =
-            "http://www.w3.org/2000/svg";
-
-
-        const min =
-            Math.min(
-                ...activity.speedHistory
-            );
-
-
-        const max =
-            Math.max(
-                ...activity.speedHistory
-            );
-
-
-        for (
-            let i = 0;
-            i <
-            routePoints.length -
-            1;
-            i++
-        ) {
-
-            const speed =
-                activity.speedHistory[
-                    i %
-                    activity.speedHistory.length
-                ];
-
-
-            const ratio =
-                (
-                    speed -
-                    min
-                ) /
-                (
-                    max -
-                    min ||
-                    1
-                );
-
-
-            let color;
-
-
-            if (
-                ratio < 0.33
-            ) {
-
-                color =
-                    "#ef4444";
-
-            }
-
-            else if (
-                ratio < 0.66
-            ) {
-
-                color =
-                    "#f59e0b";
-
-            }
-
-            else {
-
-                color =
-                    "#22c55e";
-
-            }
-
-
-            const line =
-                document.createElementNS(
-                    ns,
-                    "line"
-                );
-
-
-            line.setAttribute(
-                "x1",
-                routePoints[i].x
-            );
-
-
-            line.setAttribute(
-                "y1",
-                routePoints[i].y
-            );
-
-
-            line.setAttribute(
-                "x2",
-                routePoints[i + 1].x
-            );
-
-
-            line.setAttribute(
-                "y2",
-                routePoints[i + 1].y
-            );
-
-
-            line.setAttribute(
-                "stroke",
-                color
-            );
-
-
-            line.setAttribute(
-                "stroke-width",
-                "5"
-            );
-
-
-            line.setAttribute(
-                "stroke-linecap",
-                "round"
-            );
-
-
-            svg.appendChild(
-                line
-            );
-
-        }
-
+        const title = section?.querySelector(".activity-box-title");
+        if (title) title.textContent = elevation ? "GPS-Karte & Höhenprofil" : "GPS-Karte";
+        frame.classList.add("geo-map-active");
+        frame.classList.toggle("geo-map-only", !elevation);
+        window.geoElevationExplorer.render(frame, activity);
     }
-
 
 
     /* =====================================================
@@ -12050,7 +11876,7 @@ body:not(.force-mobile) #live .data-status {
     }
     function createSportMobile()
     {
-        dialog('Neue Sportart', 'Gib einen Namen ein und wähle die angezeigten Kennzahlen.', `<input id="mNewSportName" class="m-field" placeholder="z. B. Tischtennis" maxlength="45"><label class="m-check"><input type="checkbox" id="mMetricDist" checked>Distanz und Pace</label><label class="m-check"><input type="checkbox" id="mMetricSpeed" checked>Höchstgeschwindigkeit</label><label class="m-check"><input type="checkbox" id="mMetricElev" checked>Höhenmeter</label>`, 'Erstellen', () =>
+        dialog('Neue Sportart', 'Gib einen Namen ein und wähle die angezeigten Kennzahlen.', `<input id="mNewSportName" class="m-field" placeholder="z. B. Tischtennis" maxlength="45"><label class="m-check"><input type="checkbox" id="mMetricDist" checked>Distanz und Pace</label><label class="m-check"><input type="checkbox" id="mMetricSpeed" checked>Höchstgeschwindigkeit</label><label class="m-check"><input type="checkbox" id="mMetricElev" checked>Höhenmeter</label><label class="m-check"><input type="checkbox" id="mMetricGPS">GPS-Route anzeigen</label>`, 'Erstellen', () =>
         {
             const name = $('mNewSportName').value.trim();
             if (name.length < 2 || sportTypes.some(s => s.label.toLowerCase() === name.toLowerCase()))
@@ -12058,7 +11884,7 @@ body:not(.force-mobile) #live .data-status {
                 toast('Name zu kurz oder bereits vergeben');
                 return;
 
-            } const sport = { id: 'custom_' + Date.now(), label: name, description: 'Benutzerdefinierte Sportart', custom: true, metrics: { distance: $('mMetricDist').checked, maxSpeed: $('mMetricSpeed').checked, elevation: $('mMetricElev').checked } };
+            } const sport = { id: 'custom_' + Date.now(), label: name, description: 'Benutzerdefinierte Sportart', custom: true, gpsRoute: $('mMetricGPS').checked, metrics: { distance: $('mMetricDist').checked, maxSpeed: $('mMetricSpeed').checked, elevation: $('mMetricElev').checked } };
             sportTypes.push(sport);
             saveSports();
             selectedSport = sport.id;
@@ -12152,12 +11978,19 @@ body:not(.force-mobile) #live .data-status {
         $('mDetailStats').innerHTML = stat.filter(x => !x[2] || sm[x[2]]).map(x => `<div class="m-stat"><small>${x[0]}</small><strong>${safe(x[1])}</strong></div>`).join('');
         const oldGeo = $('mGpsContent').querySelector('#mobileGeoHost');
         if (oldGeo) window.geoElevationExplorer.destroy(oldGeo);
-        const showAltitude = !!getSport(a.sport)?.metrics?.elevation;
-        $('mGpsContent').innerHTML = showAltitude
-            ? '<div id="mobileGeoHost"></div>'
-            : demoRouteHTML(a);
+        const sport = getSport(a.sport);
+        const gps = sportHasGps(sport);
+        const elevation = !!sport?.metrics?.elevation;
+        const gpsTab = document.querySelector('#mDetail [data-mtab="gps"]');
+        if (gpsTab) {
+            gpsTab.hidden = !gps;
+            gpsTab.style.display = gps ? '' : 'none';
+        }
+        $('mGps').style.display = gps ? '' : 'none';
+        $('mGpsContent').innerHTML = gps ? '<div id="mobileGeoHost"></div>' : '';
+        $('mGps').classList.toggle('geo-map-only', gps && !elevation);
         const title = document.querySelector('#mGps h3');
-        if (title) title.textContent = showAltitude ? "GPS-Karte & Höhenprofil" : "GPS-Route";
+        if (title) title.textContent = elevation ? 'GPS-Karte & Höhenprofil' : 'GPS-Karte';
         $('mDetail').classList.add('active');
         setDetailTab('metrics');
 
@@ -12181,6 +12014,8 @@ body:not(.force-mobile) #live .data-status {
     }
     function setDetailTab(tab)
     {
+        if (tab === 'gps' && !sportHasGps(activities[selectedRecord]?.sport))
+            tab = 'metrics';
         selectedTab = tab;
         document.querySelectorAll('#mDetail [data-mtab]').forEach(b => b.classList.toggle('active', b.dataset.mtab === tab));
         ['metrics', 'charts', 'gps'].forEach(t => $('m' + t[0].toUpperCase() + t.slice(1)).classList.toggle('active', tab === t));
@@ -12192,6 +12027,7 @@ body:not(.force-mobile) #live .data-status {
                 const host = $('mobileGeoHost');
                 const activity = activities[selectedRecord];
                 if (!host || !activity) return;
+                host.classList.toggle('geo-map-only', !getSport(activity.sport)?.metrics?.elevation);
                 if (!host.querySelector('.geo-explorer'))
                     window.geoElevationExplorer.render(host, activity);
                 else
@@ -12477,8 +12313,19 @@ body:not(.force-mobile) #live .data-status {
         $('mCompareSplits').innerHTML = chosen.length
             ? window.trainingComparisonTimes(chosen, $('mCompareSplitMeters').value, colors)
             : '';
+        const selectedGPS = chosen.filter(a => sportHasGps(a.sport));
+        const routePanel = $('mCompareMaps').closest('.m-panel');
+        if (routePanel) routePanel.style.display = selectedGPS.length ? '' : 'none';
         const mode = $('mMapMode').value;
-        $('mCompareMaps').innerHTML = chosen.length ? (mode === 'single' ? chosen.map((x, i) => `<div style="margin-bottom:15px"><strong style="color:${colors[i]}">${safe(x.title)}</strong><div style="margin-top:10px">${demoRouteHTML(x)}</div></div>`).join('') : `<div class="m-info">Schematische Demo-Strecken; die vorhandenen Daten enthalten keine echten GPS-Koordinaten. Ein geografisch korrekter Routenvergleich ist daher noch nicht möglich.</div><div style="margin-top:12px">${chosen.map((x, i) => `<span class="m-chip gray" style="margin:0 4px 6px 0;color:${colors[i]}">● ${safe(x.title)}</span>`).join('')}</div>`) : '<div class="m-empty">Noch keine Einheiten ausgewählt.</div>';
+        $('mCompareMaps').innerHTML = selectedGPS.length
+            ? (mode === 'single'
+                ? selectedGPS.map(a =>
+                    '<div style="margin-bottom:15px"><strong>' + safe(a.title) +
+                    '</strong><div style="margin-top:10px">' + demoRouteHTML(a) +
+                    '</div></div>'
+                  ).join('')
+                : '<div class="m-info">Für den geografischen Vergleich sind echte GPS-Koordinaten nötig.</div>')
+            : '';
 
     }
     $('mCompareAdd').onclick = () =>
