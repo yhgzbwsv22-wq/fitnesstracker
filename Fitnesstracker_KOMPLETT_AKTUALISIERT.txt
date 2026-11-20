@@ -7062,9 +7062,9 @@ body:not(.force-mobile) #live .data-status {
         ctx.font = '600 15px Arial';ctx.lineWidth=1;ctx.textBaseline='middle';
         const ticks = w < 430 ? 3 : 4;
         for (let j=0;j<=ticks;j++) {
-            const y=top+ih*j/4;
+            const y=top+ih*j/ticks;
             ctx.strokeStyle='#33485a';ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(w-right,y);ctx.stroke();
-            ctx.fillStyle='#aec1d2';ctx.textAlign='right';ctx.fillText((max-j*extent/4).toLocaleString('de-AT',{maximumFractionDigits:1}),left-7,y);
+            ctx.fillStyle='#aec1d2';ctx.textAlign='right';ctx.fillText((max-j*extent/ticks).toLocaleString('de-AT',{maximumFractionDigits:1}),left-7,y);
             const x=left+iw*j/ticks;const v=xMax*j/ticks;
             ctx.textAlign='center';ctx.fillText(axis==='distance' ? Math.round(v)+' m' : Math.round(v/60)+' min',x,h-14);
         }
