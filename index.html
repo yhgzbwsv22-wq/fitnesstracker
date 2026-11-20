@@ -4272,6 +4272,55 @@ body:not(.force-mobile) #live .data-status {
   #mobileApp .geo-profile-canvas {height:220px}
 }
 
+
+/* ============================================================
+   NEUE GPS-ANORDNUNG
+   Höhenprofil links, Karte rechts, ohne sichtbaren Schieberegler
+   und ohne Zusatztexte. Die Höhenkurve steuert weiterhin
+   denselben Kartenmarker.
+============================================================ */
+.geo-explorer {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.18fr);
+    align-items: stretch;
+}
+.geo-mapbox {
+    height: 450px;
+}
+.geo-map-error {
+    min-height: 450px;
+}
+/* Der Regler bleibt nur intern für die Positions-Synchronisierung. */
+.geo-profile-range {
+    display: none !important;
+}
+.geo-pane .geo-explorer-controls {
+    padding-top: 9px;
+}
+@media (max-width: 1000px) {
+    .geo-explorer {
+        grid-template-columns: 1fr;
+    }
+    .geo-mapbox {
+        height: 350px;
+    }
+    .geo-map-error {
+        min-height: 350px;
+    }
+}
+#mobileApp .geo-explorer {
+    grid-template-columns: 1fr;
+}
+#mobileApp .geo-mapbox {
+    height: 310px;
+}
+#mobileApp .geo-map-error {
+    min-height: 310px;
+}
+@media (max-width: 390px) {
+    #mobileApp .geo-mapbox { height: 275px; }
+    #mobileApp .geo-map-error { min-height: 275px; }
+}
+
 </style>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -7231,21 +7280,6 @@ body:not(.force-mobile) #live .data-status {
             <div class="geo-explorer">
                 <section class="geo-pane">
                     <div class="geo-pane-head">
-                        <h3 class="geo-pane-title">🗺 Interaktive Karte</h3>
-                        <span class="geo-chip ${isDemo ? 'demo' : ''}">
-                            ${isDemo ? '● DEMO' : source === 'GPX' ? '● GPX' : source === 'GPS' ? '● GPS' : '● Ohne GPS'}
-                        </span>
-                    </div>
-                    <div class="geo-mapbox" data-geo-map></div>
-                    <p class="geo-pane-note">
-                        ${isDemo
-                            ? 'Echte OpenStreetMap-Karte, aber simulierte Strecke und Höhenwerte. Keine echte Aufzeichnung.'
-                            : points.length ? 'Der Marker folgt dem ausgewählten Punkt im Höhenprofil.'
-                                : 'Für dieses Training liegen noch keine GPS-Koordinaten vor.'}
-                    </p>
-                </section>
-                <section class="geo-pane">
-                    <div class="geo-pane-head">
                         <h3 class="geo-pane-title">⛰ Höhenprofil</h3>
                         <span class="geo-chip">↔ Mit Karte verbunden</span>
                     </div>
@@ -7269,11 +7303,13 @@ body:not(.force-mobile) #live .data-status {
                         <input class="geo-file-input" data-geo-file type="file"
                             accept=".gpx,application/gpx+xml,application/xml,text/xml">
                     </div>
-                    <p class="geo-hint">${isDemo
-                        ? '<strong>Demodaten:</strong> Route und Höhen sind nur eine Veranschaulichung.'
-                        : source === 'GPX' ? 'Die GPX-Datei wird lokal im Browser verarbeitet.'
-                            : 'Du kannst eine GPX-Datei mit GPS-Koordinaten und Höhenpunkten laden.'}</p>
                     <p class="geo-import-status" data-geo-message role="status" aria-live="polite"></p>
+                </section>
+                <section class="geo-pane">
+                    <div class="geo-pane-head">
+                        <h3 class="geo-pane-title">🗺 Interaktive Karte</h3>
+                    </div>
+                    <div class="geo-mapbox" data-geo-map></div>
                 </section>
             </div>
         `;
